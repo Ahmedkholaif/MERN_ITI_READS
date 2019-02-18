@@ -1,0 +1,30 @@
+{
+  "name": "mern_iti_reads",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "",
+    "server": "nodemon index.js",
+    "dev":""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ahmedkholaif/MERN_ITI_READS.git"
+  },
+  "keywords": [
+    "MERN",
+    "Full-Stack"
+  ],
+  "author": "Ahmed Kholaif",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ahmedkholaif/MERN_ITI_READS/issues"
+  },
+  "homepage": "https://github.com/Ahmedkholaif/MERN_ITI_READS#readme",
+  "dependencies": {
+    "concurrently": "^4.1.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.13"
+  }
+}
