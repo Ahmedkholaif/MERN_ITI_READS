@@ -18,8 +18,8 @@ user signin
 
 ==========================================================================================
 Database :
-Category {ID, name}
-Author {ID, photo, Fname, Lname, Date of birth}
-Books {ID, photo, name, catID, AuthorID, Rating{Total,Rates}, summary, comments, review}
-users {ID, Fname, Lname, Email, passwd, Img, Books{ID, rate, Shelf}
+Category {title}
+Author {firstName, lastName, imgSrc, dateOfBirth}
+Books {title, authorID, categoryID, imgSrc, rating{total,users}, reviews[{}], description}
+users {firstName, lastName, email, password, ImgSrc, Books[{book, rate, Shelve}], tokens, isadmin}
 ==========================================================================================
