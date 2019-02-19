@@ -1,0 +1,25 @@
+Admin API:
+Add book / author / category
+Edit book / author / category
+Delete book / author / category
+
+
+==========================================================================================
+User API:
+Add books to shelves
+Edit books to shelves
+Add rating
+get Authors / one author and his books
+get categories / one category and books
+get book
+user siggup
+user signin
+
+
+==========================================================================================
+Database :
+Category {ID, name}
+Author {ID, photo, Fname, Lname, Date of birth}
+Books {ID, photo, name, catID, AuthorID, Rating{Total,Rates}, summary, comments, review}
+users {ID, Fname, Lname, Email, passwd, Img, Books{ID, rate, Shelf}
+==========================================================================================
