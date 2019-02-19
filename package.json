@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "client": "",
+    "client": "node index.js",
     "server": "nodemon index.js",
     "dev": ""
   },
@@ -23,9 +23,14 @@
   },
   "homepage": "https://github.com/Ahmedkholaif/MERN_ITI_READS#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.4.3",
     "concurrently": "^4.1.0",
     "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "lodash": "^4.17.11",
     "mongoose": "^5.4.13",
-    "multer": "^1.4.1"
+    "multer": "^1.4.1",
+    "validator": "^10.11.0"
   }
 }
