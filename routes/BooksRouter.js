@@ -12,10 +12,9 @@ const uploading = multer({
 
   router.post('/',uploading.single("image"),(req,res)=>{
     const title = req.body.title;
-    const author = req.body.author;
+    const author = req.body.author;image
     const category = req.body.category;
     const imgSrc = req.file.path;
-
     let authorID;
     let categoryID;
     //query to find the authot and the category
@@ -35,7 +34,6 @@ const uploading = multer({
         (err, category) => {
             if (err) return res.status(200).send(err)
             categoryID=category._id;
-            return
        }
     );
 
@@ -64,5 +62,46 @@ const uploading = multer({
          })
      })
     })
+
+
+
+//Routes for Book
+// Get all Books and display them
+router.get("/", (req, res) => {
+    Book.find((err, data) => {
+        res.json(data);
+    });
+});
+//Edit a Book
+router.put("/:id", (req, res) => {
+    const id = req.params.id;
+    const title = req.body.title;
+    const authorID = req.body.authorID;
+    const categoryID = req.body.categoryID;
+    const imgSrc = req.body.imgSrc;
+    Book.updateOne({
+        _id: `${id}`
+    }, {
+        title: title,
+        authorID: authorID,
+        categoryID: categoryID,
+        imgSrc: imgSrc
+    }, (err, res) => {
+        if (err) console.log(err);
+        console.log(res);
+    });
+    res.send("Book Updated");
+});
+//Delete a Book
+router.delete("/:id", (req, res) => {
+    const id = req.params.id;
+    Book.deleteOne({
+        _id: `${id}`
+    }, (err) => {
+        if (err) console.log(err);
+        res.send("Book Deleted");
+    })
+});
+//End of Routes for Books
 
 module.exports = router;

@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const validator  = require('validator');
+const keys = require('../helpers/keys');
 
 const userSchema =new mongoose.Schema({
     firstName:{
@@ -17,7 +18,11 @@ const userSchema =new mongoose.Schema({
         unique:true,
         validate:{
             validator: validator.isEmail,
+<<<<<<< HEAD
             msg:`not a valid email`
+=======
+            msg:` not a valid email`
+>>>>>>> bd23966f5b2bb3a5e74be84d00ca94ad6eef1d46
 
         }
     },
@@ -36,7 +41,7 @@ const userSchema =new mongoose.Schema({
             type:"string",required:true
         }
     }],
-    isAdmin:false
+    isAdmin:{type:'boolean',default:false}
 });
 
 
@@ -62,12 +67,13 @@ userSchema.methods.toJSON =function () {
     const user = this;
     let userObject = user.toObject();
 
-    return _.pick(userObject,['_id','email']);
+    return _.pick(userObject,['_id','email','books']);
 }
 userSchema.methods.getAuthToken = function () {
     const user =this;
     let access = 'auth';
-    let token =jwt.sign({_id: user._id.toHexString(),access},'abc').toString(); 
+    const pay_load = {_id: user._id,email:user.email,isAdmin:user.isAdmin};
+    let token =jwt.sign({pay_load,access},keys.secret).toString(); 
     user.tokens.push({access,token});
    
     return user.save()
@@ -75,13 +81,33 @@ userSchema.methods.getAuthToken = function () {
         return token;
     });
 }
-const User = new mongoose.model('User',userSchema);
 
-// user1 =new User({
-//   firstName:'ahmed',lastName:'kholaif',email:'ahmd@yahoo.com',imgSrc:"hgfhfhfhf",
-//   password:'1111111',books:[],tokens:[]  
-// });
-// console.log(user1);
-// user1.save(err=> {if(err) console.log(err);});
+userSchema.methods.removeToken = function (token) {
+    const user = this;
+    return user.updateOne({
+        $pull:{
+            tokens: {token}
+        }
+    });
+}
+userSchema.statics.findByToken = function(token) {
+    const User=this;
+
+    let decoded;
+    try {
+        decoded = jwt.verify(token,keys.secret);
+    }catch(e) {
+        return Promise.reject();
+    }
+
+    return User.findOne({
+        '_id':decoded.pay_load._id,
+        'tokens.token':token,
+        'tokens.access':'auth'
+    });
+}
+
+
+const User = new mongoose.model('User',userSchema);
 
 module.exports = User;
