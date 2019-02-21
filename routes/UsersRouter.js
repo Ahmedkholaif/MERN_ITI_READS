@@ -1,16 +1,18 @@
 const express = require('express');
 const User = require('../models/User');
 const router = express.Router();
+const multer = require('multer');
+const uploading = multer({
+    dest:'./public/profilePics/',
+  })
 
 
-router.post('/',(req,res)=>{
-    console.log("reached");
-
+router.post('/',uploading.single("image"),(req,res)=>{
     const firstName = req.body.fname;
     const lastName = req.body.lname;
     const email = req.body.email;
     const password = req.body.password;
-    const imgSrc = req.body.img ;// == image source 
+    const imgSrc = req.file.path;
     
     const user = new User({
         firstName ,

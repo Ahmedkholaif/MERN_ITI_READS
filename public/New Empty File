@@ -1,0 +1,53 @@
+const express = require('express');
+const router = express.Router();
+const Book = require('../models/Book');
+const Author = require('../models/Author');
+const Category = require('../models/Category');
+
+const multer = require('multer');
+const uploading = multer({
+    dest:'./public/bookCovers',
+  })
+
+
+router.post('/',uploading.single("image"),(req,res)=>{
+    const title = req.body.title;
+    const author = req.body.author;
+    const category = req.body.category;
+    let authorID;
+    let categoryID;
+    Author.findOne(
+        // query
+        {firstName: author},
+        (err, author) => {
+            if (err) return res.status(200).send(err)
+            authorId=author._id;
+            return
+       }
+    );
+    Category.findOne(
+        // query
+        {title: category},
+        (err, category) => {
+            if (err) return res.status(200).send(err)
+            catId=category._id;
+            return
+       }
+    );
+    const book = new Book({
+        title ,
+        authorID,
+        categoryID,
+    });
+    
+    book.save()
+    .then ( () =>  {
+            res.send("done");
+        })
+    .catch(e => res.status(404).send(e));
+});
+
+
+
+
+module.exports = router;
