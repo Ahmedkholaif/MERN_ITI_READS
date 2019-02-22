@@ -1,22 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const Author = require('../models/Author');
+const Category = require('../models/Category');
 const Book = require('../models/Book');
 const perPage = 10;
 
 
-// Get all the Author in the DB
+// Get all the categories in the DB
 router.get("/", (req, res) => {
-    Author.find((err, data) => {
+    Category.find((err, data) => {
         res.json(data);
     });
 });
-// Get the books of the Author has been selected
-router.get("/:authorName",(req,res)=>{
-    let author = req.params.authorName;
+// Get the books of the category has been selected
+router.get("/:categoryName",(req,res)=>{
+    let cat = req.params.categoryName;
     const page = req.query.page;
     console.log((page - 1) * perPage);
-    Book.find({'authorID': author})
+    Book.find({'categoryID': cat})
         .skip((page > 0 ? ((page - 1) * perPage) : 0))
         .limit(perPage)
         .exec(function (err, data) {

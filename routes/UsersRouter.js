@@ -14,7 +14,6 @@ router.post('/register', uploading.single("image"), (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const imgSrc = req.file.path;
-<<<<<<< HEAD
    
     User.findOne({email})
     .then(user=>{
@@ -40,39 +39,6 @@ router.post('/register', uploading.single("image"), (req, res) => {
         }
     } )
     
-=======
-
-    User.findOne({ email })
-        .then(user => {
-            if (user) {
-                return res.status(400).json({ email: "Email already exists " });
-            } else {
-                const firstName = req.body.fname;
-                const lastName = req.body.lname;
-                const password = req.body.password;
-                const imgSrc = req.body.img;// == image source
-
-                const user = new User({
-                    firstName,
-                    lastName,
-                    email,
-                    password,
-                    imgSrc,
-                    isAdmin: req.body.isAdmin
-                });
-
-                user.save()
-                    .then(() => {
-                        return user.getAuthToken();
-                    })
-                    .then(token => {
-                        res.header('x-auth', token).send(user);
-                    })
-                    .catch(e => res.status(404).send(e));
-            }
-        })
-
->>>>>>> aed21563ddb4aa7738f802e8bf7098fdcc9d66f8
 });
 
 router.post('/login', (req, res) => {
