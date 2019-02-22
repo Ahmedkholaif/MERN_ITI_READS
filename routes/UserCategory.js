@@ -1,8 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const Category = require('../models/Category');
+const Book = require('../models/Book');
 
-router.post('/public/profilePics', function(req, res) {
 
-});
+
+
+
+
+
 
 module.exports = router;

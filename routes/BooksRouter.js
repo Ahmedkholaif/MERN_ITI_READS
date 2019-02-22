@@ -12,7 +12,7 @@ const uploading = multer({
 
   router.post('/',uploading.single("image"),(req,res)=>{
     const title = req.body.title;
-    const author = req.body.author;image
+    const author = req.body.author;
     const category = req.body.category;
     const imgSrc = req.file.path;
     let authorID;

@@ -20,11 +20,6 @@ router.post('/register',uploading.single("image"),(req,res)=>{
         if(user) {
             return res.status(400).json({email:"Email already exists "});
         }else {
-            const firstName = req.body.fname;
-            const lastName = req.body.lname;
-            const password = req.body.password;
-            const imgSrc = req.body.img ;// == image source
-
             const user = new User({
                 firstName ,
                 lastName,
