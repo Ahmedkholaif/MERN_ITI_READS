@@ -16,22 +16,21 @@ router.get("/", (req, res) => {
     router.post("/", (req, res) => {
     
         const title = req.body.title;
-        const category1 = new Category({
+        const category = new Category({
             title: title,
         });
-        console.log(category1);
-        user1.save((err) => {
+        console.log(category);
+        category.save((err) => {
             if (err) console.log(err);
         })
-        res.json(category1);
+        res.json(category);
     });
     //Edit a category
-    router.put("/:id", (req, res) => {
-        const id = req.params.id;
+    router.put("/:title", (req, res) => {
+        const oldTitle = req.params.title;
         const title = req.body.title;
-    
         Category.updateOne({
-            _id: `${id}`
+            title: `${oldTitle}`
         }, {
             title: title,
         }, (err, res) => {
@@ -41,10 +40,10 @@ router.get("/", (req, res) => {
         res.send("Category Updated");
     });
     //Delete a category
-    router.delete("/:id", (req, res) => {
-        const id = req.params.id;
+    router.delete("/:title", (req, res) => {
+        const title = req.params.title;
         Category.deleteOne({
-            _id: `${id}`
+            title: `${title}`
         }, (err) => {
             if (err) console.log(err);
             res.send("Category Deleted");
