@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(express.static('public'))
 app.use('/api/users',userRouter);
 app.use('/api/admin',adminRouter);
+app.use("/",userBookRouter);
 
 // app.use('/api',)//The home page
 

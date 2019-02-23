@@ -7,7 +7,7 @@ const bookSchema =new mongoose.Schema({
     authorID:{
         type:mongoose.Types.ObjectId,ref:'Author',required:true
     },
-    categoryID:{type:mongoose.Types.ObjectId,ref:'Category'},
+    categoryID:{type:"string"},
     imgSrc:String,
     rating:{
         total:Number,users:Number

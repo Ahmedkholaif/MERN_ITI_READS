@@ -14,7 +14,10 @@ router.post('/', uploading.single("image"), (req, res) => {
 
     const title = req.body.title;
     const author = req.body.author;
+<<<<<<< HEAD
     // image
+=======
+>>>>>>> b24753020e039be3a1b8b8d3985c7ed4dd48027c
     const category = req.body.category;
     const imgSrc = req.file.path;
 
@@ -47,7 +50,6 @@ router.post('/', uploading.single("image"), (req, res) => {
             categoryID = category._id;
         }
     );
-
     //converting queries into promises 
     let findAuthPromise = findAuthor.exec();
     let findCatPromise = findCat.exec();
@@ -83,17 +85,18 @@ router.get("/", (req, res) => {
         res.json(data);
     });
 });
+
 //Edit a Book
-router.put("/:id", (req, res) => {
-    const id = req.params.id;
+router.put("/:title",uploading.single("image"), (req, res) => {
+    const oldTitle = req.params.title;
     const title = req.body.title;
     const authorID = req.body.authorID;
     const categoryID = req.body.categoryID;
-    const imgSrc = req.body.imgSrc;
+    const imgSrc = req.file.path;
     Book.updateOne({
-        _id: `${id}`
+        title: `${oldTitle}`
     }, {
-        title: title,
+        title:title,
         authorID: authorID,
         categoryID: categoryID,
         imgSrc: imgSrc
@@ -104,10 +107,9 @@ router.put("/:id", (req, res) => {
     res.send("Book Updated");
 });
 //Delete a Book
-router.delete("/:id", (req, res) => {
-    const id = req.params.id;
+router.delete("/:title", (req, res) => {
     Book.deleteOne({
-        _id: `${id}`
+        title: `${title}`
     }, (err) => {
         if (err) console.log(err);
         res.send("Book Deleted");
