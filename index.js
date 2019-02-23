@@ -1,8 +1,9 @@
 const express = require('express');
 require('./mongo-conf.js');
-const PORT = process.env.PORT || 3001 ;
+const PORT = process.env.PORT || 3002 ;
 const userRouter = require('./routes/UsersRouter');
 const adminRouter = require('./routes/AdminRouter');
+
 const app = express();
 
 app.use(express.json());

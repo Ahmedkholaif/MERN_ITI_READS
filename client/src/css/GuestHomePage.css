@@ -1,0 +1,32 @@
+.HomeContent{
+    padding: 10px 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    background-image: url("concepto-lectura-enfoque-suave-mujer-joven-que-relaja-libro-cafe-cozy-house_34048-399.jpg");
+}
+
+#userName,#pass{
+    height: 2rem;
+    margin: 3%;
+}
+
+#loginSubmit{
+    height: 2rem;
+    line-height: .5;
+    background-color: #459ED0;
+}
+
+.seperator10{
+    height: 5vh;
+}
+
+label{
+    margin: 0 !important;
+}
+
+.signUpForm input{
+    padding: 3px 5px !important;
+}

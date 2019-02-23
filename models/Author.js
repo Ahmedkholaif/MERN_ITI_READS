@@ -1,14 +1,11 @@
 const mongoose = require('mongoose');
 
 const authorSchema =new mongoose.Schema({
-    firstName:{
-        type:"string",required:true
-    },
-    lastName:{
-        type:"string",required:true
+    fullName:{
+        type:"string",required:true,unique:true
     },
     imgSrc:String,
-    dateOfBirth:Date
+    dateOfBirth:String
 });
 
 
