@@ -14,10 +14,7 @@ router.post('/', uploading.single("image"), (req, res) => {
 
     const title = req.body.title;
     const author = req.body.author;
-<<<<<<< HEAD
     // image
-=======
->>>>>>> b24753020e039be3a1b8b8d3985c7ed4dd48027c
     const category = req.body.category;
     const imgSrc = req.file.path;
 
