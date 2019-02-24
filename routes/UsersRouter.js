@@ -9,8 +9,10 @@ const bcrypt = require('bcryptjs');
 const { authenticate, auth_Admin } = require('../helpers/Auth');
 
 router.post('/register', uploading.single("image"), (req, res) => {
-    const firstName = req.body.fname;
-    const lastName = req.body.lname;
+    console.log(req.body);
+    console.log("reach end point");
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
     const email = req.body.email;
     const password = req.body.password;
     const imgSrc = req.file.path;
@@ -26,13 +28,14 @@ router.post('/register', uploading.single("image"), (req, res) => {
                 email,
                 password,
                 imgSrc,
-                isAdmin:req.body.isAdmin
+
             });
             
             user.save()
             .then ( () =>  {
                 return user.getAuthToken();})
                 .then(token => {
+                    console.log(user);
                     res.header('x-auth',token).send(user);
                 })
             .catch(e => res.status(404).send(e));
