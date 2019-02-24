@@ -141,8 +141,6 @@ dataValidation(data) {
         </FormGroup>
         <FormGroup>
           <Label for="exampleFile" className="picLabel">Personal picture</Label>
-          <Input type="file" name="file" id="exampleFile" />
-          <Label for="exampleFile">Personal picture</Label>
           <Input type="file" name="image" id="exampleFile" />
         </FormGroup>
         <Button > Sign up</Button>

@@ -2,13 +2,17 @@ import React, { Component } from "react";
 import { Row, Col } from 'reactstrap';
 import {Table} from 'reactstrap';
 import '../css/UserHomePage.css'
-import DropDownList from './DropDownList';
 var _ = require('lodash');
 
 class BooksTable extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+
+          selected: '',
+      
+        };
       }
       toggle() {
         this.setState({
@@ -18,6 +22,10 @@ class BooksTable extends Component {
       componentDidMount(){
        
     }
+    handleChange = (selected) => {
+
+      this.setState({ selected: selected.target.value });
+    };
       render() {
         return (
           <div>
@@ -45,7 +53,15 @@ class BooksTable extends Component {
                                                     <td>{book.bookInfo.author}</td>
                                                     <td>{book.bookInfo.category}</td>
                                                     <td>{book.rate}</td>
-                                                    <td><DropDownList shelf={book.shelf}/></td>
+                                                    <td>
+                                                    <select
+                                                      onChange={this.handleChange}
+                                                      value={book.shelf}>
+                                                      <option value="read">Read</option>
+                                                    <option value="current">Currently Reading</option>
+                                                    <option value="toRead">To Read</option>
+                                                    </select>
+                                                    </td>
                                                 </tr>
                                             ))
                                         )}

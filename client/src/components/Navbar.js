@@ -81,7 +81,7 @@ class CustomNavbar extends Component {
                     </DropdownMenu>
                   </UncontrolledDropdown>
                   <NavItem className="leftMenuItem">
-                  <Button id='signOut' type="submit">Sign out</Button>
+                  <Button id='signOut' type="submit"><a href="/">Sign out</a></Button>
                   </NavItem>
                 </Nav>
               </Collapse>
