@@ -64,7 +64,7 @@ class GuestHomePage extends Component {
 
   render() {
     return (
-      <Container className='HomeContent'>
+      <div id='HomeContent'>
         <Row>
           <Col>
             <Login submit={this.submitLogin} isUserAuthenticated={this.isUserAuthenticated}/>
@@ -78,7 +78,7 @@ class GuestHomePage extends Component {
           <Col xs="4"></Col>
           <Col xs="4"></Col>
         </Row>
-      </Container>
+      </div>
     );
   }
 }

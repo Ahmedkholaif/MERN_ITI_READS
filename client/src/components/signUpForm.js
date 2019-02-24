@@ -96,7 +96,6 @@ dataValidation(data) {
     return (
       <Form method="post" onSubmit={this.handleSubmission}>
         <FormGroup className="signUpForm" > 
-          <Label for="firstName">First Name</Label>
           <Input type="text"
           name="firstName"
           id="firstName"
@@ -106,7 +105,6 @@ dataValidation(data) {
           {errors.firstName && <span className="text-danger">{errors.firstName}</span>}
         </FormGroup>
         <FormGroup>
-          <Label for="lastName">Last Name</Label>
           <Input type="text"
           name="lastName"
           id="lastName"
@@ -116,7 +114,6 @@ dataValidation(data) {
           {errors.lastName && <span className="text-danger">{errors.lastName}</span>}
         </FormGroup>
         <FormGroup>
-          <Label for="email">Email</Label>
           <Input type="email"
           name="email" id="email"
           placeholder="Please enter your email"
@@ -125,21 +122,19 @@ dataValidation(data) {
           {errors.email && <span className="text-danger">{errors.email}</span>}
         </FormGroup>
         <FormGroup>
-          <Label for="pass">Password</Label>
           <Input type="password" name="password" id="password"
           onChange={this.handleChange}
           value={newAccountData.password}/>
           {errors.password && <span className="text-danger">{errors.password}</span>}
         </FormGroup>
         <FormGroup>
-          <Label for="retypePassword">Confirm Password</Label>
           <Input type="password" name="retypePassword" id="retypePassword"
           value={newAccountData.retypePassword}
           onChange={this.handleChange}/>
           {errors.retypePassword && <span className="text-danger">{errors.retypePassword}</span>}
         </FormGroup>
         <FormGroup>
-          <Label for="exampleFile">Personal picture</Label>
+          <Label for="exampleFile" className="picLabel">Personal picture</Label>
           <Input type="file" name="file" id="exampleFile" />
         </FormGroup>
         <Button >Sign up</Button>
