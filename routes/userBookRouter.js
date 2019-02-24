@@ -18,10 +18,6 @@ router.put("/:bookName",(req,res,next)=>{
     const mode = req.query.mode;
     
 
-
-
-
-
 })
 
 module.exports = router;

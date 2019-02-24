@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import propTypes from 'prop-types';
-
+import {sendSignUpRequest} from '../services/usersFetch';
 export default class SignUp extends React.Component {
 
   constructor(props) {
@@ -15,6 +15,7 @@ export default class SignUp extends React.Component {
             email: "",
             password: "",
             retypePassword: "", 
+            image:''
         },
 
         errors: {}
@@ -43,7 +44,7 @@ handleChange(event) {
 
 }
 
-handleSubmission(event) {
+handleSubmission = (event)=> {
   event.preventDefault();
     const { newAccountData } = this.state;
     const errors = this.dataValidation(newAccountData);
@@ -51,10 +52,15 @@ handleSubmission(event) {
     this.setState({ errors })
 
     if (Object.keys(errors).length === 0) {
+      
+      console.log(newAccountData);
+      sendSignUpRequest(newAccountData)
+      .then(data => console.log(JSON.stringify( data)))
+      .catch(e => console.log(e));
 
-        this.props.submit(newAccountData)
+      this.props.submit(newAccountData)
 
-        this.setState(this.initialState)
+      this.setState(this.initialState)
         
     }
     
@@ -136,8 +142,10 @@ dataValidation(data) {
         <FormGroup>
           <Label for="exampleFile" className="picLabel">Personal picture</Label>
           <Input type="file" name="file" id="exampleFile" />
+          <Label for="exampleFile">Personal picture</Label>
+          <Input type="file" name="image" id="exampleFile" />
         </FormGroup>
-        <Button >Sign up</Button>
+        <Button > Sign up</Button>
       </Form>
     );
   }
