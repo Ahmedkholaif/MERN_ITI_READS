@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/User');
 const router = express.Router();
+const userHomeRouter = require('./userHomeRouter');
 const multer = require('multer');
 const uploading = multer({
     dest: './public/profilePics/',
@@ -76,14 +77,13 @@ router.post('/login', (req, res) => {
 //  Private route
 //
 
-router.get('/current', authenticate, (req, res) => {
-    res.send(req.user)
+router.use('/current', authenticate, (req, res , next) => {
+    next();
 })
 
+router.use('/current',userHomeRouter)
 //
-
 router.delete('/current/logout', authenticate, (req, res) => {
-
     req.user.removeToken(req.token)
         .then(() => res.status(200).send())
         .catch(() => res.status(404).send());
