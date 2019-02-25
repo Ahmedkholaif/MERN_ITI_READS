@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Row, Col } from 'reactstrap';
-import Pagination from "react-js-pagination";
 import '../css/UserHomePage.css'
 import CustomNavbar from './Navbar';
 import BooksTable from './BooksTable';
@@ -14,47 +13,35 @@ constructor(props) {
     super(props);
 
     
-    this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false,
-      activePage: 1,
+      activePage:1,
     };
 
     this.state={
       shelf : "all",
       books:[
-        {bookInfo:{img:"img1",bookName:"book1",author:"auth1",category:"mm"}
-      ,rate:"1",shelf:"read"},
-      {bookInfo:{img:"img2",bookName:"book2",author:"auth1",category:"mm"}
-      ,rate:"5",shelf:"toRead"},
-      {bookInfo:{img:"img3",bookName:"book3",author:"auth1",category:"mm"}
-      ,rate:"4",shelf:"current"},
-      {bookInfo:{img:"img4",bookName:"book4",author:"auth1",category:"mm"}
-      ,rate:"0",shelf:"read"},
-      {bookInfo:{img:"img1",bookName:"book5",author:"auth1",category:"mm"}
-      ,rate:"4.5",shelf:"toRead"}
+        {bookInfo:{img:"img1",bookName:"book1",author:"auth1",category:"mm",avgRate:2}
+      ,rate:1,shelf:"read"},
+      {bookInfo:{img:"img2",bookName:"book2",author:"auth1",category:"mm",avgRate:1}
+      ,rate:5,shelf:"toRead"},
+      {bookInfo:{img:"img3",bookName:"book3",author:"auth1",category:"mm",avgRate:2}
+      ,rate:4,shelf:"current"},
+      {bookInfo:{img:"img4",bookName:"book4",author:"auth1",category:"mm",avgRate:5}
+      ,rate:0,shelf:"read"},
+      {bookInfo:{img:"img1",bookName:"book5",author:"auth1",category:"mm",avgRate:2}
+      ,rate:3,shelf:"toRead"}
     ]
     }
 
   }
+  
 
-handelPagination = (pageNum)=>
-{
-  this.setState({activePage: pageNum});
-  alert(pageNum);
-  // window.fetch(`/userBooks?${pageNum}?${this.state.shelf}`)
-  // .then(response => response.json()).then(data=> this.setState({activePage: pageNum,books:data});) ;
-}
+// test = setInterval(() => {
+//   alert(this.state.books[0].rate)
+// }, 5000);
 
 
-toggle() {
-  this.setState({
-    isOpen: !this.state.isOpen
-  });
-}
-
-  componentDidMount() {
-}
 
 displayAllBooks =()=>{
   if(this.state.shelf!=="all")
@@ -92,6 +79,14 @@ displayToReadBooks =()=>{
     })
   }
 }
+
+
+handelPagination = (pageNum)=>
+{
+  this.setState({activePage: pageNum});
+  // window.fetch(`/userBooks?${pageNum}?${this.state.shelf}`)
+  // .then(response => response.json()).then(data=> this.setState({activePage: pageNum,books:data});) ;
+}
   render() {
     return (
       <div>
@@ -123,21 +118,7 @@ displayToReadBooks =()=>{
                 <Row className="rightMenu">
                     <Col>
                         <BooksTable books={this.state.books} shelf={this.state.shelf}/>
-                        <div className="pagginationContainer">
-                        <Pagination
-                        hideDisabled
-                        hideFirstLastPages
-                        prevPageText={<i className='fas fa-angle-left'/>}
-                        nextPageText={<i className='fas fa-angle-right'/>}
-                        activePage={this.state.activePage}
-                        itemsCountPerPage={5}
-                        totalItemsCount={450}
-                        pageRangeDisplayed={5}
-                        onChange={this.handelPagination}
-                        itemClass={"page-item"}
-                        linkClass={"page-link"}
-                        />
-                        </div>
+                        <CustomPagination activePage={this.state.activePage} change={this.handelPagination}/>
                     </Col>
                 </Row>
             </Col>

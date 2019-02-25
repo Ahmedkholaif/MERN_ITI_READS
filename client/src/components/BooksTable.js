@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Row, Col } from 'reactstrap';
 import {Table} from 'reactstrap';
 import '../css/UserHomePage.css'
-var _ = require('lodash');
-
+import DropDownShelves from './DropDownShelves'
+import RatingStars from './RatingStars';
 class BooksTable extends Component {
 
 constructor(props) {
@@ -11,22 +11,12 @@ constructor(props) {
     this.state = {
       books:props.books,
     };
-    this.handelBookShelf = this.handelBookShelf.bind(this);
   }
 
 
 
 
-handelBookShelf = event  => {
-  const newBooks = this.state.books.map(book=>{
-    if(book.bookInfo.bookName == event.target.name)
-    {
-      book.shelf = event.target.value;
-    }
-    return book;
-  })
-  this.setState({books:newBooks});
-};
+
   render() {
     return (
       <div>
@@ -53,6 +43,7 @@ handelBookShelf = event  => {
                 <th>Cover</th>
                 <th>Name</th>
                 <th>Author</th>
+                <th>Category</th>
                 <th>Avg rate</th>
                 <th>Rating</th>
                 <th>Shelve</th>
@@ -66,18 +57,10 @@ handelBookShelf = event  => {
                       <td><a href="/">{book.bookInfo.bookName}</a></td>
                       <td><a href="/">{book.bookInfo.author}</a></td>
                       <td>{book.bookInfo.category}</td>
-                      <td>{book.rate}</td>
+                      <td><RatingStars rate={book.bookInfo.avgRate} clickable={false}/></td>
+                      <td><RatingStars rate={book.rate} clickable={true} name={book.bookInfo.bookName} books={this.state.books}/></td>
                       <td>
-                      <select
-                        value={book.shelf}
-                        onChange={this.handelBookShelf}
-                        name={book.bookInfo.bookName}
-                        id="userShelf"
-                        className="form-control form-control-sm">
-                        <option value="Read" >Read</option>
-                      <option value="current">Currently Reading</option>
-                      <option value="toRead">To Read</option>
-                      </select>
+                        <DropDownShelves book={book} books={this.state.books}/>
                       </td>
                   </tr>
                   ))

@@ -1,95 +1,47 @@
 import React, { Component } from "react";
-import { Container, Row, Col } from 'reactstrap';
-import {
-    Table,
-    Pagination,
-    PaginationItem, 
-    PaginationLink } from 'reactstrap';
+import Pagination from "react-js-pagination";
+
 import '../css/UserHomePage.css'
 
-var _ = require('lodash');
 
 class CustomPagination extends Component {
 
-    constructor(props) {
-        super(props);
-      }
-      render() {
-        return (
-          <div>
-                <Row className="pagginationContainer">
-                            <Pagination aria-label="Page navigation example" className="pagginationItem">
-                                    <PaginationItem disabled>
-                                    <PaginationLink previous href="#" />
-                                    </PaginationItem>
-                                    <PaginationItem active>
-                                    <PaginationLink href="#">
-                                        1
-                                    </PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem>
-                                    <PaginationLink href="#">
-                                        2
-                                    </PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem>
-                                    <PaginationLink href="#">
-                                        3
-                                    </PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem>
-                                    <PaginationLink href="#">
-                                        4
-                                    </PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem>
-                                    <PaginationLink href="#">
-                                        5
-                                    </PaginationLink>
-                                    </PaginationItem>
-                                    <PaginationItem>
-                                    <PaginationLink next href="#" />
-                                    </PaginationItem>
-                            </Pagination>                                
-                            </Row>
-          </div>
-        );
-      }
-    }
+constructor(props) {
+    super(props);
+    
+
+}
+
+/*
+
+this component accept the next props:
+1- the active page ( it should be in the state of the parent )
+2- on change function ( do it whatever you want to get or display - we gonna send request to import PropTypes from 'prop-types'
+get 5 books per page )
+*/
+
+render() {
+return (
+    <div className="pagginationContainer">
+    <Pagination
+    hideDisabled
+    hideFirstLastPages
+    prevPageText={<i className='fas fa-angle-left'/>}
+    nextPageText={<i className='fas fa-angle-right'/>}
+    activePage={this.props.activePage}
+    itemsCountPerPage={5}
+    totalItemsCount={450}
+    pageRangeDisplayed={5}
+    onChange={this.props.change}
+    itemClass={"page-item"}
+    linkClass={"page-link"}
+    />
+    </div>
+);
+}
+}
 
 
 
 
 export default CustomPagination;
-
-// Pagination.propTypes = {
-//     children: PropTypes.node,
-//     className: PropTypes.string,
-//     listClassName: PropTypes.string,
-//     cssModule: PropTypes.object,
-//     size: PropTypes.string,
-//     tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-//     listTag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-//     'aria-label': PropTypes.string
-//   };
-  
-//   PaginationItem.propTypes = {
-//     active: PropTypes.bool,
-//     children: PropTypes.node,
-//     className: PropTypes.string,
-//     cssModule: PropTypes.object,
-//     disabled: PropTypes.bool,
-//     tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-//   };
-  
-//   PaginationLink.propTypes = {
-//     children: PropTypes.node,
-//     className: PropTypes.string,
-//     cssModule: PropTypes.object,
-//     next: PropTypes.bool,
-//     previous: PropTypes.bool,
-//     first: PropTypes.bool,
-//     last: PropTypes.bool,
-//     tag: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
-//     'aria-label': PropTypes.string
-//   };
