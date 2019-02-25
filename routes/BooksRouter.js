@@ -3,7 +3,6 @@ const router = express.Router();
 const Book = require('../models/Book');
 const Author = require('../models/Author');
 const Category = require('../models/Category');
-
 const multer = require('multer');
 const uploading = multer({
     dest: './public/bookCovers'

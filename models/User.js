@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const validator  = require('validator');
 const keys = require('../helpers/keys');
-
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 const userSchema =new mongoose.Schema({
     firstName:{
         type:"string",required:true
@@ -26,19 +26,18 @@ const userSchema =new mongoose.Schema({
     },
     imgSrc:String,
     books:[{
-        book:{type:mongoose.Types.ObjectId,ref:'Book'},rate:Number,shelve:''
+        book:{type:mongoose.Schema.Types.ObjectId,ref:'Book'},rate:Number,shelve:String
     }],
-    tokens:[{
-        access:{
-            type:"string",required:true
-        },
-        token:{
-            type:"string",required:true
-        }
-    }],
-    isAdmin:{type:'boolean',default:false}
+    // tokens:[{
+    //     access:{
+    //         type:"string",required:true
+    //     },
+    //     token:{
+    //         type:"string",required:true
+    //     }
+    // }],
+    // isAdmin:{type:'boolean',default:false}
 });
-
 
 //mongo middleware --password encryption
 userSchema.pre('save',function (next){  // middleware
