@@ -19,5 +19,15 @@ router.put("/:bookName",(req,res,next)=>{
     
 
 })
+//El fashii5 zyad
+router.post("/:bookName",(req,res)=>{
+    //add the review to book model
+    let review = {userName : "zyad" , review : req.body.review} //req.user.firstName
+            Book.updateOne({title : req.params.bookName} , { $push: { reviews: review } },(err,data)=>{
+                res.send("done")
+            });
+
+
+})
 
 module.exports = router;

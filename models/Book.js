@@ -12,7 +12,7 @@ const bookSchema =new mongoose.Schema({
     rating:{
         total:Number,users:Number
     },
-    reviews:[{}],
+    reviews:[{userName : "String" , review : "String"}],
     description:String
 });
 

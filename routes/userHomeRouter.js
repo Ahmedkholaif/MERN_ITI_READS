@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Book = require('../models/Book');
 const User = require('../models/User');
+const bookRouter = require('./userBookRouter');
+
 const authorRouter = require('./userAuthorRouter');
 const categoryRouter = require('./userCategoryRoute');
 
@@ -11,9 +13,10 @@ const { authenticate, auth_Admin } = require('../helpers/Auth');
 //it's used to get books of specific shelve
 router.use("/authors",authorRouter);
 router.use("/categories",categoryRouter);
-//books router will be added here
+router.use("/books",bookRouter);
 
 router.get("/", (req, res) => {
+    console.log("gettttttt")
     //get the user req.user._id -- find by id after adding authentication 
     const page = req.query.page;
     const mode = req.query.mode;
@@ -81,6 +84,22 @@ router.put("/:bookName",(req,res)=>{
         }) 
     }
 })
+
+/////router Elfashe777777777777777''''''' Ziyad to add search for books , author , category use pattern and relative posibilty contant Aineshtain 
+router.get("/dd", (req, res)=> {
+    console.log("search")
+      const searchQuery = req.query.q;
+        if (searchQuery === "books" ){
+            res.json("books")
+        }
+        else if (searchQuery == "authors"){
+            res.json("authors") //(data)
+
+        }
+        else {
+            res.status(404).send()
+        }
+});
 
 
 
