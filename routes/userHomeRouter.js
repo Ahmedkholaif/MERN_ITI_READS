@@ -2,11 +2,17 @@ const express = require('express');
 const router = express.Router();
 const Book = require('../models/Book');
 const User = require('../models/User');
+const authorRouter = require('./userAuthorRouter');
+const categoryRouter = require('./userCategoryRoute');
+
 const perPage = 10;
 const { authenticate, auth_Admin } = require('../helpers/Auth');
 // After using authentication 
 //it's used to get books of specific shelve
-//Use this by localhost:3003/?mode=reading&page=1
+router.use("/authors",authorRouter);
+router.use("/categories",categoryRouter);
+//books router will be added here
+
 router.get("/", (req, res) => {
     //get the user req.user._id -- find by id after adding authentication 
     const page = req.query.page;
@@ -17,7 +23,6 @@ router.get("/", (req, res) => {
     if(mode!=null){
          pipeline = [
             { $match: { firstName: "motaz" } }, // it will be req.user.firstName
-            { $project: { firstName: 1, books: 1 } },
             { $unwind: '$books' },
             { $match: { 'books.shelve': mode } },
             { $project: { books: 1, _id: 0 } },
@@ -27,7 +32,6 @@ router.get("/", (req, res) => {
     else {
          pipeline = [
             { $match: { firstName: "motaz" } }, // it will be req.user.firstName
-            { $project: { firstName: 1, books: 1 } },
             { $project: { books: 1, _id: 0 } },
             { $project: { "books._id": 0 } },
         ];
@@ -47,9 +51,6 @@ router.get("/", (req, res) => {
         })
     })
 })
-//Use it like the following 
-//localhost:3003/bookname?mode=reading
-//Or localhost:3003/ratedbook?mode=rating&rate=4
 router.put("/:bookName",(req,res)=>{
     const mode = req.query.mode;
     const rate = parseInt(req.query.rate);
@@ -81,6 +82,21 @@ router.put("/:bookName",(req,res)=>{
     }
 })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Routes for testing
 router.get("/addUserBook", (req, res, next) => {
     Book.findOne({ title: "ratedbook" }, (err, data) => {
         let book = { book: data, shelve: "read" , rate : 2}

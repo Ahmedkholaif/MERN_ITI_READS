@@ -2,60 +2,98 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 const Author = require('../models/Author');
+const Cat = require('../models/Category');
 const uploading = multer({
     dest:'./public/authorsPics',
   })
 //Start of Routes for Author
-// Get all Author and display them
-router.get("/", (req, res) => {
-        Author.find((err, data) => {
-            res.json(data);
-        });
-    });
 
-    //Add a new Author
-    router.post("/",uploading.single("image"), (req, res) => {
-        const name = req.body.name;
-        const imgSrc = req.file.path;
-        const dateOfBirth = req.body.dateOfBirth;
-        const author = new Author({
-            name: name,
-            imgSrc: imgSrc,
-            dateOfBirth: dateOfBirth
-        });
-        author.save((err) => {
-            if (err) console.log(err);
-        })
-        res.json(author);
-    });
-    //Edit an Author 
-    //////////////Name//////////////
-    router.put("/:name",uploading.single("image"), (req, res) => {
-        const oldName = req.params.name;
-        const name = req.body.name;
-        const imgSrc = req.file.path;
-        const dateOfBirth = req.body.dateOfBirth;
-        Author.updateOne({
-            _id: `${id}`
-        }, {
-            name: name,
-            imgSrc: imgSrc,
-            dateOfBirth: dateOfBirth
-        }, (err, res) => {
-            if (err) console.log(err);
-            console.log(res);
-        });
-        res.send("Author Updated");
-    });
-    //Delete an Author
-    router.delete("/:name", (req, res) => {
-        const name = req.params.name;
-        Author.deleteOne({
-            name: `${name}`
-        }, (err) => {
-            if (err) console.log(err);
-            res.send("Author Deleted");
-        })
-    });
-    //End of Routes for Author
-module.exports=router;
+// Get all Author and display them
+router.get('/', (req, res) => {
+
+  Author.find({})
+  .then((authors)=>{
+    Cat.find({}).then((cats )=>{
+      res.status(200).send({authors,cats});
+    })
+  })
+  .catch((e)=>{
+      res.status(404).send(e);
+  })
+});
+
+
+// Add a new Author
+// @ admin Auth
+router.post('/', (req, res) => {
+  const fullName = req.body.fullName;
+//   const lastName = req.body.lastName;
+  const imgSrc = req.body.imgSrc;
+  const dateOfBirth = req.body.dateOfBirth;
+
+  const author1 = new Author({
+    fullName,
+    // lastName,
+    imgSrc,
+    dateOfBirth
+  });
+
+  console.log(author1)
+
+  author1.save()
+  .then(()=>{
+      res.status(200).send(author1);
+  }).catch((e)=>{
+      console.log(e);
+      res.status(404).send({
+          msg:'error'
+      });
+  })
+});
+
+
+// Edit an Author
+//@ admin auth
+router.put('/:id', (req, res) => {
+  const id = req.params.id;
+  
+  const fullName = req.body.fullName;
+//   const lastName = req.body.lastName;
+  const imgSrc = req.body.imgSrc;
+  const dateOfBirth = req.body.dateOfBirth;
+
+  Author.updateOne(
+    {
+      _id: id
+    },
+    { $set: {
+        fullName: fullName,
+        // lastName: lastName,
+        imgSrc: imgSrc,
+        dateOfBirth: dateOfBirth,
+        }
+    })
+    .then(()=>{
+        res.status(200).send({masg:"succes"});
+    }) 
+    .catch((e)=>{
+        res.status(404).send(e);
+    })
+});
+// Delete an Author
+router.delete('/:id', (req, res) => {
+  const id = req.params.id
+  Author.deleteOne(
+    {
+      _id: id
+    })
+    .then (()=>{
+        res.status(200).send({msg:"succes"});
+    })
+    .catch((e)=>{
+        res.status(404).send(e);
+    })
+});
+
+// End of Routes for Author
+module.exports = router

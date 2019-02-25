@@ -10,42 +10,39 @@ const bcrypt = require('bcryptjs');
 const { authenticate, auth_Admin } = require('../helpers/Auth');
 
 router.post('/register', uploading.single("image"), (req, res) => {
-    const firstName = req.body.fname;
-    const lastName = req.body.lname;
+    console.log(req.body);
+    console.log("reach end point");
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
     const email = req.body.email;
     const password = req.body.password;
     const imgSrc = req.file.path;
+   
+    User.findOne({email})
+    .then(user=>{
+        if(user) {
+            return res.status(400).json({email:"Email already exists "});
+        }else {
+            const user = new User({
+                firstName ,
+                lastName,
+                email,
+                password,
+                imgSrc,
 
-    User.findOne({ email })
-        .then(user => {
-            if (user) {
-                return res.status(400).json({ email: "Email already exists " });
-            } else {
-                const firstName = req.body.fname;
-                const lastName = req.body.lname;
-                const password = req.body.password;
-                const imgSrc = req.body.img;// == image source
-
-                const user = new User({
-                    firstName,
-                    lastName,
-                    email,
-                    password,
-                    imgSrc,
-                    isAdmin: req.body.isAdmin
-                });
-
-                user.save()
-                    .then(() => {
-                        return user.getAuthToken();
-                    })
-                    .then(token => {
-                        res.header('x-auth', token).send(user);
-                    })
-                    .catch(e => res.status(404).send(e));
-            }
-        })
-
+            });
+            
+            user.save()
+            .then ( () =>  {
+                return user.getAuthToken();})
+                .then(token => {
+                    console.log(user);
+                    res.header('x-auth',token).send(user);
+                })
+            .catch(e => res.status(404).send(e));
+        }
+    } )
+    
 });
 
 router.post('/login', (req, res) => {
@@ -77,9 +74,9 @@ router.post('/login', (req, res) => {
 //  Private route
 //
 
-router.use('/current', authenticate, (req, res , next) => {
-    next();
-})
+// router.use('/current', authenticate, (req, res , next) => {
+//     next();
+// })
 
 router.use('/current',userHomeRouter)
 //

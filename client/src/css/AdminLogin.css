@@ -1,0 +1,29 @@
+.AdminLogin {
+    margin: 0px auto;
+    background-image: url("annie-spratt-746981-unsplash.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 642px;
+}
+
+.AdminLogin h1 {
+    padding: 0px 0px 20px 0;
+    text-decoration: underline;
+    color: black;
+}
+
+.AdminLogin h1 mark{
+    background-color: greenyellow;
+}
+
+@media all and (min-width: 480px) {
+    .AdminLogin {
+        padding: 60px 0;
+    }
+
+    .AdminLogin form {
+        margin: 0 auto;
+        max-width: 320px;
+    }
+}
