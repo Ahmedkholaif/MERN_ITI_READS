@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import propTypes from 'prop-types';
 import {sendSignUpRequest} from '../services/usersFetch';
+import axios from 'axios'
+
 export default class SignUp extends React.Component {
 
   constructor(props) {
@@ -15,9 +17,8 @@ export default class SignUp extends React.Component {
             email: "",
             password: "",
             retypePassword: "", 
-            image:''
         },
-
+        
         errors: {}
 
     };
@@ -52,15 +53,37 @@ handleSubmission = (event)=> {
     this.setState({ errors })
 
     if (Object.keys(errors).length === 0) {
-      
-      console.log(newAccountData);
+      // const formData = new FormData();
+      // const fileField = document.querySelector("input[type='file']");
+
+      // formData.append("firstName",newAccountData.firstName);
+      // formData.append('image', fileField.files[0]);
+      // console.log(formData);
       sendSignUpRequest(newAccountData)
-      .then(data => console.log(JSON.stringify( data)))
-      .catch(e => console.log(e));
+      .then(res => {
+        console.log(res);
+        console.log(res.headers["x-auth"]);
+        console.log(res.status);
+        console.log(res.data);
+        // console.log(res.url,res.formData,JSON.stringify(res));
+        res.json().then(response => {
+          console.log(response);
+          console.log('Success:', JSON.stringify(response))
+          
+        })
+        // console.log(res.headers);
+      } 
+        
+      )
+      .catch(error => console.log('Error:', error))
+   
+      // sendSignUpRequest({newAccountData});
+      // .then(data => console.log(JSON.stringify( data)))
+      // .catch(e => console.log(e));
 
-      this.props.submit(newAccountData)
+      // this.props.submit(newAccountData)
 
-      this.setState(this.initialState)
+      // this.setState(this.initialState)
         
     }
     

@@ -7,27 +7,43 @@ const uploading = multer({
 })
 const bcrypt = require('bcryptjs');
 const { authenticate, auth_Admin } = require('../helpers/Auth');
-
-router.post('/register', uploading.single("image"), (req, res) => {
-    console.log(req.body);
+// uploading.single("image")
+router.post('/register', (req, res) => {
+    
+    console.log(req.body,req.files);
     console.log("reach end point");
+    console.log(req.headers);
+
+    // let uploadFile = req.files.file
+    // const fileName = req.files.file.name
+    // let imgSrc ;
+    // uploadFile.mv(
+    //     `${__dirname}/public/files/${fileName}`,
+    //     function (err) {
+    //       if (err) {
+    //           console.log(err);
+    //         return res.status(500).send(err)
+    //       }
+    //       imgSrc = `public/${req.files.file.name}`
+    //     }
+    // )
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const email = req.body.email;
     const password = req.body.password;
-    const imgSrc = req.file.path;
+    
    
     User.findOne({email})
     .then(user=>{
         if(user) {
-            return res.status(400).json({email:"Email already exists "});
+            return res.status(400).json({err:"Email already exists "});
         }else {
             const user = new User({
                 firstName ,
                 lastName,
                 email,
                 password,
-                imgSrc,
+                // imgSrc,
 
             });
             
@@ -38,7 +54,7 @@ router.post('/register', uploading.single("image"), (req, res) => {
                     console.log(user);
                     res.header('x-auth',token).send(user);
                 })
-            .catch(e => res.status(404).send(e));
+            .catch(err => res.status(404).send({err}));
         }
     } )
     
