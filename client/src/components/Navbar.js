@@ -38,7 +38,7 @@ class CustomNavbar extends Component {
               <NavbarBrand>
             <ul className="menuItems">
                 <li className="menuItem">
-                    <a>Home</a>
+                    <a href="/home">Home</a>
                 </li>
                 <li className="menuItem">
                     <a>Categories</a>

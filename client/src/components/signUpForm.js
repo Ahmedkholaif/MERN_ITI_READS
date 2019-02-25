@@ -129,12 +129,14 @@ dataValidation(data) {
         </FormGroup>
         <FormGroup>
           <Input type="password" name="password" id="password"
+          placeholder="Password"
           onChange={this.handleChange}
           value={newAccountData.password}/>
           {errors.password && <span className="text-danger">{errors.password}</span>}
         </FormGroup>
         <FormGroup>
           <Input type="password" name="retypePassword" id="retypePassword"
+          placeholder="Confirm password"
           value={newAccountData.retypePassword}
           onChange={this.handleChange}/>
           {errors.retypePassword && <span className="text-danger">{errors.retypePassword}</span>}

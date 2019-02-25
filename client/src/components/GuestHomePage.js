@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Col } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import propTypes from 'prop-types';
 import Login from './loginForm';
 import SignUp from './signUpForm'
