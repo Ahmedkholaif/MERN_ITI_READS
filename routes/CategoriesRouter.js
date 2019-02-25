@@ -35,12 +35,12 @@ router.post("/", (req, res) => {
 
 //Edit a category
 
-router.put("/:id", (req, res) => {
-    const id = req.params.id;
+router.put("/:title", (req, res) => {
+    const oldtitle = req.params.title;
     const title = req.body.title;
 
     Category.updateOne({
-        _id:id
+        title:oldtitle
     },
     { $set:
         {
@@ -55,10 +55,10 @@ router.put("/:id", (req, res) => {
      });
 });
 //Delete a category
-router.delete("/:id", (req, res) => {
-    const id = req.params.id;
+router.delete("/:title", (req, res) => {
+    const title = req.params.title;
     Category.deleteOne({
-        _id: id
+        title: title
     })
     .then(()=>{
         res.status(200).send({msg:"deleted"});
