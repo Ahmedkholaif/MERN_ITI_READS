@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
 const bookSchema =new mongoose.Schema({
-    title :{
+    bookName :{
         type:"string",required:true
     },
-    authorID:{
+    author:{
         type:"string"
     },
-    categoryID:"string", 
-    imgSrc:String,
-    rating:{
+    category:"string", 
+    img:String,
+    avgRate:{
         total:Number,users:Number
     },
     reviews:[{userName : "String" , review : "String"}],

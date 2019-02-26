@@ -9,24 +9,24 @@ const userSchema =new mongoose.Schema({
     firstName:{
         type:"string",required:true
     },
-    lastName:{
-        type:"string",required:true
-    },
-    email:{
-        type:"string", //match: "^(w+\.)+[w]+@[w]+\.[w]$" ,
-        required:true,
-        unique:true,
-        validate:{
-            validator: validator.isEmail,
-            msg:`not a valid email`
-        }
-    },
-    password:{
-        type:"string",required:true,minlength:6
-    },
+    // lastName:{
+    //     type:"string",required:true
+    // },
+    // email:{
+    //     type:"string", //match: "^(w+\.)+[w]+@[w]+\.[w]$" ,
+    //     required:true,
+    //     unique:true,
+    //     validate:{
+    //         validator: validator.isEmail,
+    //         msg:`not a valid email`
+    //     }
+    // },
+    // password:{
+    //     type:"string",required:true,minlength:6
+    // },
     imgSrc:String,
     books:[{
-        book:{type:mongoose.Schema.Types.ObjectId,ref:'Book'},rate:Number,shelve:String
+        bookInfo:{type:mongoose.Schema.Types.ObjectId,ref:'Book'},rate:Number,shelf:String
     }],
     // tokens:[{
     //     access:{

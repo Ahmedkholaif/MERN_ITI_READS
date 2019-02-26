@@ -107,7 +107,7 @@ router.delete("/:title", (req, res) => {
         title: `${title}`
     }, (err) => {
         if (err) console.log(err);
-        res.send("Book Deleted");
+        res.status(200).send();
     })
 });
 //End of Routes for Books

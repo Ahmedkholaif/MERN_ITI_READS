@@ -1,5 +1,6 @@
 const express = require('express');
 const Category = require('../models/Category');
+const Book = require('../models/Book');
 
 const router = express.Router();
 
@@ -55,18 +56,14 @@ router.put("/:title", (req, res) => {
      });
 });
 //Delete a category
-router.delete("/:title", (req, res) => {
-    const title = req.params.title;
-    Category.deleteOne({
-        title: title
+router.delete("/:category" , (req,res)=>{
+    let catName = req.params.category;
+    Category.remove({title:catName},(err,data)=>{
+        Book.remove({categoryID : catName},(err,data)=>{
+            res.status(200).send()
+        })
     })
-    .then(()=>{
-        res.status(200).send({msg:"deleted"});
-    })
-    .catch((e)=>{
-        res.status(404).send(e);
-    })
-});
+})
 //End of Routes for Category
 
 

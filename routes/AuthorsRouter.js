@@ -3,6 +3,7 @@ const multer = require('multer');
 const router = express.Router();
 const Author = require('../models/Author');
 const Cat = require('../models/Category');
+const Book = require('../models/Book');
 const uploading = multer({
     dest:'./public/authorsPics',
   })
@@ -80,19 +81,14 @@ router.put('/:name', (req, res) => {
     })
 });
 // Delete an Author
-router.delete('/:name', (req, res) => {
-  const name = req.params.name
-  Author.deleteOne(
-    {
-      fullName: name
-    })
-    .then (()=>{
-        res.status(200).send({msg:"succes"});
-    })
-    .catch((e)=>{
-        res.status(404).send(e);
-    })
-});
+router.delete("/:author" , (req,res)=>{
+  let author = req.params.author;
+  Author.remove({fullName:author},(err,data)=>{
+      Book.remove({authorID : author},(err,data)=>{
+          res.status(200).send()
+      })
+  })
+})
 
 // End of Routes for Author
 module.exports = router
