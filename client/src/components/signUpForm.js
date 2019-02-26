@@ -150,7 +150,10 @@ export default class SignUp extends React.Component {
             this.props.history.push('/home');
           }
         })
-        .catch(error => console.log('Error:', error))
+        .catch(errors => {
+          console.log('Error:', errors)
+				  this.setState({ errors });
+        })
 
       // // this.props.submit(newAccountData)
 

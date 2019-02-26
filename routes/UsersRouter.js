@@ -61,11 +61,11 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-
+    console.log(req.body);
     User.findOne({ email })
         .then(user => {
             if (!user) {
-                return res.status(404).json({ email: "Invalid Email Or Password " })
+                return res.status(404).json({ err: "Invalid Email Or Password " })
             } else {
                 bcrypt.compare(password, user.password)
                     .then(isMatch => {
@@ -75,7 +75,7 @@ router.post('/login', (req, res) => {
                                     res.header('x-auth', token).send(user);
                                 })
                         } else {
-                            return res.status(400).json({ password: "Invalid Email Or Password" });
+                            return res.status(400).json({ err: "Invalid Email Or Password" });
                         }
                     })
             }

@@ -4,7 +4,7 @@ import propTypes from 'prop-types';
 import Login from './loginForm';
 import SignUp from './signUpForm'
 import '../css/GuestHomePage.css'
-
+import axios from 'axios';
 var _ = require('lodash');
 
 class GuestHomePage extends Component {
@@ -12,16 +12,32 @@ class GuestHomePage extends Component {
 
 	isUserAuthenticated = (data) => {
 
-    //check in the data got from server
-		const { users } = this.props;
+		//check in the data got from server
+		axios
+			.post("/api/users/login",data)
+			.then(res=>{
+				console.log(res);
+				if(res.status === 200){
+					localStorage.setItem("token",res.headers["x-auth"]);
+					console.log('succes');
+					 this.props.history.push('/home');
+					 return true;
+				}
+			})
+			.catch(errors=>{
+				console.log(errors);
+				return false
+				// this.setState({ errors });
+			})
+		// const { users } = this.props;
 
-		let userData = _.find(users, user => {
+		// let userData = _.find(users, user => {
 
-			return user.email === data.email && user.password === data.password;
+		// 	return user.email === data.email && user.password === data.password;
 
-		});
+		// });
 
-		return userData;
+		
 	}
 
 
@@ -67,7 +83,7 @@ class GuestHomePage extends Component {
       <div id='HomeContent'>
         <Row>
           <Col>
-            <Login submit={this.submitLogin} isUserAuthenticated={this.isUserAuthenticated}/>
+            <Login submit={this.submitLogin} history={this.props.history} isUserAuthenticated={this.isUserAuthenticated}/>
           </Col>
         </Row>
         <Row className="seperator10"></Row>
