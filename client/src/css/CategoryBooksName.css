@@ -55,27 +55,18 @@ background-color: white;
 }
 
 
-
-.bookShelves{
-    margin: 10vh;
-    
+/*** items styling */
+#displayedItems{
+    height: 70vh;
+    margin:0 auto;
 }
-.catShelf{
-    background-image: url('../css/Shelf.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    width: 60%;
-    height: 1vh;
-    margin: 0 auto;
-    margin-bottom: 10vh;
-
+.justify-content-md-center{
+    margin:0 auto;
 }
-
-.bookCatShelves{
-    list-style-type: none;
-}
-
-.bookCatShelves>li>a{
+.item{
+    margin: 1vh;
     text-decoration: none;
+}
+.lastItem{
+    margin-bottom: 5vh;
 }

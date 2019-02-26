@@ -12,6 +12,8 @@ import {
     DropdownMenu,
     DropdownItem,
    } from 'reactstrap';
+   import {Link} from "react-router-dom";
+
 import '../css/UserHomePage.css'
 
 
@@ -38,16 +40,16 @@ class CustomNavbar extends Component {
               <NavbarBrand>
             <ul className="menuItems">
                 <li className="menuItem">
-                    <a href="/home">Home</a>
+                    <Link to="/home" replace>Home</Link>
                 </li>
                 <li className="menuItem">
-                    <a href="/categories">Categories</a>
+                    <Link to="/categories" replace>Categories</Link>
                 </li>
                 <li className="menuItem">
-                    <a>Books</a>
+                <Link to="/books" replace>Books</Link>
                 </li>
                 <li className="menuItem">
-                    <a>Authors</a>
+                <Link to="/" replace>Authors</Link>
                 </li>
             </ul>
                   </NavbarBrand>
@@ -81,7 +83,7 @@ class CustomNavbar extends Component {
                     </DropdownMenu>
                   </UncontrolledDropdown>
                   <NavItem className="leftMenuItem">
-                  <Button id='signOut' type="submit"><a href="/">Sign out</a></Button>
+                  <Button id='signOut' type="submit"><Link to="/" replace>Sign out</Link></Button>
                   </NavItem>
                 </Nav>
               </Collapse>
