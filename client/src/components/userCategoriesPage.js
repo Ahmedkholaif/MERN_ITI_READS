@@ -23,7 +23,7 @@ constructor(props) {
                     {catName:"cat 0",catLink:"/home"}],
      categoryUnit:[],
     }
-    const chunk_size = 4;
+    const chunk_size = 5;
     const arr = this.state.categories;
     this.state.categoryUnit = arr.map( function(e,i){ 
          return i%chunk_size===0 ? arr.slice(i,i+chunk_size) : null; 
@@ -51,10 +51,10 @@ return (
 
                             </li>
                         </ul>
-                        {(cats.length >0 ? (
+                        {(cats[1] ? (
                         <ul className="bookCatShelves">
                             <li>
-                            <a href={cats[0].catLink}>{cats[1].catName}</a>
+                            <a href={cats[1].catLink}>{cats[1].catName}</a>
                             </li>
                             <li className="catShelf">
                                 
@@ -62,10 +62,10 @@ return (
                         </ul>
                         ):"")}
 
-                        {(cats.length >1 ? (
+                        {(cats[2] ? (
                         <ul className="bookCatShelves">
                             <li>
-                            <a href={cats[0].catLink}>{cats[2].catName}</a>
+                            <a href={cats[2].catLink}>{cats[2].catName}</a>
                             </li>
                             <li className="catShelf">
                                 
@@ -73,10 +73,21 @@ return (
                         </ul>
                         ):"")}
 
-                        {(cats.length > 2 ? 
+                        {(cats[3] ? 
                         <ul className="bookCatShelves">
                             <li>
-                            <a href={cats[0].catLink}>{cats[3].catName}</a>
+                            <a href={cats[3].catLink}>{cats[3].catName}</a>
+                            </li>
+                            <li className="catShelf">
+                                
+                            </li>
+                        </ul>
+                        :"")}
+
+                        {(cats[4] ? 
+                        <ul className="bookCatShelves">
+                            <li>
+                            <a href={cats[4].catLink}>{cats[4].catName}</a>
                             </li>
                             <li className="catShelf">
                                 

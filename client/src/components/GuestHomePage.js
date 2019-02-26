@@ -33,7 +33,7 @@ class GuestHomePage extends Component {
 		if (user) {
 
     // mark the user as authenticated
-			this.props.history.push("/userHomePage")
+			this.props.history.push("/home")
 
 		}
   }
