@@ -31,18 +31,18 @@ router.post('/', (req, res) => {
   const imgSrc = req.body.imgSrc;
   const dateOfBirth = req.body.dateOfBirth;
 
-  const author1 = new Author({
+  const author = new Author({
     fullName,
     // lastName,
     imgSrc,
     dateOfBirth
   });
 
-  console.log(author1)
+  console.log(author)
 
-  author1.save()
+  author.save()
   .then(()=>{
-      res.status(200).send(author1);
+      res.status(200).send(author);
   }).catch((e)=>{
       console.log(e);
       res.status(404).send({
@@ -54,9 +54,8 @@ router.post('/', (req, res) => {
 
 // Edit an Author
 //@ admin auth
-router.put('/:id', (req, res) => {
-  const id = req.params.id;
-  
+router.put('/:name', (req, res) => {
+  const oldname = req.params.name;
   const fullName = req.body.fullName;
 //   const lastName = req.body.lastName;
   const imgSrc = req.body.imgSrc;
@@ -64,7 +63,7 @@ router.put('/:id', (req, res) => {
 
   Author.updateOne(
     {
-      _id: id
+      fullName: oldname
     },
     { $set: {
         fullName: fullName,
@@ -81,11 +80,11 @@ router.put('/:id', (req, res) => {
     })
 });
 // Delete an Author
-router.delete('/:id', (req, res) => {
-  const id = req.params.id
+router.delete('/:name', (req, res) => {
+  const name = req.params.name
   Author.deleteOne(
     {
-      _id: id
+      fullName: name
     })
     .then (()=>{
         res.status(200).send({msg:"succes"});

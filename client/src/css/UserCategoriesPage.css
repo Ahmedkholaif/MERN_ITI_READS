@@ -1,0 +1,81 @@
+#signOut{
+    height: 1.8rem;
+    line-height: 1;
+    background-color: rgb(208, 97, 69);
+    padding: 3px 5px;
+    margin-top: 5px;
+}
+#signOut>a{
+    text-decoration: none;
+    color:white;
+}
+.searchbar{
+margin-bottom: auto;
+margin-top: auto;
+height: 39px;
+background-color: #ffffff;
+border-radius: 20px;
+padding: 0;
+}
+
+.search_input{
+color: rgb(208, 97, 69);
+border: 0;
+outline: 0;
+background: none;
+width: 0;
+caret-color:transparent;
+line-height: 39px;
+transition: width 0.4s linear;
+}
+
+.searchbar:hover > form > .search_input{
+padding: 0 10px;
+width: 450px;
+caret-color:red;
+transition: width 0.4s linear;
+}
+
+.searchbar:hover > form > .search_icon{
+background: white;
+color: #e74c3c;
+}
+
+.search_icon{
+height: 40px;
+width: 40px;
+float: right;
+display: flex;
+justify-content: center;
+align-items: center;
+border-radius: 50%;
+color:rgb(208, 97, 69);
+border:0;
+background-color: white;
+}
+
+
+
+.bookShelves{
+    margin: 10vh;
+    
+}
+.catShelf{
+    background-image: url('../css/Shelf.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 60%;
+    height: 1vh;
+    margin: 0 auto;
+    margin-bottom: 10vh;
+
+}
+
+.bookCatShelves{
+    list-style-type: none;
+}
+
+.bookCatShelves>li>a{
+    text-decoration: none;
+}

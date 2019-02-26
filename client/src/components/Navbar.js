@@ -41,7 +41,7 @@ class CustomNavbar extends Component {
                     <a href="/home">Home</a>
                 </li>
                 <li className="menuItem">
-                    <a>Categories</a>
+                    <a href="/categories">Categories</a>
                 </li>
                 <li className="menuItem">
                     <a>Books</a>

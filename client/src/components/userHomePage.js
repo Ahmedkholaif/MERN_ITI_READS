@@ -5,7 +5,6 @@ import CustomNavbar from './Navbar';
 import BooksTable from './BooksTable';
 import CustomPagination from './pagination';
 
-var _ = require('lodash');
 
 class UserHomePage extends Component {
 

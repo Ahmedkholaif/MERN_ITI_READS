@@ -10,6 +10,7 @@ this component accept the next props:
 3- the whole books displayed in the page to change them on click
 4- boolean variable to set if it's editable or not
 */
+
 class RatingStars extends Component {
     constructor(props) {
         super(props);

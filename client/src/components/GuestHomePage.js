@@ -33,7 +33,7 @@ class GuestHomePage extends Component {
 		if (user) {
 
     // mark the user as authenticated
-			this.props.history.push("/userHomePage")
+			this.props.history.push("/home")
 
 		}
   }
@@ -72,7 +72,8 @@ class GuestHomePage extends Component {
         </Row>
         <Row className="seperator10"></Row>
         <Row>
-          <Col xs="4"><SignUp isUserExists={this.isUserExists}
+					<Col xs="4"><SignUp isUserExists={this.isUserExists}
+					history={this.props.history}
           submit={this.submitRegister}
           /></Col>
           <Col xs="4"></Col>

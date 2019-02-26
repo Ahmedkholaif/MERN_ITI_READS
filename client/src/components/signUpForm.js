@@ -112,7 +112,7 @@ export default class SignUp extends React.Component {
 
   }
 
-  handleSubmission = (event) => {
+  handleSubmission (event) {
     event.preventDefault();
     const {
       newAccountData
@@ -144,34 +144,13 @@ export default class SignUp extends React.Component {
       //Send Request 
       axios.post("/api/users/register", data, conf)
         .then(res => {
-          console.log(res.data['path']);
-          console.log(res);
-          this.setState({
-            imageSrc: `${res.data['path']}`
-          })
+          if(res.status === 200){
+            localStorage.setItem("token",res.headers["x-auth"]);
+            
+            this.props.history.push('/home');
+          }
         })
-
-        // sendSignUpRequest(newAccountData)
-        //   .then(res => {
-        //       console.log(res);
-        //       console.log(res.headers["x-auth"]);
-        //       console.log(res.status);
-        //       console.log(res.data);
-        //       // console.log(res.url,res.formData,JSON.stringify(res));
-        //       res.json().then(response => {
-        //         console.log(response);
-        //         console.log('Success:', JSON.stringify(response))
-
-        //       })
-        //       // console.log(res.headers);
-        //     }
-
-        //   )
         .catch(error => console.log('Error:', error))
-
-      // // sendSignUpRequest({newAccountData});
-      // // .then(data => console.log(JSON.stringify( data)))
-      // // .catch(e => console.log(e));
 
       // // this.props.submit(newAccountData)
 
@@ -343,5 +322,15 @@ export default class SignUp extends React.Component {
 SignUp.propTypes = {
 
   submit: propTypes.func.isRequired,
-  isUserExists: propTypes.func.isRequired
+  isUserExists: propTypes.func.isRequired,
+
+  users: propTypes.arrayOf(
+		propTypes.shape({
+			email: propTypes.string.isRequired,
+		}).isRequired
+	),
+
+	history: propTypes.shape({
+		push: propTypes.func.isRequired
+	}).isRequired
 }
