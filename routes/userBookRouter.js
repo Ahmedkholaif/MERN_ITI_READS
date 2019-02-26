@@ -29,7 +29,7 @@ router.get("/:bookName", (req, res, next) => {
     }
 
     Book.findOne({ title: bookName }, (err, queriedBook) => {
-        User.findOne({ firstName: "motaz", "books.book": queriedBook._id }).populate("books.book")
+        User.findOne({ email : req.user.email , "books.bookInfo": queriedBook._id }).populate("books.bookInfo")
             .exec((err, userData) => {
                 let book
                 if (userData !== null) {
@@ -39,12 +39,12 @@ router.get("/:bookName", (req, res, next) => {
                         }
                     });
                     bookData.rate.userRate = book.rate;
-                    bookData.shelve = book.shelve;
+                    bookData.shelf = book.shelf;
                 }
-                bookData.title = queriedBook.title;
+                bookData.bookName = queriedBook.bookName;
                 bookData.author = queriedBook.author;
                 bookData.category = queriedBook.category;
-                bookData.imgSrc = queriedBook.imgSrc;
+                bookData.img = queriedBook.img;
                 bookData.describtion = queriedBook.describtion;
                 bookData.rate.rating = queriedBook.rating.total
                 bookData.rate.number = queriedBook.rating.users
@@ -59,10 +59,10 @@ router.put("/:bookName", (req, res, next) => {
     let mode = req.query.mode;
     let userRate = parseInt(req.query.rate);
     let bookName = req.params.bookName;
-    if(mode === "read" || mode === "reading" || mode ==="to-read" || (mode === "rating") ){
+    if(mode === "read" || mode === "current" || mode ==="toRead" || (mode === "rating") ){
         //check if the user own this book
-    Book.findOne({ title: bookName }, (err, queriedBook) => {
-        User.findOne({ firstName: "motaz", "books.book": queriedBook._id }).populate("books.book")
+    Book.findOne({ bookName: bookName }, (err, queriedBook) => {
+        User.findOne({ email: req.user.email , "books.bookInfo": queriedBook._id }).populate("books.bookInfo")
             .exec((err, userData) => {
                 if (userData !== null) { // if the user own it use the editBookState in userHomeRouter
                     userHomeRouter.editBookState(bookName,mode,userRate,res)
@@ -72,9 +72,9 @@ router.put("/:bookName", (req, res, next) => {
                         mode = "read";
                     }
                     //now the book object will get ready to be added to the user books with the following props 
-                    let book = {book : queriedBook , shelve : mode , rate : userRate }
+                    let book = {book : queriedBook , shelf : mode , rate : userRate }
                     //update the book in the books collection
-                    Book.findOneAndUpdate({title:bookName} , 
+                    Book.findOneAndUpdate({bookName:bookName} , 
                         {$inc: {"rating.total" : userRate , "rating.users" :  1}},(err,data)=>{
                             if(err){
                                 res.status(404).send()
@@ -82,7 +82,7 @@ router.put("/:bookName", (req, res, next) => {
                         })
                     //motaz will be changed to req.user.userName
                     //add the book to the user
-                    User.updateOne({firstName : "motaz"} , { $push: { books: book } },(err,data)=>{
+                    User.updateOne({email : req.user.email} , { $push: { books: bookInfo } },(err,data)=>{
                         console.log(data)
                         res.status(200).send()
                     });
@@ -96,10 +96,18 @@ router.put("/:bookName", (req, res, next) => {
 //El fashii5 zyad
 router.post("/:bookName",(req,res)=>{
     //add the review to book model
-    let review = {userName : "zyad" , review : req.body.review} //req.user.firstName
-            Book.updateOne({title : req.params.bookName} , { $push: { reviews: review } },(err,data)=>{
-                res.send("done")
-            });
+    if(req.body.review != null ){
+        let review = {userName : req.user.firstName + " " + req.user.lastName , review : req.body.review} //req.user.firstName
+        Book.updateOne({bookName : req.params.bookName} , { $push: { reviews: review } },(err,data)=>{
+            if(err){
+                res.status(404).send
+            }
+            res.status(200).send()
+        });
+    }
+    else{
+        req.status(404).send();
+    }
 })
 
 module.exports = router;

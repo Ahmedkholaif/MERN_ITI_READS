@@ -26,7 +26,6 @@ router.get("/", (req, res) => {
     const mode = req.query.mode;
     let start = (page > 0 ? (page - 1) : 0) * 5; //start from index ( 0 , 5 , 10 , 15)
     let end = start + 5;
-    console.log(start , "  " , end)
     let pipeline;
     if(mode !== 'all'){
          pipeline = [
@@ -51,7 +50,7 @@ router.get("/", (req, res) => {
     }
     User.aggregate(pipeline, function (err, result) {
         if(err){
-            res.status(404).send(err);
+            res.status(500).send();
         }
         User.populate(result, {
             path: "books.bookInfo",
@@ -73,25 +72,23 @@ router.get("/", (req, res) => {
 //this is used to add rating or to change shelve
 const editBookState = (bookName, mode, rate, res) => {
     let book_id;
-    if (mode === "read" || mode === "reading" || mode === "to-read") {
-        Book.findOne({ title: bookName }, (err, data) => {
+    if (mode === "read" || mode === "current" || mode === "toRead") {
+        Book.findOne({ bookName : bookName }, (err, data) => {
             if (err) {
-                res.send(err)
+                res.status(404).send()
             }
             if (data) {
                 book_id = data._id;
-                console.log("i will change state of ", book_id, "to ", mode);
-                User.findOneAndUpdate({ firstName: "motaz", "books.book": book_id }, //firstName willbe req.user._id
-                    { '$set': { 'books.$.shelve': mode } }, (err, dataa) => {
+                User.findOneAndUpdate({ email: req.user.email, "books.bookInfo": book_id }, //firstName willbe req.user._id
+                    { '$set': { 'books.$.shelf': mode } }, (err, dataa) => {
                         if (err) {
                             res.status(404).send(err)
                         }
-                        console.log("found in user");
                         res.status(200).send()
                     })
             }
             else {
-                res.status(404).send(data)
+                res.status(404).send()
             }
 
         })
@@ -103,9 +100,8 @@ const editBookState = (bookName, mode, rate, res) => {
                     res.status(404).send()
                 }
                 book_id = data._id;
-                User.findOneAndUpdate({ firstName: "motaz", "books.book": book_id }, //firstName willbe req.user._id
-                    { '$set': { 'books.$.rate': rate } }, (err, dataa) => {
-                        console.log("found in user");
+                User.findOneAndUpdate({ email: req.user.email, "books.bookInfo": book_id }, //firstName willbe req.user._id
+                    { '$set': { 'books.$.rate': rate } }, (err, daaa) => {
                         res.send.status(200).send()
                     })
             })
@@ -122,28 +118,6 @@ router.put("/:bookName", (req, res) => {
     editBookState(bookName, mode, rate, res)
 })
 //delete the book
-router.delete("/:bookName", (req, res) => {
-    const bookName = req.params.bookName;
-    //req.user.email
-    Book.findOne({ title: bookName }, (err, data) => {
-        if (err) {
-            res.send(err)
-        }
-        let bookId = data.id
-        console.log(bookId)
-        User.findOne({ firstName: "motaz" },(err,user)=>{
-            if (err){
-                res.send(err)
-            }
-            user.books.pull({"book.id" : bookId});
-            user.save()
-            res.status(200).send();
-        });
-    })
-});
-
-
-
 
 
     /////router Elfashe777777777777777''''''' Ziyad to add search for books , author , category use pattern and relative posibilty contant Aineshtain 

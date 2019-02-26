@@ -9,24 +9,6 @@ const userSchema =new mongoose.Schema({
     firstName:{
         type:"string",required:true
     },
-<<<<<<< HEAD
-    // lastName:{
-    //     type:"string",required:true
-    // },
-    // email:{
-    //     type:"string", //match: "^(w+\.)+[w]+@[w]+\.[w]$" ,
-    //     required:true,
-    //     unique:true,
-    //     validate:{
-    //         validator: validator.isEmail,
-    //         msg:`not a valid email`
-    //     }
-    // },
-    // password:{
-    //     type:"string",required:true,minlength:6
-    // },
-    imgSrc:String,
-=======
     lastName:{
         type:"string",required:true
     },
@@ -43,7 +25,6 @@ const userSchema =new mongoose.Schema({
         type:"string",required:true,minlength:6
     },
     img:String,
->>>>>>> fe1d473ff43ce589a0af08b78d8426e041e3d0d6
     books:[{
         bookInfo:{type:mongoose.Schema.Types.ObjectId,ref:'Book'},rate:Number,shelf:String
     }],
