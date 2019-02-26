@@ -10,7 +10,6 @@ const uploading = multer({
 
 
 router.post('/', uploading.single("image"), (req, res) => {
-
     const title = req.body.title;
     const author = req.body.author;
     // image
@@ -21,19 +20,19 @@ router.post('/', uploading.single("image"), (req, res) => {
     let categoryID;
     //query to find the authot and the category
 
-    let findAuthor = 
+    let findAuthor =
         Author.findOne(
-        // query
-        {
-            fullName: author
-        },
-        (err, author) => {
-            console.log(author);
-            if (err) return res.status(200).send(err)
-            console.log(author._id);
-            authorID = author._id;
-        }
-    )
+            // query
+            {
+                fullName: author
+            },
+            (err, author) => {
+                console.log(author);
+                if (err) return res.status(200).send(err)
+                console.log(author._id);
+                authorID = author._id;
+            }
+        )
 
 
     let findCat = Category.findOne(
@@ -83,7 +82,7 @@ router.get("/", (req, res) => {
 });
 
 //Edit a Book
-router.put("/:title",uploading.single("image"), (req, res) => {
+router.put("/:title", uploading.single("image"), (req, res) => {
     const oldTitle = req.params.title;
     const title = req.body.title;
     const authorID = req.body.authorID;
@@ -92,14 +91,14 @@ router.put("/:title",uploading.single("image"), (req, res) => {
     Book.updateOne({
         title: `${oldTitle}`
     }, {
-        title:title,
-        authorID: authorID,
-        categoryID: categoryID,
-        imgSrc: imgSrc
-    }, (err, res) => {
-        if (err) console.log(err);
-        console.log(res);
-    });
+            title: title,
+            authorID: authorID,
+            categoryID: categoryID,
+            imgSrc: imgSrc
+        }, (err, res) => {
+            if (err) console.log(err);
+            console.log(res);
+        });
     res.send("Book Updated");
 });
 //Delete a Book
