@@ -1,9 +1,13 @@
-const express = require('express')
-
-const router = express.Router()
+const express = require('express');
+const multer = require('multer');
+const router = express.Router();
 const Author = require('../models/Author');
 const Cat = require('../models/Category');
-// Start of Routes for Author
+const uploading = multer({
+    dest:'./public/authorsPics',
+  })
+//Start of Routes for Author
+
 // Get all Author and display them
 router.get('/', (req, res) => {
 

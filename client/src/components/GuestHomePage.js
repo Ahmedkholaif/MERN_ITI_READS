@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Col } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import propTypes from 'prop-types';
 import Login from './loginForm';
 import SignUp from './signUpForm'
@@ -64,7 +64,7 @@ class GuestHomePage extends Component {
 
   render() {
     return (
-      <Container className='HomeContent'>
+      <div id='HomeContent'>
         <Row>
           <Col>
             <Login submit={this.submitLogin} isUserAuthenticated={this.isUserAuthenticated}/>
@@ -78,7 +78,7 @@ class GuestHomePage extends Component {
           <Col xs="4"></Col>
           <Col xs="4"></Col>
         </Row>
-      </Container>
+      </div>
     );
   }
 }

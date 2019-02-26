@@ -11,18 +11,3 @@ export function getTodos (){
         );
 }
 
-export function sendSignUpRequest (data) {
-    // console.log("fetch",data)
-   return (
-    axios.post('/api/users/register', 
-      data,
-      // method: 'POST', // or 'PUT'
-      // body: JSON.stringify(data),
-      // type:'application/json',
-      {headers:
-      {
-        'Content-Type': 'application/json',
-        "x-auth":"token"
-      }}
-    ) );
-}
