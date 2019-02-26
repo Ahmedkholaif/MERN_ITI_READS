@@ -4,6 +4,7 @@ import '../css/UserHomePage.css'
 import CustomNavbar from './Navbar';
 import BooksTable from './BooksTable';
 import CustomPagination from './pagination';
+import Axios from "axios";
 
 
 class UserHomePage extends Component {
@@ -15,27 +16,38 @@ constructor(props) {
     this.state = {
       isOpen: false,
       activePage:1,
-    };
-
-    this.state={
       shelf : "all",
-      books:[
-        {bookInfo:{img:"img1",bookName:"book1",author:"auth1",category:"mm",avgRate:2}
-      ,rate:1,shelf:"read"},
-      {bookInfo:{img:"img2",bookName:"book2",author:"auth1",category:"mm",avgRate:1}
-      ,rate:5,shelf:"toRead"},
-      {bookInfo:{img:"img3",bookName:"book3",author:"auth1",category:"mm",avgRate:2}
-      ,rate:4,shelf:"current"},
-      {bookInfo:{img:"img4",bookName:"book4",author:"auth1",category:"mm",avgRate:5}
-      ,rate:0,shelf:"read"},
-      {bookInfo:{img:"img1",bookName:"book5",author:"auth1",category:"mm",avgRate:2}
-      ,rate:3,shelf:"toRead"}
-    ]
+      books:[],
     }
 
   }
   
+componentDidMount(){
+  const token = localStorage.token;
+  if(token) {
+    const conf ={
+      params:{
+        page:`${this.state.activePage}`,
+        mode:`${this.state.shelf}`
+      },
+      headers:{
+      "x-auth":token,
+      }
+    }
+    Axios.get(`/api/users/current`,conf
+    )
+    .then(res =>{
+      console.log(res);
+      console.log(res.data.books)
+      this.setState({
+        books:res.data.books,
 
+      })
+    })
+    .catch(err => console.log(err))
+  }
+
+}
 // test = setInterval(() => {
 //   alert(this.state.books[0].rate)
 // }, 5000);

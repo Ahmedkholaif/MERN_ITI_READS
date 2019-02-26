@@ -87,12 +87,9 @@ router.post('/login', (req, res) => {
 //  Private route
 //
 
-// router.use('/current', authenticate, (req, res , next) => {
-//     next();
-// })
-
-
-
+router.use('/current', authenticate, (req, res , next) => {
+    next();
+})
 
 /////////////////To ziyad sho3'l 
 

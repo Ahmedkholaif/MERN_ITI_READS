@@ -18,16 +18,20 @@ router.use("/books",bookRouter);
 router.get("/", (req, res) => {
     //it get the data based on page and mode
     //get the user req.user._id -- find by id after adding authentication 
+    // console.log(req.headers);
+    // console.log(req.user);
+    // console.log(req.query);
+    const {email,img}=req.user;
     const page = req.query.page;
     const mode = req.query.mode;
     let start = (page > 0 ? (page - 1) : 0) * 5; //start from index ( 0 , 5 , 10 , 15)
     let end = start + 5;
     let pipeline;
-    if(mode!=null){
+    if(mode !== 'all'){
          pipeline = [
-            { $match: { firstName: "motaz" } }, // it will be req.user.firstName
+            { $match: { email: req.user.email } }, // it will be req.user.firstName
             { $unwind: '$books' }, // to comvert the books field into array
-            { $match: { 'books.shelve': mode } }, 
+            { $match: { 'books.shelf': mode } }, 
             { $project: { books: 1, _id: 0 } }, //to only keep books and user's id
             { $project: { "books._id": 0 } }, // to remove book id
             {$skip : start }, //for pagunation
@@ -36,35 +40,32 @@ router.get("/", (req, res) => {
     }
     else {
          pipeline = [
-            { $match: { firstName: "motaz" } }, // it will be req.user.firstName
+            { $match: { email: req.user.email } }, // it will be req.user.firstName
+            { $unwind: '$books' }, // to comvert the books field into array
             { $project: { books: 1, _id: 0 } },
             { $project: { "books._id": 0 } },
             {$skip : page*5 || 0},
             {$limit : 5 }
         ];
     }
-
     User.aggregate(pipeline, function (err, result) {
         if(err){
-            // res.status(404).send()
+            res.status(404).send(err);
         }
         User.populate(result, {
-            path: "books.book",
-            select: { _id: 0, title: 1, authorID: 1 } //select fields to return
+            path: "books.bookInfo",
+            select: { img:1,_id: 0, bookName: 1, author: 1,category:1,avgRate:1 } //select fields to return
         }, (err, result) => {
+            console.log(result);
             if(err){
+                console.log(err)
                 // res.status(404).send()
             }
-            let arr = [];
+            let books = [];
             result.forEach(element => {
-                arr.push(element.books)
+                books.push(element.books)
             });
-            if(mode==null){ // id mode = null the array will contain an array i don't know why
-                res.json(arr[0]);
-            }
-            else{
-            res.json(arr)}
-
+            return res.json({"books":books,email,img});
         })
     })
 })

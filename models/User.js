@@ -24,9 +24,9 @@ const userSchema =new mongoose.Schema({
     password:{
         type:"string",required:true,minlength:6
     },
-    imgSrc:String,
+    img:String,
     books:[{
-        book:{type:mongoose.Schema.Types.ObjectId,ref:'Book'},rate:Number,shelve:String
+        bookInfo:{type:mongoose.Schema.Types.ObjectId,ref:'Book'},rate:Number,shelf:String
     }],
     tokens:[{
         access:{
