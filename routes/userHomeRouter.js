@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Book = require('../models/Book');
 const User = require('../models/User');
+const bookRouter = require('./userBookRouter');
+
 const authorRouter = require('./userAuthorRouter');
 const categoryRouter = require('./userCategoryRoute');
 const bookRouter = require('./userBookRouter');
@@ -116,6 +118,22 @@ router.put("/:bookName",(req,res)=>{
     const bookName = req.params.bookName;
     editBookState(bookName,mode,rate,res)
 })
+
+/////router Elfashe777777777777777''''''' Ziyad to add search for books , author , category use pattern and relative posibilty contant Aineshtain 
+router.get("/dd", (req, res)=> {
+    console.log("search")
+      const searchQuery = req.query.q;
+        if (searchQuery === "books" ){
+            res.json("books")
+        }
+        else if (searchQuery == "authors"){
+            res.json("authors") //(data)
+
+        }
+        else {
+            res.status(404).send()
+        }
+});
 
 
 

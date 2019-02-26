@@ -3,6 +3,7 @@ import {BrowserRouter,Route} from "react-router-dom";
 import AdminLogin from './components/AdminLogin'
 import GuestHomePage from './components/GuestHomePage'
 import HomePage from './components/userHomePage'
+import Categories from './components/userCategoriesPage'
 import './App.css'
 
 class App extends Component {
@@ -14,6 +15,7 @@ class App extends Component {
                     <Route path="/admin" exact component={AdminLogin}/>
                     <Route path='/' exact component={GuestHomePage}/>
                     <Route path='/Home' exact component={HomePage}/>
+                    <Route path='/Categories' exact component={Categories}/>
                 </div>
             </BrowserRouter>
         );
