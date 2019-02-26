@@ -6,6 +6,7 @@ const bookRouter = require('./userBookRouter');
 
 const authorRouter = require('./userAuthorRouter');
 const categoryRouter = require('./userCategoryRoute');
+const bookRouter = require('./userBookRouter');
 
 const perPage = 10;
 const { authenticate, auth_Admin } = require('../helpers/Auth');
@@ -16,7 +17,7 @@ router.use("/categories",categoryRouter);
 router.use("/books",bookRouter);
 
 router.get("/", (req, res) => {
-    console.log("gettttttt")
+    //it get the data based on page and mode
     //get the user req.user._id -- find by id after adding authentication 
     const page = req.query.page;
     const mode = req.query.mode;
@@ -26,10 +27,12 @@ router.get("/", (req, res) => {
     if(mode!=null){
          pipeline = [
             { $match: { firstName: "motaz" } }, // it will be req.user.firstName
-            { $unwind: '$books' },
-            { $match: { 'books.shelve': mode } },
-            { $project: { books: 1, _id: 0 } },
-            { $project: { "books._id": 0 } },
+            { $unwind: '$books' }, // to comvert the books field into array
+            { $match: { 'books.shelve': mode } }, 
+            { $project: { books: 1, _id: 0 } }, //to only keep books and user's id
+            { $project: { "books._id": 0 } }, // to remove book id
+            {$skip : start }, //for pagunation
+            {$limit : end }
         ];
     }
     else {
@@ -37,52 +40,83 @@ router.get("/", (req, res) => {
             { $match: { firstName: "motaz" } }, // it will be req.user.firstName
             { $project: { books: 1, _id: 0 } },
             { $project: { "books._id": 0 } },
+            {$skip : page*5 || 0},
+            {$limit : 5 }
         ];
     }
 
     User.aggregate(pipeline, function (err, result) {
+        if(err){
+            // res.status(404).send()
+        }
         User.populate(result, {
             path: "books.book",
-            select: { _id: 0, title: 1, authorID: 1 }
+            select: { _id: 0, title: 1, authorID: 1 } //select fields to return
         }, (err, result) => {
+            if(err){
+                // res.status(404).send()
+            }
             let arr = [];
             result.forEach(element => {
                 arr.push(element.books)
             });
-            res.json(arr.slice(start, end))
+            if(mode==null){ // id mode = null the array will contain an array i don't know why
+                res.json(arr[0]);
+            }
+            else{
+            res.json(arr)}
 
         })
     })
 })
+//this is used to add rating or to change shelve
+const editBookState = (bookName,mode,rate,res)=>{
+    let book_id;
+    if(mode === "read" || mode === "reading" || mode === "to-read"){
+        Book.findOne({title:bookName},(err,data)=>{
+            if(err){
+                res.send(err)
+            }
+            if(data){
+                book_id = data._id;
+                console.log("i will change state of " , book_id , "to " , mode);
+                User.findOneAndUpdate({firstName : "motaz" , "books.book" : book_id}, //firstName willbe req.user._id
+                {'$set' : {'books.$.shelve' : mode}},(err,dataa)=>{
+                    if(err){
+                        res.status(404).send(err)
+                    }
+                    console.log("found in user");
+                    res.status(200).send()})
+            }
+            else{
+                    res.status(404).send(data)
+                }
+
+        }) 
+    }
+    else if(mode=="rating") {
+        Book.findOneAndUpdate({title:bookName} , 
+            {$inc: {"rating.total" : rate , "rating.users" :  1}},(err,data)=>{ //$inc to increament
+                if(err){
+                    res.status(404).send()
+                }
+            book_id = data._id;
+            User.findOneAndUpdate({firstName : "motaz" , "books.book" : book_id}, //firstName willbe req.user._id
+            {'$set' : {'books.$.rate' : rate}},(err,dataa)=>{
+                console.log("found in user");
+                res.send.status(200).send()})
+        }) 
+    }
+    else{
+        res.status(404).send()
+    }
+}
+// edit the book
 router.put("/:bookName",(req,res)=>{
     const mode = req.query.mode;
     const rate = parseInt(req.query.rate);
-    console.log(typeof rate);
-    let book_id;
-    console.log(req.params.bookName);
-    console.log(mode);
-    if(mode!="rating"){
-        console.log("shelve");
-        Book.findOne({title:req.params.bookName},(err,data)=>{
-            book_id = data._id;
-            console.log(book_id);
-            User.findOneAndUpdate({firstName : "motaz" , "books.book" : book_id}, //firstName willbe req.user._id
-            {'$set' : {'books.$.rate' : mode}},(err,data)=>{
-                res.send("done")})
-        }) 
-    }
-    else {
-        console.log("rating");
-        console.log(rate);
-        Book.findOneAndUpdate({title:req.params.bookName} , 
-            {$inc: {"rating.total" : rate , "rating.users" :  1}},(err,data)=>{
-            book_id = data._id;
-            console.log(data);
-            User.findOneAndUpdate({firstName : "motaz" , "books.book" : book_id}, //firstName willbe req.user._id
-            {'$set' : {'books.$.rate' : rate}},(err,dataa)=>{
-                res.send(dataa)})
-        }) 
-    }
+    const bookName = req.params.bookName;
+    editBookState(bookName,mode,rate,res)
 })
 
 /////router Elfashe777777777777777''''''' Ziyad to add search for books , author , category use pattern and relative posibilty contant Aineshtain 
@@ -115,25 +149,25 @@ router.get("/dd", (req, res)=> {
 
 
 
+
 //Routes for testing
 router.get("/addUserBook", (req, res, next) => {
     Book.findOne({ title: "ratedbook" }, (err, data) => {
         let book = { book: data, shelve: "read" , rate : 2}
         User.findOneAndUpdate({ firstName: "motaz" }, { $push: { books: book } }, (err, dataa) => {
-            console.log(dataa)
         })
         res.send("done")
     })
 })
 
 router.get("/addBook",(req,res)=>{
-        let book = new Book({ title: "ratedbook", authorID: "motaz" , rating:{total:0,users:0} });
+        let book = new Book({ title: "willBeAdded", authorID: "motaz" , rating:{total:0,users:0} });
         book.save((err,data)=>{
             res.send("done")
         })
 })
 
-
+module.exports.editBookState = editBookState;
 module.exports = router;
 
 
