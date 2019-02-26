@@ -3,12 +3,49 @@ require('./mongo-conf.js');
 const PORT = process.env.PORT || 3002 ;
 const userRouter = require('./routes/UsersRouter');
 const adminRouter = require('./routes/AdminRouter');
+const fileUpload = require('express-fileupload');
 const app = express();
 
 app.use(express.json());
-app.use(express.static('public'))
+app.use(fileUpload());
+
+app.use(express.static('public'));
 app.use('/api/users',userRouter);
 app.use('/api/admin',adminRouter);
+
+app.post("/uploader",(req,res)=>{
+
+    console.log("reached uploader");
+    // console.log(req,req.files,req.files.file);
+    console.log(req.body);
+    body =JSON.parse(req.body.body);
+    console.log(body);
+    // console.log(req);
+    console.log(__dirname);
+    let uploadFile = req.files.file ;
+    const fileName = `${new Date().toISOString()}${Math.random()}${req.files.file.name}` ;
+    uploadFile.mv(
+        
+        `${__dirname}/public/${fileName}`,
+        function (err) {
+        if (err) {
+        return res.status(500).send(err)
+        }
+
+        res.json({
+            path: `../../../${fileName}`,
+        })
+        },
+    )
+})
+
+app.use('/image', express.static(__dirname + '/'));
+
+app.get('/image',(req,res)=>{
+    console.log(req.params,req.query);
+    const imgSrc = req.query.name;
+    res.json(`${imgSrc}`);
+})
 
 // app.use('/api',)//The home page
 //----------------User routes ------------------------

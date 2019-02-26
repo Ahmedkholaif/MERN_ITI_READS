@@ -6,7 +6,6 @@ const bookRouter = require('./userBookRouter');
 
 const authorRouter = require('./userAuthorRouter');
 const categoryRouter = require('./userCategoryRoute');
-const bookRouter = require('./userBookRouter');
 
 const perPage = 10;
 const { authenticate, auth_Admin } = require('../helpers/Auth');
