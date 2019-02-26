@@ -40,15 +40,17 @@ export default class Login extends React.Component {
 	}
 
 	handleSubmit(event) {
+		event.preventDefault();
 
 		const { loginData } = this.state;
 
 		const errors = this.validate(loginData);
 
-		this.setState({ errors });
+	
 
-		// if (Object.keys(errors).length === 0) {
-			
+		if (errors) {
+			this.setState({ errors });
+			// this.props.history.push('/home');
 			// axios
 			// .post("/api/users/login",loginData)
 			// .then(res=>{
@@ -67,9 +69,9 @@ export default class Login extends React.Component {
 			// this.props.submit(loginData);
 
 			// this.setState(this.initialState);
-		// }
+		}
 		
-		event.preventDefault();
+		
 
 	}
 
