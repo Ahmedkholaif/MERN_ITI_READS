@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const Book = require('../models/Book');
 const Author = require('../models/Author');
@@ -30,27 +30,24 @@ router.post('/', auth_Admin, (req, res) => {
             return res.status(400).send({err:"already exists"});
         }else {
 
-            let findAuthor =
+        let findAuthor =
         Author.findOne(
             // query
             {
-                fullName: author
-            },
-            (err, author) => {
+              fullName: author
+            },(err, author) => {
                 console.log(author);
                 if (err) return res.status(200).send(err)
                 console.log(author._id);
                 authorID = author._id;
             }
-        )
-
+        );
 
     let findCat = Category.findOne(
         // query
         {
             catName: category
-        },
-        (err, category) => {
+        },(err, category) => {
             if (err) return res.status(200).send(err)
             categoryID = category._id;
         }
@@ -60,7 +57,6 @@ router.post('/', auth_Admin, (req, res) => {
     let findCatPromise = findCat.exec();
 
     const addBook = () => {
-
 
     uploadFile.mv(
     `${__dirname}/../public/${fileName}`,(err)=> {
@@ -78,19 +74,23 @@ router.post('/', auth_Admin, (req, res) => {
                 res.send("done");
             })
             .catch(e => res.status(404).send(e));
-    })}
+    })
+  }
 
     //use promises to add book after getting the data from the database
-    findAuthPromise.then(() => {
-        findCatPromise.then(() => {
-            addBook();
-        })
-    })
-        }
-    }).catch(err => res.status(404).send({err}))
-});
+  findAuthPromise
+  .then(() => {
+      findCatPromise
+      .then(() => {
+          addBook();
+      })
+  })
+  .catch(err => res.status(404).send({err}))
+  }
+  })
+    .catch(err=>res.status(404).send(err))
 
-
+  })  ;
 
 //Routes for Book
 // Get all Books and display them

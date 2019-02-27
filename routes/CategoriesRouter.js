@@ -3,8 +3,6 @@ const Category = require('../models/Category');
 const {auth_Admin} = require('../helpers/Auth');
 const router = express.Router();
 
-
-
 //Routes for Category
 // Get all category and display them
 
@@ -23,13 +21,14 @@ router.post("/",auth_Admin, (req, res) => {
         catName,
     });
 
-    category.save()
-    .then(()=>{
-        res.status(200).send(category);
+  category
+    .save()
+    .then(() => {
+      res.status(200).send(category);
     })
-    .catch((e)=>{
-        res.status(404).send(e);
-        console.log(e);
+    .catch(e => {
+      res.status(404).send(e);
+      console.log(e);
     });
 });
 
@@ -47,12 +46,9 @@ router.put("/:title",auth_Admin, (req, res) => {
         catName,
         }
     })
-    .then(()=>{
-        res.status(200).send({msg:"updated"});
-     })
-    .catch((e)=>{
-         res.status(404).send(e);
-     });
+    .catch(e => {
+      res.status(404).send(e);
+    });
 });
 //Delete a category
 router.delete("/:title",auth_Admin, (req, res) => {
@@ -68,10 +64,5 @@ router.delete("/:title",auth_Admin, (req, res) => {
     })
 });
 //End of Routes for Category
-
-
-
-
-
 
 module.exports = router;

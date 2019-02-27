@@ -1,5 +1,5 @@
-const express = require('express');
-const multer = require('multer');
+const express = require("express");
+const multer = require("multer");
 const router = express.Router();
 const Author = require('../models/Author');
 const Cat = require('../models/Category');
@@ -11,16 +11,15 @@ const {auth_Admin} = require('../helpers/Auth');
 router.get('/', auth_Admin,(req, res) => {
 
   Author.find({})
-  .then((authors)=>{
-    Cat.find({}).then((cats )=>{
-      res.status(200).send({authors,cats});
+    .then(authors => {
+      Cat.find({}).then(cats => {
+        res.status(200).send({ authors, cats });
+      });
     })
-  })
-  .catch((e)=>{
+    .catch(e => {
       res.status(404).send(e);
-  })
+    });
 });
-
 
 // Add a new Author
 // @ admin Auth
@@ -63,7 +62,6 @@ router.post('/', auth_Admin,(req, res) => {
         }
   });
 })
-
 
 // Edit an Author
 //@ admin auth
@@ -115,4 +113,4 @@ router.delete('/:name',auth_Admin ,(req, res) => {
     })
 });
 // End of Routes for Author
-module.exports = router
+module.exports = router;

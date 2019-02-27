@@ -39,6 +39,4 @@ router.use('/categories',categoryRouter);
 router.use('/books',bookRouter);
 router.use('/authors',authorRouter);
 
-
-
-module.exports=router;
+module.exports = router;
