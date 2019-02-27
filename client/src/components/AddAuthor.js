@@ -12,9 +12,12 @@ class AddAuthor extends Component {
     state = {
         modal: false,
         authors: [],
-        authorFirstName: '',
-        authorLastName: '',
-        authorDate: ''
+        author:{
+            fullName: '',
+            dateOfBirth: '',
+            img:'',
+        },
+        selectedFile: null,
     };
 
     toggle() {
@@ -22,35 +25,57 @@ class AddAuthor extends Component {
             modal: !prevState.modal
         }));
 
-        if (this.state.authorDate === '' || this.state.authorLastName === '' || this.state.authorLastName === '') {
-        } else if (this.state.authorDate !== '' && this.state.authorLastName !== '' && this.state.authorLastName !== '') {
-            axios.post('/', {
-                authorFirstName: this.state.authorFirstName,
-                authorLastName: this.state.authorLastName,
-                authorDate: this.state.authorDate
-            }).then(response => {
+        if (this.state.author.dateOfBirth === '' || this.state.author.authorFullName === '') {
+        } else {
+            const token = localStorage.token;
+            if (token) {
+                const data = new FormData();
+            data.append(
+                "file",
+                this.state.selectedFile,
+                this.state.selectedFile.name
+            );
+
+            data.append("body", JSON.stringify(this.state.author));
+            const conf = {
+                onUploadProgress: ProgressEvent => {
+                this.setState({
+                    loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
+                });
+                },
+                headers: {
+                "Content-Type": "application/json",
+                "x-auth": token
+                }
+            };
+            axios.post('/api/admin/authors', data,conf)
+            .then(response => {
                 console.log(response);
+                const authorsProps = this.props.authors;
+                authorsProps.push(response.data.author);
+                this.setState({authors: authorsProps});
+                this.props.handlerFromParant(authorsProps);
+                this.setState({authors: ''});
+
             }).catch(error => {
                 console.log(error);
             });
-            const authorsProps = this.props.authors;
-            authorsProps.push({userId: 1, id: Math.floor(Math.random() * 1000), title: this.state.authorFirstName});
-            this.setState({authors: authorsProps});
-            this.props.handlerFromParant(authorsProps);
-            this.setState({authors: ''});
+            }
         }
     }
 
     handleOnChaneFname = event => {
-        this.setState({authorFirstName: event.target.value});
-    }
-    handleOnChaneLname = event => {
-        this.setState({authorLastName: event.target.value});
+        this.setState({author: {...this.state.author,fullName: event.target.value}});
     }
     handleOnChaneDate = event => {
-        this.setState({authorDate: event.target.value});
+        this.setState({author: {...this.state.author,dateOfBirth: event.target.value}});
     }
-
+    handleselectedFile = event => {
+        this.setState({
+          selectedFile: event.target.files[0],
+          loaded: 0
+        });
+      };
 
     render() {
         return (
@@ -61,17 +86,22 @@ class AddAuthor extends Component {
                        className={this.props.className}>
                     <ModalHeader toggle={this.toggle}>Add Author</ModalHeader>
                     <ModalBody>
-                        <Input type="text" value={this.state.authorFirstName} onChange={this.handleOnChaneFname}
+                        <Input type="text" value={this.state.authorFullName} onChange={this.handleOnChaneFname}
                                placeholder='Author FirstName'/>
-                        <Input type="text" value={this.state.authorLastName} onChange={this.handleOnChaneLname}
-                               placeholder='Author LastName'/>
                         <Input type="date" value={this.state.authorDate} onChange={this.handleOnChaneDate}
                                placeholder='Author Date'/>
+                        <Input
+                               type="file"
+                               name=""
+                               id="exampleFile"
+                               onChange={this.handleselectedFile}
+                               placeholder='Author Photo '/>
+
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={this.toggle}>Add
                             Author</Button>{' '}
-                        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                        <Button color="secondary" onClick={this.toggle}>Close</Button>
                     </ModalFooter>
                 </Modal>
             </div>

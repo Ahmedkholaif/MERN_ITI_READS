@@ -25,72 +25,114 @@ class CategoriesView extends Component {
             IdEdit: 0
         }));
 
-        const categories = this.state.categories;
-        const category = categories.filter(category => {
-            return category.id === id;
-        });
+        if(id !== null) {
+            const categories = this.state.categories;
+            const category = categories.filter(category => {
+            return category._id === id;
+             });
 
-        const catid = category[0].id;
-        const cattitle = category[0].title;
+        const catid = category[0]._id;
+        const cattitle = category[0].catName;
         this.setState({
             NameEdit: cattitle,
             IdEdit: catid
         });
+        }
+        
     }
 
-    handleUpdateCategory() {
-        const title = this.state.NameEdit;
-        const id = this.state.IdEdit;
-        if (title !== '' && id !== 0) {
-            const categories = this.state.categories;
-            for (var key in categories) {
-                if(categories[key].id===id){
-                    categories[key].title=title;
-                }
-            }
-            this.setState({categories: categories});
-        }
+handleUpdateCategory() {
+    
+const title = this.state.NameEdit;
+const id = this.state.IdEdit;
+if (title && id ) {
+    const categories = this.state.categories;
+    for (let key in categories) {
+        if(categories[key]._id === id){
+        categories[key].catName =title;
+        this.setState({categories: categories});
         this.setState({
             NameEdit: '',
             idEdit: ''
         });
-        // send post
-        axios.post('/',{
-            id:id,
-            title:title
-        }).then(response=>{
-            console.log(response);
-        }).catch(error=>{
-            console.log(error);
-        });
-    }
+        // send put request 
+        const token = localStorage.token;
+        if(token) {
+            const conf ={
+            headers:{
+            "x-auth":token,
+            }
+            }
+            axios.put(`/api/admin/categories/${id}`,{
+                catName:title
+            },conf)
+            .then(res =>{
+                console.log(res);
+                if(res.status === 200){
+                    console.log(res);
 
-    handleData(data) {
+                } else {
+                    console.log("not updated in db");
+                }
+            })
+            .catch(err => {
+                console.log({err});
+                this.setState({error: 'Error Delete Operation'})
+            })
+        }
+    }
+}
+}
+}
+
+handleData(data) {
+    this.setState({
+        categories: data
+    });
+}
+
+componentDidMount() {
+    const token = localStorage.token;
+    if(token) {
+        const conf ={
+            headers:{
+            "x-auth":token,
+        }
+        }
+    axios.get(`/api/admin/categories`,conf)
+    .then(res =>{
+        console.log(res);
         this.setState({
-            categories: data
-        });
-    }
-
-    componentDidMount() {
-        axios.get('https://jsonplaceholder.typicode.com/albums')
-            .then(response => {
-                this.setState({categories: response.data});
-                console.log(response);
-            }).catch(error => {
-            console.log(error);
-            this.setState({error: 'Error reteiriving data'})
+            categories: res.data
+            })
         })
+    .catch(err => {
+        console.log(err)})
+        this.setState({error: 'Error reteiriving data'})
     }
-
+}
     handleDeleteCategory = deletedId => {
-        axios.delete('https://jsonplaceholder.typicode.com/albums/' + {deletedId})
-            .then(response => {
-                console.log(response);
-            }).catch(error => {
+        const token = localStorage.token;
+        if(token) {
+            const conf ={
+              headers:{
+              "x-auth":token,
+            }
+          }
+        axios.delete(`/api/admin/categories/${deletedId}`,conf)
+        .then(res =>{
+            if(res.status === 200){
+            console.log(res);
+            } else {
+                console.log("not deleted from db");
+            }
+         })
+        .catch(err => {
+            console.log(err)})
             this.setState({error: 'Error Delete Operation'})
-        })
-
-        this.setState({categories: this.state.categories.filter(category => category.id !== deletedId)});
+        }
+        this.setState({categories: this.state.categories.filter(category => category._id !== deletedId)});
+        
     }
 
     handleOnChange = event => {
@@ -101,10 +143,10 @@ class CategoriesView extends Component {
     render() {
         const {categories, error} = this.state;
         const categoriesView = categories.length ? categories.map(category =>
-            <tr key={category.id}>
-                <td>{category.title}</td>
-                <td><Button color='danger' onClick={() => this.handleDeleteCategory(category.id)}>Delete</Button></td>
-                <td><Button color='success' onClick={() => this.toggle(category.id)}>Edit</Button></td>
+            <tr key={category._id}>
+                <td>{category.catName}</td>
+                <td><Button color='danger' onClick={() => this.handleDeleteCategory(category._id)}>Delete</Button></td>
+                <td><Button color='success' onClick={() => this.toggle(category._id)}>Edit</Button></td>
             </tr>
         ) : error ? <h1><Alert color='danger'>{error}</Alert></h1> : null;
 
@@ -120,7 +162,7 @@ class CategoriesView extends Component {
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={() => this.handleUpdateCategory()}>Edit Category</Button>{' '}
-                        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                        <Button color="secondary" onClick={()=>this.toggle(null)}>Cancel</Button>
                     </ModalFooter>
                 </Modal>
                 <Table>

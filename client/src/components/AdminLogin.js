@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {  Button, FormGroup,Input } from 'reactstrap';
+import propTypes from "prop-types";
 import '../css/AdminLogin.css'
 import axios from 'axios';
 
@@ -44,7 +45,7 @@ class AdminLogin extends Component {
             console.log(res);
             if(res.status === 200){
                 localStorage.setItem("token",res.headers["x-auth"]);
-
+                this.props.history.push('/admin/dashboard');
                 //route to admin dash board
                 this.setState({
                     isLoaded: true,
@@ -75,4 +76,18 @@ class AdminLogin extends Component {
     }
 }
 
+AdminLogin.propTypes = {
+    submit: propTypes.func.isRequired,
+    isUserExists: propTypes.func.isRequired,
+  
+    users: propTypes.arrayOf(
+      propTypes.shape({
+        email: propTypes.string.isRequired
+      }).isRequired
+    ),
+  
+    history: propTypes.shape({
+      push: propTypes.func.isRequired
+    }).isRequired
+  };
 export default AdminLogin;

@@ -9,6 +9,7 @@ const authorRouter = require('./AuthorsRouter');
 const User = require('../models/User');
 const router = express.Router();
 
+//admin login request
 router.post('/',(req,res)=>{
     console.log(req.body);
     const email = req.body.email;
@@ -35,6 +36,7 @@ router.post('/',(req,res)=>{
 
 });
 
+//admin private request
 router.use('/categories',categoryRouter);
 router.use('/books',bookRouter);
 router.use('/authors',authorRouter);

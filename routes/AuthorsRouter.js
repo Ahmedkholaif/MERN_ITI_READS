@@ -2,7 +2,6 @@ const express = require("express");
 const multer = require("multer");
 const router = express.Router();
 const Author = require('../models/Author');
-const Cat = require('../models/Category');
 const {auth_Admin} = require('../helpers/Auth');
 //Start of Routes for Author
 
@@ -10,11 +9,10 @@ const {auth_Admin} = require('../helpers/Auth');
 
 router.get('/', auth_Admin,(req, res) => {
 
+  console.log("get authors ");
   Author.find({})
     .then(authors => {
-      Cat.find({}).then(cats => {
-        res.status(200).send({ authors, cats });
-      });
+      res.status(200).send({authors});
     })
     .catch(e => {
       res.status(404).send(e);
@@ -24,6 +22,9 @@ router.get('/', auth_Admin,(req, res) => {
 // Add a new Author
 // @ admin Auth
 router.post('/', auth_Admin,(req, res) => {
+
+  console.log("reached");
+  console.log(req.body,req.files.file);
 
   const body =JSON.parse(req.body.body);
   let img ;
@@ -52,7 +53,7 @@ router.post('/', auth_Admin,(req, res) => {
                 console.log(author);
                 author.save()
                 .then(()=>{
-                    res.status(200).send(author);
+                    res.status(200).send({author});
                 })
                 .catch((e)=>{
                     console.log(e);

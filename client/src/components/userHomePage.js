@@ -4,7 +4,7 @@ import '../css/UserHomePage.css'
 import CustomNavbar from './Navbar';
 import BooksTable from './BooksTable';
 import CustomPagination from './pagination';
-import Axios from "axios";
+import axios from "axios";
 
 
 class UserHomePage extends Component {
@@ -35,7 +35,7 @@ componentDidMount(){
       "x-auth":token,
       }
     }
-    Axios.get(`/api/users/current`,conf
+    axios.get(`/api/users/current`,conf
     )
     .then(res =>{
       console.log(res);
