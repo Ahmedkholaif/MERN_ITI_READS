@@ -13,39 +13,6 @@ app.use(express.static('public'));
 app.use('/api/users',userRouter);
 app.use('/api/admin',adminRouter);
 
-app.post("/uploader",(req,res)=>{
-
-    console.log("reached uploader");
-    // console.log(req,req.files,req.files.file);
-    console.log(req.body);
-    body =JSON.parse(req.body.body);
-    console.log(body);
-    // console.log(req);
-    console.log(__dirname);
-    let uploadFile = req.files.file ;
-    const fileName = `${new Date().toISOString()}${Math.random()}${req.files.file.name}` ;
-    uploadFile.mv(
-        
-        `${__dirname}/public/${fileName}`,
-        function (err) {
-        if (err) {
-        return res.status(500).send(err)
-        }
-
-        res.json({
-            path: `../../../${fileName}`,
-        })
-        },
-    )
-})
-
-app.use('/image', express.static(__dirname + '/'));
-
-app.get('/image',(req,res)=>{
-    console.log(req.params,req.query);
-    const imgSrc = req.query.name;
-    res.json(`${imgSrc}`);
-})
 
 // app.use('/api',)//The home page
 //----------------User routes ------------------------
@@ -64,7 +31,7 @@ app.get('/image',(req,res)=>{
 //use PUT : /api/users/current/books/bookName?mode=read                 to to edit shielve
 //use POST : /api/users/current/books/bookName                          to add a review it's added as {userName : --- , review : ----}
 //Search will be added it will be on GET : /api/users/current/search?q=-------
-
+//use GET : /api/users/current/search?type=book&title=Blue+Cat                  to search for a book or author and search by title
 
 
 //----------------admin routes ------------------------

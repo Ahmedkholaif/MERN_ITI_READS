@@ -1,20 +1,28 @@
 import React, {Component} from 'react';
 import {  Button, FormGroup,Input } from 'reactstrap';
 import '../css/AdminLogin.css'
+import axios from 'axios';
 
 class AdminLogin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            password: ''
+            loginData: {
+				email: "",
+				password: ""
+			},
         };
     }
 
     handleChange = (event) => {
+        const { name, value } = event.target;
+
+		const { loginData } = this.state;
+
         this.setState({
-            [event.target.id]: event.target.value
-        })
+            loginData : { ...loginData, [name]: value }
+        });
+            
     }
 
     handleSubmit = (event) => {
@@ -26,44 +34,39 @@ class AdminLogin extends Component {
         return this.state.email.length > 0 && this.state.password.length;
     }
 
-    handleLoginOpertion() {
-        let loginObject = {
-            email: this.state.email,
-            password: this.state.password
-        };
+    handleLoginOpertion = ()=> {
+      
+        const { loginData } = this.state;
+        console.log(loginData);
 
-        fetch("/", {
-            header: {
-                "Content-Type": "application/json"
-            }, method: "POST",
-            body: JSON.stringify(loginObject)
-        }).then(
-            res => {
-                if (res.ok) {
-                    return res.json();
-                } else {
-                    throw Error(res.statusText);
-                }
+        axios.post("/api/admin",loginData )
+        .then(res => {
+            console.log(res);
+            if(res.status === 200){
+                localStorage.setItem("token",res.headers["x-auth"]);
+
+                //route to admin dash board
+                this.setState({
+                    isLoaded: true,
+                })
+            } 
             }
-        ).then(json => {
-            this.setState({
-                isLoaded: true,
-                token: json
-            })
-        }).catch(error => console.error(error))
+        )
+        .catch(error => console.error(error))
     }
 
 
     render() {
         return (
             <div className='AdminLogin'>
+            
                 <h1><mark>Adminstrator Login</mark></h1>
                 <form onSubmit={this.handleSubmit}>
                     <FormGroup>
-                        <Input required type="email" name="email" id="Email" placeholder="email" onChange={this.state.email} />
+                        <Input required type="email" name="email" id="Email" placeholder="email" onChange={this.handleChange} />
                     </FormGroup>
                     <FormGroup>
-                        <Input required type="password" name="password" id="Password" placeholder="Password" onChange={this.state.password} />
+                        <Input required type="password" name="password" id="Password" placeholder="Password" onChange={this.handleChange} />
                     </FormGroup>
                     <Button color='primary' size='lg' block type="submit">Login</Button>
                 </form>
