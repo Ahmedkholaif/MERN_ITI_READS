@@ -155,10 +155,6 @@ export default class SignUp extends React.Component {
 				  this.setState({ errors });
         })
 
-      // // this.props.submit(newAccountData)
-
-      // // this.setState(this.initialState)
-
     }
 
   }

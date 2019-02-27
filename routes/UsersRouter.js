@@ -3,9 +3,7 @@ const User = require('../models/User');
 const router = express.Router();
 const userHomeRouter = require('./userHomeRouter');
 const multer = require('multer');
-const uploading = multer({
-    dest: './public/profilePics/',
-})
+
 const bcrypt = require('bcryptjs');
 const { authenticate, auth_Admin } = require('../helpers/Auth');
 router.post('/register', (req, res) => {
@@ -13,7 +11,7 @@ router.post('/register', (req, res) => {
     const body =JSON.parse(req.body.body);
     console.log(req.body);
     console.log(body);
-    let imgSrc ;
+    let img ;
     let uploadFile = req.files.file ;
     const fileName = `${new Date().toISOString()}${Math.random()}${req.files.file.name}` ;
     
@@ -32,18 +30,14 @@ router.post('/register', (req, res) => {
                 (err)=> {
                     if(err) {return res.status(500).send(err)}
         
-                    imgSrc =  `../../../${fileName}`;
-                    console.log(firstName ,
-                        lastName,
-                        email,
-                        password,
-                        imgSrc);
+                    img =  `../../../${fileName}`;
+                   
                     const user = new User({
                         firstName ,
                         lastName,
                         email,
                         password,
-                        imgSrc
+                        img
                         })
                     user.save()
                     .then ( () =>  {

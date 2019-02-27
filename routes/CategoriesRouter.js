@@ -1,6 +1,6 @@
 const express = require('express');
 const Category = require('../models/Category');
-
+const {auth_Admin} = require('../helpers/Auth');
 const router = express.Router();
 
 
@@ -8,19 +8,19 @@ const router = express.Router();
 //Routes for Category
 // Get all category and display them
 
-router.get("/", (req, res) => {
+router.get("/", auth_Admin,(req, res) => {
     Category.find((err, data) => {
         res.json(data);
     });
 });
 //Add a new category
 
-router.post("/", (req, res) => {
+router.post("/",auth_Admin, (req, res) => {
 
-    const title = req.body.title;
+    const catName = req.body.title;
 
     const category = new Category({
-        title,
+        catName,
     });
 
     category.save()
@@ -35,16 +35,16 @@ router.post("/", (req, res) => {
 
 //Edit a category
 
-router.put("/:title", (req, res) => {
+router.put("/:title",auth_Admin, (req, res) => {
     const oldtitle = req.params.title;
-    const title = req.body.title;
+    const catName = req.body.title;
 
     Category.updateOne({
-        title:oldtitle
+        catName:oldtitle
     },
     { $set:
         {
-        title: title,
+        catName,
         }
     })
     .then(()=>{
@@ -55,10 +55,10 @@ router.put("/:title", (req, res) => {
      });
 });
 //Delete a category
-router.delete("/:title", (req, res) => {
-    const title = req.params.title;
+router.delete("/:title",auth_Admin, (req, res) => {
+    const catName = req.params.title;
     Category.deleteOne({
-        title: title
+        catName
     })
     .then(()=>{
         res.status(200).send({msg:"deleted"});
