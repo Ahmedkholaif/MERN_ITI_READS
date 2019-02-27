@@ -4,7 +4,7 @@ const authorSchema =new mongoose.Schema({
     fullName:{
         type:"string",required:true,unique:true
     },
-    imgSrc:String,
+    img:String,
     dateOfBirth:String
 });
 

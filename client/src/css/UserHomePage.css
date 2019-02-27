@@ -104,7 +104,7 @@ background-color: white;
 
 .pagginationContainer{
     text-align: center;
-    width: 23%;
+    display: inline-block;
     margin: 4vh auto;
 }
 

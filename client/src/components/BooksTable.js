@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { Row, Col } from 'reactstrap';
+import { Row } from 'reactstrap';
 import {Table} from 'reactstrap';
+import {Link} from "react-router-dom";
 import '../css/UserHomePage.css'
 import DropDownShelves from './DropDownShelves'
 import RatingStars from './RatingStars';
+
 class BooksTable extends Component {
 
 constructor(props) {
@@ -54,8 +56,8 @@ constructor(props) {
                 this.state.books.map(book=>(
                   <tr>
                       <td><img src={book.bookInfo.img} width={"40px"}/></td>
-                      <td><a href="/">{book.bookInfo.bookName}</a></td>
-                      <td><a href="/">{book.bookInfo.author}</a></td>
+                      <td><Link to="/" replace>{book.bookInfo.bookName}</Link></td>
+                      <td><Link to="/" replace>{book.bookInfo.author}</Link></td>
                       <td>{book.bookInfo.category}</td>
                       <td><RatingStars rate={book.bookInfo.avgRate} clickable={false}/></td>
                       <td><RatingStars rate={book.rate} clickable={true} name={book.bookInfo.bookName} books={this.state.books}/></td>

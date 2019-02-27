@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import propTypes from 'prop-types';
-
+import axios from 'axios';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -40,20 +40,38 @@ export default class Login extends React.Component {
 	}
 
 	handleSubmit(event) {
+		event.preventDefault();
 
 		const { loginData } = this.state;
 
 		const errors = this.validate(loginData);
 
-		this.setState({ errors });
+	
 
-		if (Object.keys(errors).length === 0) {
-			this.props.submit(loginData);
+		if (errors) {
+			this.setState({ errors });
+			// this.props.history.push('/home');
+			// axios
+			// .post("/api/users/login",loginData)
+			// .then(res=>{
+			// 	console.log(res);
+			// 	if(res.status === 200){
+			// 		localStorage.setItem("token",res.headers["x-auth"]);
+			// 		console.log('succes');
+			// 		this.props.history.push('/home');
+			// 	}
+			// })
+			// .catch(errors=>{
+			// 	console.log(errors);
+			// 	// this.setState({ errors });
+			// })
+			
+			// this.props.submit(loginData);
 
-			this.setState(this.initialState);
+			// this.setState(this.initialState);
 		}
-
-		event.preventDefault();
+		
+		
 
 	}
 
@@ -115,4 +133,13 @@ Login.propTypes = {
 	submit : propTypes.func.isRequired,
 	isUserAuthenticated : propTypes.func.isRequired,
 
+  users: propTypes.arrayOf(
+		propTypes.shape({
+			email: propTypes.string.isRequired,
+		}).isRequired
+	),
+
+	history: propTypes.shape({
+		push: propTypes.func.isRequired
+	}).isRequired
 }

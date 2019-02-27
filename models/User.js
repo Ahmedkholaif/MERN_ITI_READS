@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const validator  = require('validator');
 const keys = require('../helpers/keys');
+
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 const userSchema =new mongoose.Schema({
     firstName:{
@@ -13,7 +14,7 @@ const userSchema =new mongoose.Schema({
         type:"string",required:true
     },
     email:{
-        type:"string", //match: "^(w+\.)+[w]+@[w]+\.[w]$" ,
+        type:"string", 
         required:true,
         unique:true,
         validate:{
@@ -24,19 +25,19 @@ const userSchema =new mongoose.Schema({
     password:{
         type:"string",required:true,minlength:6
     },
-    imgSrc:String,
+    img:String,
     books:[{
-        book:{type:mongoose.Schema.Types.ObjectId,ref:'Book'},rate:Number,shelve:String
+        bookInfo:{type:mongoose.Schema.Types.ObjectId,ref:'Book'},rate:Number,shelf:String
     }],
-    // tokens:[{
-    //     access:{
-    //         type:"string",required:true
-    //     },
-    //     token:{
-    //         type:"string",required:true
-    //     }
-    // }],
-    // isAdmin:{type:'boolean',default:false}
+    tokens:[{
+        access:{
+            type:"string",required:true
+        },
+        token:{
+            type:"string",required:true
+        }
+    }],
+    isAdmin:{type:'boolean',default:false}
 });
 
 //mongo middleware --password encryption
@@ -61,7 +62,7 @@ userSchema.methods.toJSON =function () {
     const user = this;
     let userObject = user.toObject();
 
-    return _.pick(userObject,['_id','email','books']);
+    return _.pick(userObject,['_id','email','books','img']);
 }
 userSchema.methods.getAuthToken = function () {
     const user =this;
@@ -103,5 +104,6 @@ userSchema.statics.findByToken = function(token) {
 
 
 const User = new mongoose.model('User',userSchema);
+
 
 module.exports = User;
