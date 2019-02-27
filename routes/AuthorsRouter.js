@@ -1,34 +1,32 @@
-const express = require('express');
-const multer = require('multer');
+const express = require("express");
+const multer = require("multer");
 const router = express.Router();
-const Author = require('../models/Author');
-const Cat = require('../models/Category');
-const Book = require('../models/Book');
+const Author = require("../models/Author");
+const Cat = require("../models/Category");
+const Book = require("../models/Book");
 const uploading = multer({
-    dest:'./public/authorsPics',
-  })
+  dest: "./public/authorsPics"
+});
 //Start of Routes for Author
 
 // Get all Author and display them
-router.get('/', (req, res) => {
-
+router.get("/", (req, res) => {
   Author.find({})
-  .then((authors)=>{
-    Cat.find({}).then((cats )=>{
-      res.status(200).send({authors,cats});
+    .then(authors => {
+      Cat.find({}).then(cats => {
+        res.status(200).send({ authors, cats });
+      });
     })
-  })
-  .catch((e)=>{
+    .catch(e => {
       res.status(404).send(e);
-  })
+    });
 });
-
 
 // Add a new Author
 // @ admin Auth
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
   const fullName = req.body.fullName;
-//   const lastName = req.body.lastName;
+  //   const lastName = req.body.lastName;
   const imgSrc = req.body.imgSrc;
   const dateOfBirth = req.body.dateOfBirth;
 
@@ -39,26 +37,27 @@ router.post('/', (req, res) => {
     dateOfBirth
   });
 
-  console.log(author)
+  console.log(author);
 
-  author.save()
-  .then(()=>{
+  author
+    .save()
+    .then(() => {
       res.status(200).send(author);
-  }).catch((e)=>{
+    })
+    .catch(e => {
       console.log(e);
       res.status(404).send({
-          msg:'error'
+        msg: "error"
       });
-  })
+    });
 });
-
 
 // Edit an Author
 //@ admin auth
-router.put('/:name', (req, res) => {
+router.put("/:name", (req, res) => {
   const oldname = req.params.name;
   const fullName = req.body.fullName;
-//   const lastName = req.body.lastName;
+  //   const lastName = req.body.lastName;
   const imgSrc = req.body.imgSrc;
   const dateOfBirth = req.body.dateOfBirth;
 
@@ -66,29 +65,31 @@ router.put('/:name', (req, res) => {
     {
       fullName: oldname
     },
-    { $set: {
+    {
+      $set: {
         fullName: fullName,
         // lastName: lastName,
         imgSrc: imgSrc,
-        dateOfBirth: dateOfBirth,
-        }
+        dateOfBirth: dateOfBirth
+      }
+    }
+  )
+    .then(() => {
+      res.status(200).send({ masg: "succes" });
     })
-    .then(()=>{
-        res.status(200).send({masg:"succes"});
-    }) 
-    .catch((e)=>{
-        res.status(404).send(e);
-    })
+    .catch(e => {
+      res.status(404).send(e);
+    });
 });
 // Delete an Author
-router.delete("/:author" , (req,res)=>{
+router.delete("/:author", (req, res) => {
   let author = req.params.author;
-  Author.remove({fullName:author},(err,data)=>{
-      Book.remove({authorID : author},(err,data)=>{
-          res.status(200).send()
-      })
-  })
-})
+  Author.remove({ fullName: author }, (err, data) => {
+    Book.remove({ authorID: author }, (err, data) => {
+      res.status(200).send();
+    });
+  });
+});
 
 // End of Routes for Author
-module.exports = router
+module.exports = router;
