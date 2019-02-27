@@ -128,7 +128,6 @@ router.use("/current", authenticate, (req, res, next) => {
   next();
 });
 
-/////////////////To ziyad sho3'l
 
 router.use("/current", userHomeRouter);
 //

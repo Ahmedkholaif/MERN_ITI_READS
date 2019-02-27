@@ -22,6 +22,7 @@ constructor(props) {
 
   }
   
+
 componentDidMount(){
   const token = localStorage.token;
   if(token) {
@@ -51,7 +52,6 @@ componentDidMount(){
 // test = setInterval(() => {
 //   alert(this.state.books[0].rate)
 // }, 5000);
-
 
 
 displayAllBooks =()=>{

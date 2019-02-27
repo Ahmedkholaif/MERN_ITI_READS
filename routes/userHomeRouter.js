@@ -1,5 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const Book = require('../models/Book');
+const User = require('../models/User');
+const Author = require('../models/Author');
+
+const bookRouter = require('./userBookRouter');
+
+const authorRouter = require('./userAuthorRouter');
+const categoryRouter = require('./userCategoryRoute');
 const Book = require("../models/Book");
 const User = require("../models/User");
 const bookRouter = require("./userBookRouter");
@@ -96,6 +104,99 @@ const editBookState = (bookName, mode, rate, res) => {
             if (err) {
               res.status(404).send(err);
             }
+            else{
+                    res.status(404).send(data)
+                }
+
+        }) 
+    }
+    else if(mode=="rating") {
+        Book.findOneAndUpdate({title:bookName} , 
+            {$inc: {"rating.total" : rate , "rating.users" :  1}},(err,data)=>{ //$inc to increament
+                if(err){
+                    res.status(404).send()
+                }
+            book_id = data._id;
+            User.findOneAndUpdate({firstName : "motaz" , "books.book" : book_id}, //firstName willbe req.user._id
+            {'$set' : {'books.$.rate' : rate}},(err,dataa)=>{
+                console.log("found in user");
+                res.send.status(200).send()})
+        }) 
+    }
+    else{
+        res.status(404).send()
+    }
+}
+// edit the book
+router.put("/:bookName",(req,res)=>{
+    const mode = req.query.mode;
+    const rate = parseInt(req.query.rate);
+    const bookName = req.params.bookName;
+    editBookState(bookName,mode,rate,res)
+})
+
+//use GET : /api/users/search?type=book&title=Blue+Cat                 
+// to search for a book or author and search by title
+router.get("/search", (req, res)=> {
+    const q = req.query.q;
+    const type = req.query.type;
+    if (type === "book"){
+        Book.find({ bookName: { $regex: ".*" + q + ".*", $options: 'i' }  } , (err, result) => {
+            if (err) return handleError(err);
+            console.log(result);
+            res.json(result);
+        })
+    } else if(type === "author"){
+        Author.find({ fullName: { $regex: ".*" + q + ".*", $options: 'i' }  } , (err, result) => {
+            if (err) return handleError(err);
+            console.log(result);
+            res.json(result);
+        })
+    }else{
+        res.status(404).send()
+        console.log("404");
+    }
+})
+    // } else if(type === "author"){
+
+
+    // }  else {
+
+
+   
+
+    // console.log(type);
+    // res.json([q,type]);
+    
+    // res.json(name);
+
+    //   const searchQuery = req.query.q;
+    //     if (searchQuery === "books" ){
+    //         res.json("books")
+    //     }
+    //     else if (searchQuery == "authors"){
+    //         res.json("authors") //(data)
+
+    //     }
+    //     else {
+    //         res.status(404).send()
+    //     }
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             res.status(200).send();
           }
         );

@@ -31,7 +31,7 @@ app.use('/api/admin',adminRouter);
 //use PUT : /api/users/current/books/bookName?mode=read                 to to edit shielve
 //use POST : /api/users/current/books/bookName                          to add a review it's added as {userName : --- , review : ----}
 //Search will be added it will be on GET : /api/users/current/search?q=-------
-
+//use GET : /api/users/current/search?type=book&title=Blue+Cat                  to search for a book or author and search by title
 
 
 //----------------admin routes ------------------------

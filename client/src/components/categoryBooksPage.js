@@ -44,6 +44,10 @@ this.setState({activePage: pageNum});
 // .then(response => response.json()).then(data=> this.setState({activePage: pageNum,books:data});) ;
 }
 
+componentDidMount(){
+    // const {name} = this.props.location.state;
+    console.log(this.props.location);
+}
 
   
 render() {
@@ -57,7 +61,6 @@ return (
         </Row>
         <Row className="justify-content-md-center">
             <Col>
-                <h2></h2>
                 <CustomPagination activePage={this.state.activePage} change={this.handelPagination}/>
             </Col>
         </Row>
