@@ -1,0 +1,20 @@
+.row{
+    margin: 0 auto !important;
+}
+
+.bookBody{
+    margin-top:10vh !important; 
+}
+.bookInfo{
+    text-align: left;
+}
+.bookInfo>a{
+    display: block;
+    text-decoration: none;
+}
+.bookInfo>h3{
+    display: block;
+}
+.bookInfo>p{
+    display: block;
+}
