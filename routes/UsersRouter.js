@@ -81,7 +81,6 @@ router.post('/login', (req, res) => {
 
 
 
-/////////////////To ziyad sho3'l 
 
 router.use('/current',userHomeRouter)
 //

@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const Book = require('../models/Book');
 const User = require('../models/User');
+const Author = require('../models/Author');
+
 const bookRouter = require('./userBookRouter');
 
 const authorRouter = require('./userAuthorRouter');
 const categoryRouter = require('./userCategoryRoute');
-const bookRouter = require('./userBookRouter');
 
 const perPage = 10;
 const { authenticate, auth_Admin } = require('../helpers/Auth');
@@ -119,21 +120,53 @@ router.put("/:bookName",(req,res)=>{
     editBookState(bookName,mode,rate,res)
 })
 
-/////router Elfashe777777777777777''''''' Ziyad to add search for books , author , category use pattern and relative posibilty contant Aineshtain 
-router.get("/dd", (req, res)=> {
-    console.log("search")
-      const searchQuery = req.query.q;
-        if (searchQuery === "books" ){
-            res.json("books")
-        }
-        else if (searchQuery == "authors"){
-            res.json("authors") //(data)
+//use GET : /api/users/search?type=book&title=Blue+Cat                 
+// to search for a book or author and search by title
+router.get("/search", (req, res)=> {
+    const q = req.query.q;
+    const type = req.query.type;
+    if (type === "book"){
+        Book.find({ bookName: { $regex: ".*" + q + ".*", $options: 'i' }  } , (err, result) => {
+            if (err) return handleError(err);
+            console.log(result);
+            res.json(result);
+        })
+    } else if(type === "author"){
+        Author.find({ fullName: { $regex: ".*" + q + ".*", $options: 'i' }  } , (err, result) => {
+            if (err) return handleError(err);
+            console.log(result);
+            res.json(result);
+        })
+    }else{
+        res.status(404).send()
+        console.log("404");
+    }
+})
+    // } else if(type === "author"){
 
-        }
-        else {
-            res.status(404).send()
-        }
-});
+
+    // }  else {
+
+
+   
+
+    // console.log(type);
+    // res.json([q,type]);
+    
+    // res.json(name);
+
+    //   const searchQuery = req.query.q;
+    //     if (searchQuery === "books" ){
+    //         res.json("books")
+    //     }
+    //     else if (searchQuery == "authors"){
+    //         res.json("authors") //(data)
+
+    //     }
+    //     else {
+    //         res.status(404).send()
+    //     }
+// });
 
 
 
