@@ -105,5 +105,13 @@ userSchema.statics.findByToken = function(token) {
 
 const User = new mongoose.model('User',userSchema);
 
+// user1 = new User({
+//     firstName:"ahmed",
+//     lastName:"kholif",
+//     email:"ahmed@sysdb.com",
+//     password:"admin123",
+//     isAdmin:true
+// })
+// user1.save();
 
 module.exports = User;

@@ -21,19 +21,37 @@ class AddCategory extends React.Component {
 
         if (this.state.categoryName === '') {
         } else if (this.state.categoryName !== '') {
-            axios.post('/', {
+            const token = localStorage.token;
+             if(token) {
+            const conf = {
+              headers:{
+              "x-auth":token,
+                }
+            };
+           
+            axios.post('/api/admin/categories', {
                 categoryName: this.state.categoryName
-            }).then(response => {
+            },conf)
+            .then(response => {
+                if(response.status === 200 ) {
                 console.log(response);
-            }).catch(error => {
+                const categoriesProps = this.props.categories;
+                categoriesProps.push({ id:response.data._id , catName: response.data.catName});
+                this.setState({
+                    categories: [...this.props.categories,this.state.categoryName],
+                    categoryName: '',
+                });
+                this.props.handlerFromParant(categoriesProps);
+                // this.setState({categoryName: ''});
+                } else {
+                    console.log('response error');
+                }
+            })
+            .catch(error => {
                 console.log(error);
             });
-            const categoriesProps = this.props.categories;
-            categoriesProps.push({userId: 1, id: Math.floor(Math.random() * 1000), title: this.state.categoryName});
-            this.setState({categories: categoriesProps});
-            this.props.handlerFromParant(categoriesProps);
-            this.setState({categoryName: ''});
         }
+    }
     }
 
     handleOnChange = event => {

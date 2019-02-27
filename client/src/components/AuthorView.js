@@ -15,10 +15,12 @@ class AuthorView extends Component {
     state = {
         authors: [],
         modal: false,
-        AuthorFirstNameEdit: '',
+        AuthorFullNameEdit: '',
         IdEdit: 0,
-        AuthorLastNameEdit: '',
         AuthorDateEdit: '',
+        selectedFile: null,
+        loaded: 0,
+        img: "",
     };
 
     handleData(data) {
@@ -42,10 +44,10 @@ class AuthorView extends Component {
         });
 
         console.log(author);
-        const author_id = author[id];
-        const author_fname = author["title"];
-        const author_lname = author["title"];
-        const author_date = author[title];
+        const author_id = author[0].id;
+        const author_fname = author[0].title;
+        const author_lname = author[0].title;
+        const author_date = author[0].title;
         this.setState({
             AuthorFirstNameEdit: author_fname,
             AuthorLastNameEdit: author_lname,
@@ -110,16 +112,27 @@ class AuthorView extends Component {
         });
     }
 
-    componentDidMount() {
-        axios.get('https://jsonplaceholder.typicode.com/albums')
-            .then(response => {
-                this.setState({authors: response.data});
-                console.log(response);
-            }).catch(error => {
-            console.log(error);
-            this.setState({error: 'Error reteiriving data'})
-        })
+componentDidMount() {
+    const token = localStorage.token;
+    if(token) {
+        const conf = {
+        headers:{
+            "x-auth":token,
+        }
+        }
+    axios.get('/api/admin/authors',conf)
+        .then(response => {
+            console.log(response);
+            this.setState(
+                {authors: response.data.authors }
+                );
+        
+        }).catch(error => {
+        console.log(error);
+        this.setState({error: 'Error reteiriving data'})
+    })
     }
+}
 
     handleOnChangeFname = event => {
         this.setState({AuthorFirstNameEdit:event.target.value});
@@ -134,16 +147,22 @@ class AuthorView extends Component {
         console.log(this.state.AuthorDateEdit);
     }
 
+    handleselectedFile = event => {
+        this.setState({
+          selectedFile: event.target.files[0],
+          loaded: 0
+        });
+      };
+
     render() {
         const {authors, error} = this.state;
         const authorsView = authors.length ? authors.map(author =>
-            <tr key={author.id}>
-                <td>{author.title}</td>
-                <td>{author.title}</td>
-                <td>{author.title}</td>
-                <td>{author.title}</td>
-                <td><Button color='danger' onClick={() => this.handleDeleteAuthor(author.id)}>Delete</Button></td>
-                <td><Button color='success' onClick={() => this.toggle(author.id)}>Edit</Button></td>
+            <tr key={author._id}>
+                <td><img src={author.img} alt="img"/></td>
+                <td>{author.fullName}</td>
+                <td>{author.dateOfBirth}</td>
+                <td><Button color='danger' onClick={() => this.handleDeleteAuthor(author._id)}>Delete</Button></td>
+                <td><Button color='success' onClick={() => this.toggle(author._id)}>Edit</Button></td>
             </tr>
         ) : error ? <h1><Alert color='danger'>{error}</Alert></h1> : null;
 
@@ -163,19 +182,25 @@ class AuthorView extends Component {
                         <Input type="date" defaultValue={this.state.AuthorDateEdit}
                                onChange={this.handleOnChangeDate}
                                placeholder='Author Date fo Birth'/>
+                        <Input
+                                 type="file"
+                                 name=""
+                                 id="exampleFile"
+                                 onChange={this.handleselectedFile}
+                                 placeholder='Author Photo '/>
+                        
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="primary" onClick={() => this.handleDeleteAuthor()}>Edit Author</Button>{' '}
-                        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                        <Button color="primary" onClick={() => this.handleUpdateAuthor()}>Edit Author</Button>{' '}
+                        <Button color="secondary" onClick={()=>this.toggle(null)}>Close</Button>
                     </ModalFooter>
                 </Modal>
                 <Table>
                     <thead>
                     <tr>
                         <th>Author Photo</th>
-                        <th>Author First-Name</th>
-                        <th>Author Last-Name</th>
-                        <th>Author-Date</th>
+                        <th>Author Full-Name</th>
+                        <th>Author Date Of Birth </th>
                         <th>#</th>
                         <th>#</th>
                     </tr>
