@@ -35,12 +35,7 @@ constructor(props) {
 
   }
   
-
-// test = setInterval(() => {
-//   alert(this.state.books[0].rate)
-// }, 5000);
-
-
+// componentDidMount()
 
 displayAllBooks =()=>{
   if(this.state.shelf!=="all")

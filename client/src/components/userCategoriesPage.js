@@ -42,7 +42,11 @@ return (
                     <div>
                         <ul className="bookCatShelves">
                             <li>
-                            <Link to={`/category?${cats[0].catId}`} replace>{cats[0].catName}</Link>
+                            {/* <Link to={`/category?${cats[0].catId}`} replace>{cats[0].catName}</Link> */}
+                            <Link replace to={
+                                { pathname:`/category?${cats[0].catId}`, state: { name: `${cats[0].catName}`  } }
+                                }>{cats[0].catName}</Link>
+
                             </li>
                             <li className="catShelf">
 
