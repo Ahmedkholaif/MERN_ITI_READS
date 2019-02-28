@@ -16,6 +16,7 @@ this.state={
     categoryName:"",
     books:[],
     activePage:1,
+    itemsCount:1
 }
 
 const chunk_size = 10;
@@ -46,18 +47,38 @@ componentDidMount(){
       if(res.status === 200){
       this.setState({
         books:res.data.books,
-      
+        itemsCount:res.data.count
       })
     }
     })
     .catch(err => console.log(err))
   }
 }
+
 handelPagination = (pageNum)=>
 {
-this.setState({activePage: pageNum});
-// window.fetch(`/userBooks?${pageNum}?${this.state.shelf}`)
-// .then(response => response.json()).then(data=> this.setState({activePage: pageNum,books:data});) ;
+  const token = localStorage.token;
+  if(token) {
+    const conf ={
+      params:{
+        page:`${pageNum}`,
+      },
+      headers:{
+      "x-auth":token,
+      }
+    }
+    axios.get(`/api/users/current/books?page=${this.state.activePage}`,conf
+    )
+    .then(res =>{
+      console.log(res.data);
+      this.setState({
+        books:res.data.books,
+        activePage: pageNum,
+        itemsCount:res.data.count
+      })
+    })
+    .catch(err => console.log(err))
+  }
 }
   
 render() {
@@ -70,7 +91,7 @@ return (
         </Row>
         <Row className="justify-content-md-center">
             <Col>
-                <CustomPagination activePage={this.state.activePage} change={this.handelPagination}/>
+                <CustomPagination chunk={10} max={this.state.itemsCount} activePage={this.state.activePage} change={this.handelPagination}/>
             </Col>
         </Row>
       </div>

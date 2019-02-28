@@ -45,7 +45,7 @@ constructor(props) {
       })()}
         </Row>
         <Row>
-          <Table className="m-0">
+          <Table className="m-0 booksTable">
               <thead>
               <tr>
                 <th>Cover</th>
@@ -64,8 +64,8 @@ constructor(props) {
                   return (
                   <tr>
                       <td><img src={book.bookInfo.img} width="40"/></td>
-                      <td><Link to="/" replace>{book.bookInfo.bookName}</Link></td>
-                      <td><Link to="/" replace>{book.bookInfo.author}</Link></td>
+                      <td><Link to={`/book?${book.bookInfo.bookName}`} replace>{book.bookInfo.bookName}</Link></td>
+                      <td><Link to={`/author?${book.bookInfo.author}`} replace>{book.bookInfo.author}</Link></td>
                       <td>{book.bookInfo.category}</td>
                       <td><RatingStars rate={averageRate} clickable={false}/></td>
                       <td><RatingStars rate={book.rate} clickable={true} name={book.bookInfo.bookName} books={this.state.books}/></td>

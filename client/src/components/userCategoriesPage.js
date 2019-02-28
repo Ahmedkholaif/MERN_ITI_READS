@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "../css/UserCategoriesPage.css";
 import CustomNavbar from "./Navbar";
 
@@ -8,28 +9,38 @@ class UserHomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categories: [
-        { catId: 44, catName: "cat 1" },
-        { catId: 2, catName: "cat 1" },
-        { catId: 2, catName: "cat 1" },
-        { catId: 7, catName: "cat 1" },
-        { catId: 1, catName: "cat 1" },
-        { catId: 8, catName: "cat 1" },
-        { catId: 1, catName: "cat 1" }
-      ],
+      categories: [],
       categoryUnit: []
     };
-    const chunk_size = 5;
-    const arr = this.state.categories;
-    this.state.categoryUnit = arr
+  }
+
+  componentDidMount(){
+    const token = localStorage.token;
+  if(token) {
+    const conf ={
+      headers:{
+      "x-auth":token,
+      }
+    }
+    axios.get(`/api/users/current/categories`,conf
+    )
+    .then(res =>{
+      console.log(res.data)
+      let chunk_size = 5;
+      this.state.categoryUnit = res.data
       .map(function(e, i) {
-        return i % chunk_size === 0 ? arr.slice(i, i + chunk_size) : null;
+        return i % chunk_size === 0 ? res.data.slice(i, i + chunk_size) : null;
       })
       .filter(function(e) {
         return e;
       });
+      this.setState({
+        categories:res.data,
+      })
+    })
+    .catch(err => console.log(err))
   }
-
+  }
   render() {
     return (
       <div>
@@ -37,24 +48,28 @@ class UserHomePage extends Component {
         <Row className="bookShelves">
         {(
            this.state.categoryUnit.map(cats =>(
-               <Col>
+               <Col className="mt-5">
                     <div>
-                        <ul className="bookCatShelves"/>>
+                        <ul className="bookCatShelves">
                             <li>
-                            {/* <Link to={`/category?${cats[0].catId}`} replace>{cats[0].catName}</Link> */}
-                            <Link replace to={
-                                { pathname:`/category?${cats[0].catId}`, state: { name: `${cats[0].catName}`  } }
-                                }>{cats[0].catName}</Link>
-
+                            <Link replace to={`/category?${cats[0].catName}`}>{cats[0].catName}</Link>
                             </li>
                             <li className="catShelf"/>
-
+                        </ul>
+                  {cats[1] ? (
+                  <ul className="bookCatShelves">
+                    <li>
+                    <Link replace to={`/category?${cats[1].catName}`}>{cats[1].catName}</Link>
+                    </li>
+                    <li className="catShelf" />
+                  </ul>
+                ) : (
+                  ""
+                )}
                 {cats[2] ? (
                   <ul className="bookCatShelves">
                     <li>
-                      <Link to={`/category?${cats[2].catId}`} replace>
-                        {cats[2].catName}
-                      </Link>
+                    <Link replace to={`/category?${cats[2].catName}`}>{cats[2].catName}</Link>
                     </li>
                     <li className="catShelf" />
                   </ul>
@@ -65,9 +80,7 @@ class UserHomePage extends Component {
                 {cats[3] ? (
                   <ul className="bookCatShelves">
                     <li>
-                      <Link to={`/category?${cats[3].catId}`} replace>
-                        {cats[3].catName}
-                      </Link>
+                    <Link replace to={`/category?${cats[3].catName}`}>{cats[3].catName}</Link>
                     </li>
                     <li className="catShelf" />
                   </ul>
@@ -78,9 +91,7 @@ class UserHomePage extends Component {
                 {cats[4] ? (
                   <ul className="bookCatShelves">
                     <li>
-                      <Link to={`/category?${cats[3].catId}`} replace>
-                        {cats[3].catName}
-                      </Link>
+                    <Link replace to={`/category?${cats[4].catName}`}>{cats[4].catName}</Link>
                     </li>
                     <li className="catShelf" />
                   </ul>

@@ -17,6 +17,7 @@ constructor(props) {
     this.state = {
       isOpen: false,
       activePage:1,
+      itemsCount:1,
       shelf : "all",
       books:[],
     }
@@ -39,8 +40,10 @@ componentDidMount(){
     axios.get(`/api/users/current?page=${this.state.activePage}?mode=${this.state.shelf}`,conf
     )
     .then(res =>{
+      console.log(res.data)
       this.setState({
         books:res.data.books,
+        itemsCount:res.data.count
       })
     })
     .catch(err => console.log(err))
@@ -51,6 +54,33 @@ componentDidMount(){
 //   alert(this.state.books[0].rate)
 // }, 5000);
 
+sendRequestShelf = (shelf)=>
+{
+  const token = localStorage.token;
+  if(token) {
+    const conf ={
+      params:{
+        page:1,
+        mode:`${shelf}`
+      },
+      headers:{
+      "x-auth":token,
+      }
+    }
+    axios.get(`/api/users/current`,conf
+    )
+    .then(res =>{
+      console.log(conf.params.mode,res.data.books)
+
+      this.setState({
+        books:res.data.books,
+        activePage: 1,
+        itemsCount:res.data.count
+      })
+    })
+    .catch(err => console.log(err))
+  }
+}
 
 displayAllBooks =()=>{
   if(this.state.shelf!=="all")
@@ -59,6 +89,8 @@ displayAllBooks =()=>{
       shelf:"all",
       activePage:1,
     })
+    this.sendRequestShelf("all");
+
   }
 }
 displayReadBooks =()=>{
@@ -68,6 +100,8 @@ displayReadBooks =()=>{
       shelf:"read",
       activePage:1,
     })
+    this.sendRequestShelf("read");
+
   }
 }
 displayCurrentlyReadingBooks =()=>{
@@ -77,6 +111,7 @@ displayCurrentlyReadingBooks =()=>{
       shelf:"current",
       activePage:1,
     })
+    this.sendRequestShelf("current");
   }
 }
 displayToReadBooks =()=>{
@@ -86,25 +121,25 @@ displayToReadBooks =()=>{
       shelf:"toRead",
       activePage:1,
     })
+    this.sendRequestShelf("toRead");
   }
 }
 
 
 handelPagination = (pageNum)=>
 {
-  console.log("page",pageNum ,"----",this.state.books)
   const token = localStorage.token;
   if(token) {
     const conf ={
       params:{
-        page:`${this.state.activePage}`,
+        page:`${pageNum}`,
         mode:`${this.state.shelf}`
       },
       headers:{
       "x-auth":token,
       }
     }
-    axios.get(`/api/users/current?page=${this.state.pageNum}&mode=${this.state.shelf}`,conf
+    axios.get(`/api/users/current`,conf
     )
     .then(res =>{
       this.setState({
@@ -114,7 +149,6 @@ handelPagination = (pageNum)=>
     })
     .catch(err => console.log(err))
   }
-  console.log("page",pageNum ,"----",this.state.books)
 }
   render() {
     return (
@@ -148,7 +182,7 @@ handelPagination = (pageNum)=>
                 <Row className="rightMenu">
                     <Col>
                         <BooksTable books={this.state.books} shelf={this.state.shelf}/>
-                        <CustomPagination activePage={this.state.activePage} change={this.handelPagination}/>
+                        <CustomPagination chunk={5} max={this.state.itemsCount} activePage={this.state.activePage} change={this.handelPagination}/>
                     </Col>
                 </Row>
             </Col>
