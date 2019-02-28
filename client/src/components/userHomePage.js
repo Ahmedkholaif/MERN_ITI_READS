@@ -36,7 +36,7 @@ class UserHomePage extends Component {
       axios
         .get(
           `/api/users/current?page=${this.state.activePage}?mode=${
-            this.state.shelf
+          this.state.shelf
           }`,
           conf
         )
@@ -189,8 +189,8 @@ class UserHomePage extends Component {
         </Row>
       </div>
     ) : (
-      <Redirect to={{ pathname: "/", state: { from: this.props.location } }} />
-    );
+        <Redirect to={{ pathname: "/", state: { from: this.props.location } }} />
+      );
   }
 }
 

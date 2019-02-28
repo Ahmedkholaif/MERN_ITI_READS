@@ -5,9 +5,13 @@ import CategoriesView from '../components/CategoriesView'
 import AuthorView from '../components/AuthorView'
 import BookView from '../components/BookView'
 import axios from 'axios';
+<<<<<<< HEAD
 import { Redirect } from "react-router-dom";
 
 
+=======
+import {Redirect} from 'react-router-dom'
+>>>>>>> a41380987213c4761e7dc5ca877e2a58017816c0
 import '../css/AdminLogin.css';
 
 
@@ -26,9 +30,15 @@ export default class Example extends React.Component {
 
     handleSignout(event) {
         event.preventDefault();
+<<<<<<< HEAD
         if (localStorage.token) {
             const conf = {
                 headers: { 'x-auth': localStorage.token }
+=======
+        if(localStorage.token){
+            const conf= {
+                headers: {'x-auth':localStorage.token}
+>>>>>>> a41380987213c4761e7dc5ca877e2a58017816c0
             };
             axios.delete('/api/signout', conf)
                 .then(response => {

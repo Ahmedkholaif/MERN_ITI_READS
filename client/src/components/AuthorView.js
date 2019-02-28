@@ -4,7 +4,7 @@ import AddAuthor from './AddAuthor';
 import axios from "axios";
 import {Redirect} from 'react-router-dom'
 import {Alert, Button, Input, Modal, ModalBody, ModalFooter, ModalHeader, Table} from "reactstrap";
-
+import {Redirect} from 'react-router-dom'
 
 class AuthorView extends Component {
     constructor(props) {
@@ -81,7 +81,6 @@ class AuthorView extends Component {
                             this.state.selectedFile,
                             this.state.selectedFile.name
                         );
-
                         data.append("body", JSON.stringify(this.state.author));
                         const conf = {
                             onUploadProgress: ProgressEvent => {
@@ -94,10 +93,9 @@ class AuthorView extends Component {
                                 "x-auth": token
                             }
                         };
-
                         axios.put(`/api/admin/authors/${id}`, data, conf)
                             .then(res => {
-                                console.log(res);
+                                // console.log(res);
                                 if (res.status === 200) {
                                     authors[key].img = res.data.img;
 
@@ -110,9 +108,7 @@ class AuthorView extends Component {
                                             IdEdit: 0
                                         }
                                     );
-
-                                    console.log(res.data.img);
-
+                                    // console.log(res.data.img);
                                 } else {
                                     console.log("not updated in db");
                                 }
@@ -177,6 +173,7 @@ class AuthorView extends Component {
                 this.setState({error: 'Error reteiriving data'})
             })
         }
+        
     }
 
     handleOnChangefullName = event => {
