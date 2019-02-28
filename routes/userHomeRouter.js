@@ -126,7 +126,7 @@ const editBookState = (bookName, mode, rate, res) => {
     else{
         res.status(404).send()
     }
-}
+})})
 // edit the book
 router.put("/:bookName",(req,res)=>{
     const mode = req.query.mode;
@@ -184,71 +184,6 @@ router.get("/search", (req, res)=> {
 // });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            res.status(200).send();
-          }
-        );
-      } else {
-        res.status(404).send();
-      }
-    });
-  } else if (mode == "rating") {
-    Book.findOneAndUpdate(
-      { title: bookName },
-      { $inc: { "rating.total": rate, "rating.users": 1 } },
-      (err, data) => {
-        //$inc to increament
-        if (err) {
-          res.status(404).send();
-        }
-        book_id = data._id;
-        User.findOneAndUpdate(
-          { email: req.user.email, "books.bookInfo": book_id }, //firstName willbe req.user._id
-          { $set: { "books.$.rate": rate } },
-          (err, daaa) => {
-            res.send.status(200).send();
-          }
-        );
-      }
-    );
-  } else {
-    res.status(404).send();
-  }
-};
-// edit the book
-router.put("/:bookName", (req, res) => {
-  const mode = req.query.mode;
-  const rate = parseInt(req.query.rate);
-  const bookName = req.params.bookName;
-  editBookState(bookName, mode, rate, res);
-});
-//delete the book
-
-/////router Elfashe777777777777777''''''' Ziyad to add search for books , author , category use pattern and relative posibilty contant Aineshtain
-router.get("/dd", (req, res) => {
-  console.log("search");
-  const searchQuery = req.query.q;
-  if (searchQuery === "books") {
-    res.json("books");
-  } else if (searchQuery == "authors") {
-    res.json("authors"); //(data)
-  } else {
-    res.status(404).send();
-  }
-});
-
 //Routes for testing
 router.get("/addUserBook", (req, res, next) => {
   Book.findOne({ bookName: "ahemd fi belad el 3ga2eb" }, (err, data) => {
@@ -279,51 +214,3 @@ router.get("/addBook", (req, res) => {
 module.exports.editBookState = editBookState;
 module.exports = router;
 
-// const addBooks = () => {
-//     for (let index = 0; index < 12; index++) {
-//         let book = new Book({ title: "xx", authorID: "motaz" });
-//         console.log(book._id)
-//         book.save().then(function (result) {
-//             console.log(result._id)
-//             return User.findOneAndUpdate(
-//                 { firstName: "motaz" },
-//                 { $push: { books: result } }
-//             );
-//         }).then(function (result) {
-//             console.log('updated post');
-//         });
-
-//     }
-// }
-// const getbooks = (books) => {
-//     books.forEach(book => {
-//         console.log(book._id)
-//         gettedBooks.push(book.id)
-//         Book.findById((book._id).then(()=>{
-//             gettedBooks.push(data)
-//             console.log(data);
-
-//         }),(err,data)=>{
-//                     if (err) throw err;
-
-//                 })
-//     });
-// }
-
-// router.get("/", (req, res, next) => {
-// let books;
-// addBooks()
-// const page = req.query.page;
-// let start = (page > 0 ? (page - 1) : 0) * 10; //start from index ( 0 , 10 , 20 , 30)
-// let end = start + 10;
-// let user;
-// })
-
-// })
-// Book.find()
-//     .skip((page > 0 ? ((page - 1) * perPage) : 0))
-//     .limit(perPage)
-//     .exec(function (err, data) {
-//         if (err) throw err;
-//         res.json(data)
-//     })
