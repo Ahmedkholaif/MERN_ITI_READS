@@ -1,8 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from "axios";
-import {Alert, Button, Table} from "reactstrap";
+import { Alert, Button, Table } from "reactstrap";
 import AddBook from '../components/AddBook';
-import {Input, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
+import { Input, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { Redirect } from "react-router-dom";
+
 
 class BookView extends Component {
     constructor(props) {
@@ -137,8 +139,8 @@ class BookView extends Component {
                                 }
                             })
                             .catch(err => {
-                                console.log({err});
-                                this.setState({error: 'Error Delete Operation'})
+                                console.log({ err });
+                                this.setState({ error: 'Error Delete Operation' })
                             })
                     }
                 }
@@ -161,14 +163,14 @@ class BookView extends Component {
                     console.log(response);
                     if (response.status === 200) {
                         this.setState(
-                            {books: response.data.books}
+                            { books: response.data.books }
                         );
                     }
                     // this.props.passAuthors(response.data);
                 }).catch(error => {
-                console.log(error);
-                this.setState({error: 'Error reteiriving data'})
-            })
+                    console.log(error);
+                    this.setState({ error: 'Error reteiriving data' })
+                })
         }
 
     }
@@ -192,15 +194,15 @@ class BookView extends Component {
                 .catch(err => {
                     console.log(err)
                 })
-            this.setState({error: 'Error Delete Operation'})
+            this.setState({ error: 'Error Delete Operation' })
         }
-        this.setState({books: this.state.books.filter(book => book._id !== deletedId)});
+        this.setState({ books: this.state.books.filter(book => book._id !== deletedId) });
     }
 
 
     render() {
 
-        const {categories, books, authors, error} = this.state;
+        const { categories, books, authors, error } = this.state;
         const categoiresView = categories.length ? categories.map(category =>
             <option key={category._id} value={category.catName}>{category.catName}</option>
         ) : error ? <h1><Alert color='danger'>{error}</Alert></h1> : null;
@@ -212,7 +214,7 @@ class BookView extends Component {
         console.log(books, bookslength);
         const booksView = bookslength ? books.map(book =>
             <tr key={book._id}>
-                <td><img src={book.img} alt="img" width="75" height="75"/></td>
+                <td><img src={book.img} alt="img" width="75" height="75" /></td>
                 <td>{book.bookName}</td>
                 <td>{book.author}</td>
                 <td>{book.category}</td>
@@ -225,34 +227,34 @@ class BookView extends Component {
             localStorage.token ?
                 <div>
                     <AddBook categories={this.state.categories} handlerFromParant={this.handleData}
-                             books={this.state.books}
-                             authors={this.state.authors}/>
+                        books={this.state.books}
+                        authors={this.state.authors} />
                     <Modal isOpen={this.state.modal} toggle={this.toggle} backdrop={this.state.backdrop}
-                           className={this.props.className}>
+                        className={this.props.className}>
                         <ModalHeader toggle={this.toggle}>Add Book</ModalHeader>
                         <ModalBody>
                             <Input type="text" value={this.state.bookName} defaultValue={this.state.book.bookName}
-                                   onChange={this.handleOnChangeBookName}
-                                   placeholder='Book Name'/>
+                                onChange={this.handleOnChangeBookName}
+                                placeholder='Book Name' />
                             <Input type="select" name="selectCategory" defaultValue={this.state.book.category}
-                                   id="categorySelect" onClick={this.handleOnChangeCategory}>
+                                id="categorySelect" onClick={this.handleOnChangeCategory}>
                                 {categoiresView}
                             </Input>
                             <Input type="select" name="selectAuthor" id="authorSelect"
-                                   defaultValue={this.state.book.author}
-                                   onClick={this.handleOnChangeAuthor}>
+                                defaultValue={this.state.book.author}
+                                onClick={this.handleOnChangeAuthor}>
                                 {authorView}
                             </Input>
                             <textarea name="description" id="authorSelect" defaultValue={this.state.book.description}
-                                      onChange={this.handleOnChangeDescription}
-                                      placeholder='Discription '></textarea>
+                                onChange={this.handleOnChangeDescription}
+                                placeholder='Discription '></textarea>
 
                             <Input
                                 type="file"
                                 name=""
                                 id="addImageBook"
                                 onChange={this.handleselectedFile}
-                                placeholder='Book Photo '/>
+                                placeholder='Book Photo ' />
                         </ModalBody>
                         <ModalFooter>
                             <Button color="primary" onClick={this.handleUpdateBook}> Edit Book</Button>{' '}
@@ -262,22 +264,22 @@ class BookView extends Component {
 
                     <Table>
                         <thead>
-                        <tr>
-                            <th>Book Photo</th>
-                            <th>Book Name</th>
-                            <th>Book Author</th>
-                            <th>Book Category</th>
-                            <th>Book Description</th>
-                            <th>#</th>
-                            <th>#</th>
-                        </tr>
+                            <tr>
+                                <th>Book Photo</th>
+                                <th>Book Name</th>
+                                <th>Book Author</th>
+                                <th>Book Category</th>
+                                <th>Book Description</th>
+                                <th>#</th>
+                                <th>#</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {booksView}
+                            {booksView}
                         </tbody>
                     </Table>
                 </div>
-                : <Redirect to={{pathname: '/', state: {from: this.props.location}}}/>
+                : <Redirect to={{ pathname: '/', state: { from: this.props.location } }} />
         );
     }
 }

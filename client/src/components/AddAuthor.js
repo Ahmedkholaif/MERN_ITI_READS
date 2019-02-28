@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
-import {Button, Modal, ModalBody, ModalFooter, ModalHeader, Input} from "reactstrap";
+import React, { Component } from 'react';
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Input } from "reactstrap";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 
 class AddAuthor extends Component {
@@ -53,22 +54,22 @@ class AddAuthor extends Component {
                         console.log(response);
                         const authorsProps = this.props.authors;
                         authorsProps.push(response.data.author);
-                        this.setState({authors: authorsProps});
+                        this.setState({ authors: authorsProps });
                         this.props.handlerFromParant(authorsProps);
-                        this.setState({authors: ''});
+                        this.setState({ authors: '' });
 
                     }).catch(error => {
-                    console.log(error);
-                });
+                        console.log(error);
+                    });
             }
         }
     }
 
     handleOnChaneFname = event => {
-        this.setState({author: {...this.state.author, fullName: event.target.value}});
+        this.setState({ author: { ...this.state.author, fullName: event.target.value } });
     }
     handleOnChaneDate = event => {
-        this.setState({author: {...this.state.author, dateOfBirth: event.target.value}});
+        this.setState({ author: { ...this.state.author, dateOfBirth: event.target.value } });
     }
     handleselectedFile = event => {
         this.setState({
@@ -84,19 +85,19 @@ class AddAuthor extends Component {
                     <h1>Authors Contents</h1>
                     <Button color="success" onClick={this.toggle}>Add Author</Button>
                     <Modal isOpen={this.state.modal} toggle={this.toggle} backdrop={this.state.backdrop}
-                           className={this.props.className}>
+                        className={this.props.className}>
                         <ModalHeader toggle={this.toggle}>Add Author</ModalHeader>
                         <ModalBody>
                             <Input type="text" value={this.state.authorFullName} onChange={this.handleOnChaneFname}
-                                   placeholder='Author FirstName'/>
+                                placeholder='Author FirstName' />
                             <Input type="date" value={this.state.authorDate} onChange={this.handleOnChaneDate}
-                                   placeholder='Author Date'/>
+                                placeholder='Author Date' />
                             <Input
                                 type="file"
                                 name=""
                                 id="exampleFile"
                                 onChange={this.handleselectedFile}
-                                placeholder='Author Photo '/>
+                                placeholder='Author Photo ' />
 
                         </ModalBody>
                         <ModalFooter>
@@ -106,7 +107,7 @@ class AddAuthor extends Component {
                         </ModalFooter>
                     </Modal>
                 </div>
-                : <Redirect to={{pathname: '/', state: {from: this.props.location}}}/>
+                : <Redirect to={{ pathname: '/', state: { from: this.props.location } }} />
         );
     }
 }

@@ -1,6 +1,6 @@
 const express = require('express');
 require('./mongo-conf.js');
-const PORT = process.env.PORT || 3002 ;
+const PORT = process.env.PORT || 3002;
 const userRouter = require('./routes/UsersRouter');
 const adminRouter = require('./routes/AdminRouter');
 const fileUpload = require('express-fileupload');
@@ -10,8 +10,8 @@ app.use(express.json());
 app.use(fileUpload());
 
 app.use(express.static('public'));
-app.use('/api/users',userRouter);
-app.use('/api/admin',adminRouter);
+app.use('/api/users', userRouter);
+app.use('/api/admin', adminRouter);
 
 
 // app.use('/api',)//The home page
@@ -47,6 +47,6 @@ app.use('/api/admin',adminRouter);
 //use POST : /api/admin/categories                          to add category
 //use PUT : /api/admin/categories/categoryName              to edit  category
 //use DELETE : /api/admin/categories/categotyName           to delete  category
-app.listen(PORT,()=>{
+app.listen(PORT, () => {
     console.log(`Server Started at port ${PORT}`);
 });
