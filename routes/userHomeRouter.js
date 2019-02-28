@@ -29,7 +29,7 @@ router.get("/", (req, res) => {
   let pipeline;
   if (mode !== "all") {
     pipeline = [
-      { $match: { email: req.user.email } }, // it will be req.user.firstName
+      { $match: { email: "ahmed_kholaif@yahoo.com" } }, // it will be req.user.firstName
       { $unwind: "$books" }, // to comvert the books field into array
       { $match: { "books.shelf": mode } },
       { $project: { books: 1, _id: 0 } }, //to only keep books and user's id
@@ -38,16 +38,17 @@ router.get("/", (req, res) => {
       { $limit: end }
     ];
   } else {
+    console.log(page);
     pipeline = [
-      { $match: { email: req.user.email } }, // it will be req.user.firstName
+      { $match: { email: "ahmed_kholaif@yahoo.com" } }, // it will be req.user.firstName
       { $unwind: "$books" }, // to comvert the books field into array
       { $project: { books: 1, _id: 0 } },
       { $project: { "books._id": 0 } },
-      { $skip: page * 5 || 0 },
-      { $limit: 5 }
+      { $skip: start },
+      { $limit: end }
     ];
   }
-  User.findOne({ email: req.user.email }, (err, user) => {
+  User.findOne({ email: "ahmed_kholaif@yahoo.com" }, (err, user) => {
     let count = 0;
     if (mode != "all") {
       user.books.forEach(book => {
@@ -58,8 +59,8 @@ router.get("/", (req, res) => {
     } else {
       count = user.books.length;
     }
-    console.log(count);
     User.aggregate(pipeline, function(err, result) {
+      console.log(result);
       if (err) {
         res.status(500).send();
       }
