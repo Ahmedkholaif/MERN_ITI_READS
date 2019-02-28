@@ -68,14 +68,15 @@ router.post('/', auth_Admin,(req, res) => {
 
 // Edit an Author
 //@ admin auth
-router.put('/:name', auth_Admin,(req, res) => {
+router.put('/:authorID', auth_Admin,(req, res) => {
 
   const body =JSON.parse(req.body.body);
+  console.log(body);
   let img ;
   const fullName = body.fullName;
   const dateOfBirth = body.dateOfBirth;
   let uploadFile = req.files.file ;
-
+  const authorID = req.params.authID;
   const fileName = `${new Date().toISOString()}${Math.random()}${req.files.file.name}` ;
   uploadFile.mv(
     `${__dirname}/../public/${fileName}`,(err)=> {
@@ -84,7 +85,7 @@ router.put('/:name', auth_Admin,(req, res) => {
       img =  `../../../${fileName}`;
       Author.updateOne(
         {
-          fullName: oldname
+          _id: authorID
         },
         { $set: {
             fullName,
@@ -93,7 +94,7 @@ router.put('/:name', auth_Admin,(req, res) => {
             }
         })
         .then(()=>{
-            res.status(200).send({masg:"succes"});
+            res.status(200).send({img});
         }) 
         .catch((e)=>{
             res.status(404).send(e);
