@@ -12,10 +12,10 @@ class AddAuthor extends Component {
     state = {
         modal: false,
         authors: [],
-        author:{
+        author: {
             fullName: '',
             dateOfBirth: '',
-            img:'',
+            img: '',
         },
         selectedFile: null,
     };
@@ -30,81 +30,83 @@ class AddAuthor extends Component {
             const token = localStorage.token;
             if (token) {
                 const data = new FormData();
-            data.append(
-                "file",
-                this.state.selectedFile,
-                this.state.selectedFile.name
-            );
+                data.append(
+                    "file",
+                    this.state.selectedFile,
+                    this.state.selectedFile.name
+                );
 
-            data.append("body", JSON.stringify(this.state.author));
-            const conf = {
-                onUploadProgress: ProgressEvent => {
-                this.setState({
-                    loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
+                data.append("body", JSON.stringify(this.state.author));
+                const conf = {
+                    onUploadProgress: ProgressEvent => {
+                        this.setState({
+                            loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
+                        });
+                    },
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-auth": token
+                    }
+                };
+                axios.post('/api/admin/authors', data, conf)
+                    .then(response => {
+                        console.log(response);
+                        const authorsProps = this.props.authors;
+                        authorsProps.push(response.data.author);
+                        this.setState({authors: authorsProps});
+                        this.props.handlerFromParant(authorsProps);
+                        this.setState({authors: ''});
+
+                    }).catch(error => {
+                    console.log(error);
                 });
-                },
-                headers: {
-                "Content-Type": "application/json",
-                "x-auth": token
-                }
-            };
-            axios.post('/api/admin/authors', data,conf)
-            .then(response => {
-                console.log(response);
-                const authorsProps = this.props.authors;
-                authorsProps.push(response.data.author);
-                this.setState({authors: authorsProps});
-                this.props.handlerFromParant(authorsProps);
-                this.setState({authors: ''});
-
-            }).catch(error => {
-                console.log(error);
-            });
             }
         }
     }
 
     handleOnChaneFname = event => {
-        this.setState({author: {...this.state.author,fullName: event.target.value}});
+        this.setState({author: {...this.state.author, fullName: event.target.value}});
     }
     handleOnChaneDate = event => {
-        this.setState({author: {...this.state.author,dateOfBirth: event.target.value}});
+        this.setState({author: {...this.state.author, dateOfBirth: event.target.value}});
     }
     handleselectedFile = event => {
         this.setState({
-          selectedFile: event.target.files[0],
-          loaded: 0
+            selectedFile: event.target.files[0],
+            loaded: 0
         });
-      };
+    };
 
     render() {
         return (
-            <div>
-                <h1>Authors Contents</h1>
-                <Button color="success" onClick={this.toggle}>Add Author</Button>
-                <Modal isOpen={this.state.modal} toggle={this.toggle} backdrop={this.state.backdrop}
-                       className={this.props.className}>
-                    <ModalHeader toggle={this.toggle}>Add Author</ModalHeader>
-                    <ModalBody>
-                        <Input type="text" value={this.state.authorFullName} onChange={this.handleOnChaneFname}
-                               placeholder='Author FirstName'/>
-                        <Input type="date" value={this.state.authorDate} onChange={this.handleOnChaneDate}
-                               placeholder='Author Date'/>
-                        <Input
-                               type="file"
-                               name=""
-                               id="exampleFile"
-                               onChange={this.handleselectedFile}
-                               placeholder='Author Photo '/>
+            localStorage.token ?
+                <div>
+                    <h1>Authors Contents</h1>
+                    <Button color="success" onClick={this.toggle}>Add Author</Button>
+                    <Modal isOpen={this.state.modal} toggle={this.toggle} backdrop={this.state.backdrop}
+                           className={this.props.className}>
+                        <ModalHeader toggle={this.toggle}>Add Author</ModalHeader>
+                        <ModalBody>
+                            <Input type="text" value={this.state.authorFullName} onChange={this.handleOnChaneFname}
+                                   placeholder='Author FirstName'/>
+                            <Input type="date" value={this.state.authorDate} onChange={this.handleOnChaneDate}
+                                   placeholder='Author Date'/>
+                            <Input
+                                type="file"
+                                name=""
+                                id="exampleFile"
+                                onChange={this.handleselectedFile}
+                                placeholder='Author Photo '/>
 
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={this.toggle}>Add
-                            Author</Button>{' '}
-                        <Button color="secondary" onClick={this.toggle}>Close</Button>
-                    </ModalFooter>
-                </Modal>
-            </div>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={this.toggle}>Add
+                                Author</Button>{' '}
+                            <Button color="secondary" onClick={this.toggle}>Close</Button>
+                        </ModalFooter>
+                    </Modal>
+                </div>
+                : <Redirect to={{pathname: '/', state: {from: this.props.location}}}/>
         );
     }
 }

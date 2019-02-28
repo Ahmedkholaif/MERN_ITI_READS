@@ -48,7 +48,9 @@ export default class Example extends React.Component {
     }
 
     render() {
+
         return (
+        localStorage.token ?
             <div className='AdminDashboard'>
                 <Nav tabs>
                     <NavItem>
@@ -101,6 +103,7 @@ export default class Example extends React.Component {
                     </TabPane>
                 </TabContent>
             </div>
+            :<Redirect to={{pathname: '/', state: {from: this.props.location}}}/>
         );
     }
 }

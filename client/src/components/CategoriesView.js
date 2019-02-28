@@ -156,33 +156,36 @@ class CategoriesView extends Component {
         ) : error ? <h1><Alert color='danger'>{error}</Alert></h1> : null;
 
         return (
-            <div className='CategoriesTable'>
-                <AddCategory categories={this.state.categories} handlerFromParant={this.handleData}/>
-                <Modal isOpen={this.state.modal} toggle={() => this.toggle()}
-                       className={this.props.className}>
-                    <ModalHeader>Add Category</ModalHeader>
-                    <ModalBody>
-                        <Input type="text" defaultValue={this.state.NameEdit} onChange={this.handleOnChange}
-                               placeholder='Category Name'/>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={() => this.handleUpdateCategory()}>Edit Category</Button>{' '}
-                        <Button color="secondary" onClick={() => this.toggle(null)}>Close</Button>
-                    </ModalFooter>
-                </Modal>
-                <Table>
-                    <thead>
-                    <tr>
-                        <th>Category Name</th>
-                        <th>#</th>
-                        <th>#</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {categoriesView}
-                    </tbody>
-                </Table>
-            </div>
+            localStorage.token ?
+                <div className='CategoriesTable'>
+                    <AddCategory categories={this.state.categories} handlerFromParant={this.handleData}/>
+                    <Modal isOpen={this.state.modal} toggle={() => this.toggle()}
+                           className={this.props.className}>
+                        <ModalHeader>Add Category</ModalHeader>
+                        <ModalBody>
+                            <Input type="text" defaultValue={this.state.NameEdit} onChange={this.handleOnChange}
+                                   placeholder='Category Name'/>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={() => this.handleUpdateCategory()}>Edit
+                                Category</Button>{' '}
+                            <Button color="secondary" onClick={() => this.toggle(null)}>Close</Button>
+                        </ModalFooter>
+                    </Modal>
+                    <Table>
+                        <thead>
+                        <tr>
+                            <th>Category Name</th>
+                            <th>#</th>
+                            <th>#</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {categoriesView}
+                        </tbody>
+                    </Table>
+                </div>
+                : <Redirect to={{pathname: '/', state: {from: this.props.location}}}/>
         );
     }
 }
