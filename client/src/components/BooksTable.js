@@ -15,11 +15,17 @@ constructor(props) {
     };
   }
 
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      books:nextProps.books
+    })
+}
 
 
 
 
   render() {
+    console.log(this.state.books)
     return (
       <div>
         <Row>
@@ -39,7 +45,7 @@ constructor(props) {
       })()}
         </Row>
         <Row>
-          <Table>
+          <Table className="m-0">
               <thead>
               <tr>
                 <th>Cover</th>
@@ -53,19 +59,21 @@ constructor(props) {
               </thead>
               <tbody>
               {(
-                this.state.books.map(book=>(
+                this.state.books.map(book=>
+                  { let averageRate = book.bookInfo.avgRate.total/book.bookInfo.avgRate.users;
+                  return (
                   <tr>
                       <td><img src={book.bookInfo.img} width="40"/></td>
                       <td><Link to="/" replace>{book.bookInfo.bookName}</Link></td>
                       <td><Link to="/" replace>{book.bookInfo.author}</Link></td>
                       <td>{book.bookInfo.category}</td>
-                      <td><RatingStars rate={book.bookInfo.avgRate} clickable={false}/></td>
+                      <td><RatingStars rate={averageRate} clickable={false}/></td>
                       <td><RatingStars rate={book.rate} clickable={true} name={book.bookInfo.bookName} books={this.state.books}/></td>
                       <td>
                         <DropDownShelves book={book} books={this.state.books}/>
                       </td>
                   </tr>
-                  ))
+                  )})
               )}
               </tbody>
           </Table>

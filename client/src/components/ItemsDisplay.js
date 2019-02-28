@@ -10,9 +10,16 @@ class ItemsDisplay extends Component {
     };
   }
 
+
+componentWillReceiveProps(nextProps){
+    this.setState({
+       items:nextProps.items,
+    })
+}
+
   render() {
     return (
-      <div>
+      <Col>
         <Row className="justify-content-md-center">
           <Col>
             <Row>
@@ -42,7 +49,7 @@ class ItemsDisplay extends Component {
             </Row>
           </Col>
         </Row>
-      </div>
+      </Col>
     );
   }
 }

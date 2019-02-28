@@ -11,6 +11,13 @@ constructor(props) {
     this.handelBookShelf = this.handelBookShelf.bind(this);
   }
 
+
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      books:nextProps.books
+    })
+}
+
   handelBookShelf = event  => {
     const newBooks = this.state.books.map(book=>{
       if(book.bookInfo.bookName == event.target.name)

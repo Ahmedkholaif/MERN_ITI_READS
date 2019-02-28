@@ -102,11 +102,15 @@ export default class SignUp extends React.Component {
 
     if (Object.keys(errors).length === 0) {
       const data = new FormData();
-      data.append(
-        "file",
-        this.state.selectedFile,
-        this.state.selectedFile.name
-      );
+      if(this.state.selectedFile)
+      {
+        data.append(
+          "file",
+          this.state.selectedFile,
+          this.state.selectedFile.name
+        );
+      }
+      
 
       data.append("body", JSON.stringify(newAccountData));
       const conf = {
