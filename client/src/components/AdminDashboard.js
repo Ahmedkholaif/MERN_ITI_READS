@@ -28,7 +28,7 @@ export default class Example extends React.Component {
             const conf= {
                 headers: {'x-auth':token}
             };
-            axios.delete('/api/admin/signout',conf)
+            axios.delete('/api/signout',conf)
                 .then(response=>{
                     localStorage.clear();
                     window.location.href = '/';
