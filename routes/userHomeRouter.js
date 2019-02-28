@@ -29,7 +29,7 @@ router.get("/", (req, res) => {
   let pipeline;
   if (mode !== "all") {
     pipeline = [
-      { $match: { email: "ahmed_kholaif@yahoo.com" } }, // it will be req.user.firstName
+      { $match: { email: req.user.email } }, // it will be req.user.firstName
       { $unwind: "$books" }, // to comvert the books field into array
       { $match: { "books.shelf": mode } },
       { $project: { books: 1, _id: 0 } }, //to only keep books and user's id
@@ -40,7 +40,7 @@ router.get("/", (req, res) => {
   } else {
     console.log(page);
     pipeline = [
-      { $match: { email: "ahmed_kholaif@yahoo.com" } }, // it will be req.user.firstName
+      { $match: { email: req.user.email } }, // it will be req.user.firstName
       { $unwind: "$books" }, // to comvert the books field into array
       { $project: { books: 1, _id: 0 } },
       { $project: { "books._id": 0 } },
@@ -48,7 +48,7 @@ router.get("/", (req, res) => {
       { $limit: end }
     ];
   }
-  User.findOne({ email: "ahmed_kholaif@yahoo.com" }, (err, user) => {
+  User.findOne({ email: req.user.email }, (err, user) => {
     let count = 0;
     if (mode != "all") {
       user.books.forEach(book => {
@@ -104,7 +104,7 @@ const editBookState = (bookName, mode, rate, res) => {
       if (data) {
         book_id = data._id;
         User.findOneAndUpdate(
-          { email: "ahmed_kholaif@yahoo.com", "books.bookInfo": book_id }, //firstName willbe req.user._id
+          { email: req.user.email, "books.bookInfo": book_id }, //firstName willbe req.user._id
           { $set: { "books.$.shelf": mode } },
           (err, dataa) => {
             if (err) {
@@ -127,7 +127,7 @@ const editBookState = (bookName, mode, rate, res) => {
         }
         book_id = data._id;
         User.findOneAndUpdate(
-          { email: "ahmed_kholaif@yahoo.com", "books.bookInfo": book_id }, //firstName willbe req.user._id
+          { email: req.user.email, "books.bookInfo": book_id }, //firstName willbe req.user._id
           { $set: { "books.$.rate": rate } },
           (err, dataa) => {
             console.log(dataa);
