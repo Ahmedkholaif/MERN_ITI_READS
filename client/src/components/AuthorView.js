@@ -31,6 +31,7 @@ class AuthorView extends Component {
     }
 
     toggle(id) {
+        console.log(id);
         this.setState(prevState => ({
             modal: !prevState.modal,
             author:{
@@ -44,9 +45,9 @@ class AuthorView extends Component {
             const author = authors.filter(author => {
                 return author._id === id;
             });
-    
+            console.log(id);
             console.log(author);
-            const id = author[0]._id;
+            
             const fullName = author[0].fullName;
             const dateOfBirth = author[0].dateOfBirth;
             this.setState({
@@ -66,47 +67,65 @@ class AuthorView extends Component {
         const id = this.state.IdEdit;
         if (fullName !== '' && id !== 0 && dateOfBirth !== '') {
             const authors = this.state.authors;
-            authors.forEach(author => {
-                if (author.id === id) {
-                    author.fullName = fullName;
-                    this.setState({
-                        authors: authors});
-                }
-            });
-            this.setState({
-                author:{
-                    fullName:'',
-                    dateOfBirth:'',
+            for (let key in authors ){
+                if (authors[key]._id === id) {
+                    authors[key].fullName = fullName;
+                    
+                            // send post
+            const token = localStorage.token;
+            if (token) {
+                const data = new FormData();
+            data.append(
+                "file",
+                this.state.selectedFile,
+                this.state.selectedFile.name
+            );
+
+            data.append("body", JSON.stringify(this.state.author));
+            const conf = {
+                onUploadProgress: ProgressEvent => {
+                this.setState({
+                    loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
+                });
                 },
-                IdEdit: 0
-            });
-                // send post
-        const token = localStorage.token;
-        if(token) {
-            const conf ={
-            headers:{
-            "x-auth":token,
-            }
-            }
-            axios.put(`/api/admin/categories/${id}`,{
-                fullName,
-                dateOfBirth,
-            },conf)
+                headers: {
+                "Content-Type": "application/json",
+                "x-auth": token
+                }
+            };
+
+            axios.put(`/api/admin/authors/${id}`, data , conf)
             .then(res =>{
                 console.log(res);
                 if(res.status === 200){
-                    console.log(res);
+                    authors[key].img = res.data.img;
 
-                } else {
-                    console.log("not updated in db");
+                    this.setState({
+                    authors,
+                     author:{
+                    fullName:'',
+                    dateOfBirth:'',
+                     },
+                     IdEdit: 0
                 }
-            })
-            .catch(err => {
-                console.log({err});
-                this.setState({error: 'Error Delete Operation'})
-            })
+                );
+
+                console.log(res.data.img);
+
+            } else {
+                console.log("not updated in db");
+            }
+        })
+        .catch(err => {
+            console.log({err});
+            this.setState({error: 'Error Delete Operation'})
+        })
         }
         }
+
+                }
+            };
+        
     }
 
     handleDeleteAuthor = deletedId => {
@@ -158,7 +177,8 @@ componentDidMount() {
 }
 
     handleOnChangefullName = event => {
-        this.setState({author:{
+        this.setState({
+            author:{...this.state.author,
             fullName :event.target.value
         }
         });
@@ -166,7 +186,7 @@ componentDidMount() {
     }
     
     handleOnChangeDate = event => {
-        this.setState({author:{
+        this.setState({author:{...this.state.author,
             dateOfBirth:event.target.value
         }
         });
