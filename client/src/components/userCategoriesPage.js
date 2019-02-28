@@ -39,7 +39,7 @@ class UserHomePage extends Component {
            this.state.categoryUnit.map(cats =>(
                <Col>
                     <div>
-                        <ul className="bookCatShelves">
+                        <ul className="bookCatShelves"/>>
                             <li>
                             {/* <Link to={`/category?${cats[0].catId}`} replace>{cats[0].catName}</Link> */}
                             <Link replace to={
@@ -47,7 +47,7 @@ class UserHomePage extends Component {
                                 }>{cats[0].catName}</Link>
 
                             </li>
-                            <li className="catShelf">
+                            <li className="catShelf"/>
 
                 {cats[2] ? (
                   <ul className="bookCatShelves">
@@ -89,10 +89,11 @@ class UserHomePage extends Component {
                 )}
               </div>
             </Col>
-          ))}
+          ))
+        )}
         </Row>
       </div>
-    );
+    )
   }
 }
 

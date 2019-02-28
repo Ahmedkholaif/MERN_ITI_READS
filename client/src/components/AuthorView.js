@@ -160,7 +160,7 @@ componentDidMount() {
         const {authors, error} = this.state;
         const authorsView = authors.length ? authors.map(author =>
             <tr key={author._id}>
-                <td><img src={author.img} alt="img"/></td>
+                <td><img src={author.img} alt="img" width="75" height="75"/></td>
                 <td>{author.fullName}</td>
                 <td>{author.dateOfBirth}</td>
                 <td><Button color='danger' onClick={() => this.handleDeleteAuthor(author._id)}>Delete</Button></td>
