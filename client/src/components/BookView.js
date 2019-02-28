@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import {Alert, Button, Table} from "reactstrap";
+import AddBook from '../components/AddBook';
 
 class BookView extends Component {
     constructor(props) {
         super(props);
         this.handleData = this.handleData.bind(this);
     }
+
+
 
     state = {
         books: [],
@@ -70,6 +73,7 @@ class BookView extends Component {
         ) : error ? <h1><Alert color='danger'>{error}</Alert></h1> : null;
         return (
             <div>
+                <AddBook categories={this.state.categories} authors={this.state.authors}/>
                 <Table>
                     <thead>
                     <tr>

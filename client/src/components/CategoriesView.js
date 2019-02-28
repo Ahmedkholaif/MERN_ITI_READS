@@ -25,116 +25,119 @@ class CategoriesView extends Component {
             IdEdit: 0
         }));
 
-        if(id !== null) {
+        if (id !== null) {
             const categories = this.state.categories;
             const category = categories.filter(category => {
                 return category._id === id;
-             });
+            });
 
-        const catid = category[0]._id;
-        const cattitle = category[0].catName;
-        this.setState({
-            NameEdit: cattitle,
-            IdEdit: catid
-        });
+            const catid = category[0]._id;
+            const cattitle = category[0].catName;
+            this.setState({
+                NameEdit: cattitle,
+                IdEdit: catid
+            });
         }
-        
+
     }
 
-handleUpdateCategory() {
-    
-const title = this.state.NameEdit;
-const id = this.state.IdEdit;
-if (title && id ) {
-    const categories = this.state.categories;
-    for (let key in categories) {
-        if(categories[key]._id === id){
-        categories[key].catName =title;
-        this.setState({categories: categories});
-        this.setState({
-            NameEdit: '',
-            idEdit: ''
-        });
-        // send put request 
-        const token = localStorage.token;
-        if(token) {
-            const conf ={
-            headers:{
-            "x-auth":token,
-            }
-            }
-            axios.put(`/api/admin/categories/${id}`,{
-                catName:title
-            },conf)
-            .then(res =>{
-                console.log(res);
-                if(res.status === 200){
-                    console.log(res);
+    handleUpdateCategory() {
 
-                } else {
-                    console.log("not updated in db");
+        const title = this.state.NameEdit;
+        const id = this.state.IdEdit;
+        if (title && id) {
+            const categories = this.state.categories;
+            for (let key in categories) {
+                if (categories[key]._id === id) {
+                    categories[key].catName = title;
+                    this.setState({categories: categories});
+                    this.setState({
+                        NameEdit: '',
+                        idEdit: ''
+                    });
+                    // send put request
+                    const token = localStorage.token;
+                    if (token) {
+                        const conf = {
+                            headers: {
+                                "x-auth": token,
+                            }
+                        }
+                        axios.put(`/api/admin/categories/${id}`, {
+                            catName: title
+                        }, conf)
+                            .then(res => {
+                                console.log(res);
+                                if (res.status === 200) {
+                                    console.log(res);
+
+                                } else {
+                                    console.log("not updated in db");
+                                }
+                            })
+                            .catch(err => {
+                                console.log({err});
+                                this.setState({error: 'Error Delete Operation'})
+                            })
+                    }
                 }
-            })
-            .catch(err => {
-                console.log({err});
-                this.setState({error: 'Error Delete Operation'})
-            })
+            }
         }
     }
-}
-}
-}
 
-handleData(data) {
-    this.setState({
-        categories: data
-    });
-}
-
-componentDidMount() {
-    const token = localStorage.token;
-    if(token) {
-        const conf ={
-            headers:{
-            "x-auth":token,
-        }
-        }
-    axios.get(`/api/admin/categories`,conf)
-    .then(res =>{
-        console.log(res);
+    handleData(data) {
         this.setState({
-            categories: res.data
-            })
-            this.props.passCategories(res.data);
-                
-        })
-    .catch(err => {
-        console.log(err)})
-        this.setState({error: 'Error reteiriving data'})
+            categories: data
+        });
     }
-}
+
+    componentDidMount() {
+        const token = localStorage.token;
+        if (token) {
+            const conf = {
+                headers: {
+                    "x-auth": token,
+                }
+            }
+            axios.get(`/api/admin/categories`, conf)
+                .then(res => {
+                    console.log(res);
+                    this.setState({
+                        categories: res.data
+                    })
+                    this.props.passCategories(res.data);
+
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            this.setState({error: 'Error reteiriving data'})
+        }
+    }
+
     handleDeleteCategory = deletedId => {
         const token = localStorage.token;
-        if(token) {
-            const conf ={
-              headers:{
-              "x-auth":token,
+        if (token) {
+            const conf = {
+                headers: {
+                    "x-auth": token,
+                }
             }
-          }
-        axios.delete(`/api/admin/categories/${deletedId}`,conf)
-        .then(res =>{
-            if(res.status === 200){
-            console.log(res);
-            } else {
-                console.log("not deleted from db");
-            }
-         })
-        .catch(err => {
-            console.log(err)})
+            axios.delete(`/api/admin/categories/${deletedId}`, conf)
+                .then(res => {
+                    if (res.status === 200) {
+                        console.log(res);
+                    } else {
+                        console.log("not deleted from db");
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
             this.setState({error: 'Error Delete Operation'})
         }
         this.setState({categories: this.state.categories.filter(category => category._id !== deletedId)});
-        
+
     }
 
     handleOnChange = event => {
@@ -164,7 +167,7 @@ componentDidMount() {
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={() => this.handleUpdateCategory()}>Edit Category</Button>{' '}
-                        <Button color="secondary" onClick={()=>this.toggle(null)}>Close</Button>
+                        <Button color="secondary" onClick={() => this.toggle(null)}>Close</Button>
                     </ModalFooter>
                 </Modal>
                 <Table>
