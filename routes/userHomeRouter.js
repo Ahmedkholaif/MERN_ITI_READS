@@ -24,8 +24,8 @@ router.get("/", (req, res) => {
   const { email, img } = req.user;
   const page = req.query.page;
   const mode = req.query.mode;
-  let start = (page > 0 ? page - 1 : 0) * 5; //start from index ( 0 , 5 , 10 , 15)
-  let end = start + 5;
+  let start = (page > 0 ? page - 1 : 0) * 4; //start from index ( 0 , 5 , 10 , 15)
+  let end = start + 4;
   let pipeline;
   if (mode !== "all") {
     pipeline = [
@@ -35,7 +35,7 @@ router.get("/", (req, res) => {
       { $project: { books: 1, _id: 0 } }, //to only keep books and user's id
       { $project: { "books._id": 0 } }, // to remove book id
       { $skip: start }, //for pagunation
-      { $limit: end }
+      { $limit: 4 }
     ];
   } else {
     console.log(page);
@@ -45,7 +45,7 @@ router.get("/", (req, res) => {
       { $project: { books: 1, _id: 0 } },
       { $project: { "books._id": 0 } },
       { $skip: start },
-      { $limit: end }
+      { $limit: 4 }
     ];
   }
   User.findOne({ email: req.user.email }, (err, user) => {
@@ -130,8 +130,6 @@ const editBookState = (bookName, mode, rate, res) => {
           { email: req.user.email, "books.bookInfo": book_id }, //firstName willbe req.user._id
           { $set: { "books.$.rate": rate } },
           (err, dataa) => {
-            console.log(dataa);
-            console.log(err);
             res.status(200).send();
           }
         );
@@ -159,7 +157,6 @@ router.get("/search", (req, res) => {
       { bookName: { $regex: ".*" + q + ".*", $options: "i" } },
       (err, result) => {
         if (err) return handleError(err);
-        console.log(result);
         res.json(result);
       }
     );
@@ -168,7 +165,6 @@ router.get("/search", (req, res) => {
       { fullName: { $regex: ".*" + q + ".*", $options: "i" } },
       (err, result) => {
         if (err) return handleError(err);
-        console.log(result);
         res.json(result);
       }
     );
@@ -201,7 +197,7 @@ router.get("/search", (req, res) => {
 
 //Routes for testing
 router.get("/addUserBook", (req, res, next) => {
-  Book.findOne({ bookName: "ahemd fi belad el 3ga2eb" }, (err, data) => {
+  Book.findOne({ bookName: "Hatchet" }, (err, data) => {
     let book = { bookInfo: data, shelf: "read", rate: 2 };
     User.findOneAndUpdate(
       { email: "ahmed_kholaif@yahoo.com" },

@@ -21,13 +21,19 @@ router.get("/:authorName", (req, res) => {
   let author = req.params.authorName;
   const page = req.query.page;
   console.log((page - 1) * perPage);
-  Book.find({ authorID: author })
-    .skip(page > 0 ? (page - 1) * perPage : 0)
-    .limit(perPage)
-    .exec(function(err, data) {
-      if (err) throw err;
-      res.json(data);
-    });
+  Author.findOne({ fullName: author }, (err, authorData) => {
+    console.log(authorData);
+    Book.find({ author: author })
+      .skip(page > 0 ? (page - 1) * perPage : 0)
+      .limit(perPage)
+      .exec(function(err, books) {
+        if (err) throw err;
+        console.log(books);
+        data = { name: authorData.fullName, img: authorData.img, books };
+        console.log(data);
+        res.json(data);
+      });
+  });
 });
 
 module.exports = router;

@@ -12,8 +12,8 @@ router.get("/", (req, res, next) => {
     .skip(page > 0 ? (page - 1) * perPage : 0)
     .limit(perPage)
     .exec(function(err, books) {
-      if (err) res.status(404).send({err});
-      res.status(200).json({books});
+      if (err) res.status(404).send({ err });
+      res.status(200).json({ books });
     });
 });
 //to get book name and show its status according to the user
@@ -23,17 +23,18 @@ router.get("/:bookName", (req, res, next) => {
   let rate = parseInt(req.query.rate);
   // console.log(bookName);
   let bookData = {
-    title: null,
+    bookName: null,
     author: null,
     category: null,
-    imgSrc: null,
-    describtion: null,
+    img: null,
+    description: null,
     rate: { userRate: null, rating: null, number: null },
-    shelve: null,
+    shelf: null,
     reviews: null
   };
 
-  Book.findOne({ title: bookName }, (err, queriedBook) => {
+  Book.findOne({ bookName: bookName }, (err, queriedBook) => {
+    console.log(queriedBook);
     User.findOne({
       email: req.user.email,
       "books.bookInfo": queriedBook._id
@@ -41,9 +42,10 @@ router.get("/:bookName", (req, res, next) => {
       .populate("books.bookInfo")
       .exec((err, userData) => {
         let book;
+        console.log(userData);
         if (userData !== null) {
           userData.books.forEach(element => {
-            if (element.book.id === queriedBook.id) {
+            if (element.bookInfo.id === queriedBook.id) {
               //bookHere is id not _id
               book = element;
             }
@@ -55,9 +57,11 @@ router.get("/:bookName", (req, res, next) => {
         bookData.author = queriedBook.author;
         bookData.category = queriedBook.category;
         bookData.img = queriedBook.img;
-        bookData.describtion = queriedBook.describtion;
-        bookData.rate.rating = queriedBook.rating.total;
-        bookData.rate.number = queriedBook.rating.users;
+        bookData.description = queriedBook.description;
+        bookData.rate.rating = queriedBook.avgRate.total;
+        bookData.rate.number = queriedBook.avgRate.users;
+        bookData.reviews = queriedBook.reviews;
+        console.log(bookData);
         res.send(bookData);
       });
   });
