@@ -49,7 +49,7 @@ class CustomNavbar extends Component {
                 <Link to="/books" replace>Books</Link>
                 </li>
                 <li className="menuItem">
-                <Link to="/" replace>Authors</Link>
+                <Link to="/testBook" replace>Authors</Link>
                 </li>
             </ul>
                   </NavbarBrand>

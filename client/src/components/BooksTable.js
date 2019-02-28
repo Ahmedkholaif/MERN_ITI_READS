@@ -55,7 +55,7 @@ constructor(props) {
               {(
                 this.state.books.map(book=>(
                   <tr>
-                      <td><img src={book.bookInfo.img} width={"40px"}/></td>
+                      <td><img src={book.bookInfo.img} width="40"/></td>
                       <td><Link to="/" replace>{book.bookInfo.bookName}</Link></td>
                       <td><Link to="/" replace>{book.bookInfo.author}</Link></td>
                       <td>{book.bookInfo.category}</td>

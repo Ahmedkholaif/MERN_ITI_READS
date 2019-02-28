@@ -12,52 +12,71 @@ router.get("/", auth_Admin,(req, res) => {
     });
 });
 //Add a new category
-
+// /api/admin/categories
 router.post("/",auth_Admin, (req, res) => {
 
-    const catName = req.body.title;
+    console.log(req.body);
+    const catName = req.body.categoryName;
 
-    const category = new Category({
-        catName,
-    });
-
-  category
-    .save()
-    .then(() => {
-      res.status(200).send(category);
-    })
-    .catch(e => {
-      res.status(404).send(e);
-      console.log(e);
-    });
-});
-
-//Edit a category
-
-router.put("/:title",auth_Admin, (req, res) => {
-    const oldtitle = req.params.title;
-    const catName = req.body.title;
-
-    Category.updateOne({
-        catName:oldtitle
-    },
-    { $set:
-        {
-        catName,
+    Category.findOne({catName})
+    .then(cat =>{
+        if(cat) {
+            res.status(404).send({err:'Already Exists '});
+        }else{
+            const category = new Category({
+                catName,
+            });
+            console.log(catName);
+          category
+            .save()
+            .then(() => {
+              res.status(200).send(category);
+            })
+            .catch(e => {
+                res.status(404).send(e);
+                console.log(e);
+            });
         }
     })
     .catch(e => {
       res.status(404).send(e);
-    });
+      console.log(e);
+    })
+});
+
+//Edit a category
+
+router.put("/:catID",auth_Admin, (req, res) => {
+   
+    console.log(req.params,req.body);
+    console.log("reached h h h ");
+    const catID = req.params.catID;
+    const catName = req.body.catName;
+
+    console.log(catID,catName);
+
+    Category.updateOne({
+        _id:catID
+    },
+    { $set:{catName} 
+    },(err,reslt)=>{
+       if(err) {
+             res.status(404).send(e);
+        }
+         res.status(200).send({msg:"updated"})
+    })
+    
 });
 //Delete a category
-router.delete("/:title",auth_Admin, (req, res) => {
-    const catName = req.params.title;
+router.delete("/:catID",auth_Admin, (req, res) => {
+    console.log(req.params);
+    const catID = req.params.catID;
+    console.log(catID);
     Category.deleteOne({
-        catName
+        _id : catID
     })
-    .then(()=>{
-        res.status(200).send({msg:"deleted"});
+    .then((reslt)=>{
+        res.status(200).send({msg:"deleted",reslt});
     })
     .catch((e)=>{
         res.status(404).send(e);

@@ -4,7 +4,7 @@ import '../css/UserHomePage.css'
 import CustomNavbar from './Navbar';
 import BooksTable from './BooksTable';
 import CustomPagination from './pagination';
-import Axios from "axios";
+import axios from "axios";
 
 
 class UserHomePage extends Component {
@@ -22,6 +22,7 @@ constructor(props) {
 
   }
   
+
 componentDidMount(){
   const token = localStorage.token;
   if(token) {
@@ -34,7 +35,7 @@ componentDidMount(){
       "x-auth":token,
       }
     }
-    Axios.get(`/api/users/current`,conf
+    axios.get(`/api/users/current`,conf
     )
     .then(res =>{
       console.log(res);
@@ -51,7 +52,6 @@ componentDidMount(){
 // test = setInterval(() => {
 //   alert(this.state.books[0].rate)
 // }, 5000);
-
 
 
 displayAllBooks =()=>{

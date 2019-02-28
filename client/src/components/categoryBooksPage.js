@@ -111,11 +111,18 @@ class categoryBooksPage extends Component {
       });
   }
 
+<<<<<<< HEAD
   handelPagination = pageNum => {
     this.setState({ activePage: pageNum });
     // window.fetch(`/userBooks?${pageNum}?${this.state.shelf}`)
     // .then(response => response.json()).then(data=> this.setState({activePage: pageNum,books:data});) ;
   };
+=======
+componentDidMount(){
+    // const {name} = this.props.location.state;
+    console.log(this.props.location);
+}
+>>>>>>> 76f0d64e0e6ee1f7083e441ec9e7662fe6cccf6e
 
   render() {
     return (
@@ -126,6 +133,7 @@ class categoryBooksPage extends Component {
           <ItemsDisplay items={this.state.books} />
         </Row>
         <Row className="justify-content-md-center">
+<<<<<<< HEAD
           <Col>
             <h2 />
             <CustomPagination
@@ -133,6 +141,11 @@ class categoryBooksPage extends Component {
               change={this.handelPagination}
             />
           </Col>
+=======
+            <Col>
+                <CustomPagination activePage={this.state.activePage} change={this.handelPagination}/>
+            </Col>
+>>>>>>> 76f0d64e0e6ee1f7083e441ec9e7662fe6cccf6e
         </Row>
       </div>
     );

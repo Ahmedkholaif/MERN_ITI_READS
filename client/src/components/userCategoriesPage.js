@@ -35,29 +35,19 @@ class UserHomePage extends Component {
       <div>
         <CustomNavbar />
         <Row className="bookShelves">
-          {this.state.categoryUnit.map(cats => (
-            <Col>
-              <div>
-                <ul className="bookCatShelves">
-                  <li>
-                    <Link to={`/category?${cats[0].catId}`} replace>
-                      {cats[0].catName}
-                    </Link>
-                  </li>
-                  <li className="catShelf" />
-                </ul>
-                {cats[1] ? (
-                  <ul className="bookCatShelves">
-                    <li>
-                      <Link to={`/category?${cats[1].catId}`} replace>
-                        {cats[1].catName}
-                      </Link>
-                    </li>
-                    <li className="catShelf" />
-                  </ul>
-                ) : (
-                  ""
-                )}
+        {(
+           this.state.categoryUnit.map(cats =>(
+               <Col>
+                    <div>
+                        <ul className="bookCatShelves">
+                            <li>
+                            {/* <Link to={`/category?${cats[0].catId}`} replace>{cats[0].catName}</Link> */}
+                            <Link replace to={
+                                { pathname:`/category?${cats[0].catId}`, state: { name: `${cats[0].catName}`  } }
+                                }>{cats[0].catName}</Link>
+
+                            </li>
+                            <li className="catShelf">
 
                 {cats[2] ? (
                   <ul className="bookCatShelves">
