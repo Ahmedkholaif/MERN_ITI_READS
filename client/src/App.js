@@ -8,7 +8,8 @@ import Categories from './components/userCategoriesPage'
 import Category from './components/categoryBooksPage'
 import books from './components/AllBooksPage'
 import authors from './components/AllAuthorsPage'
-import testBook from './components/SingleAuthorPage'
+import singleBook from './components/SingleBookPage'
+import singleAuthor from './components/SingleAuthorPage'
 import './App.css'
 
 class App extends Component {
@@ -24,7 +25,9 @@ class App extends Component {
                     <Route path='/Categories' exact component={Categories}/>
                     <Route path='/Category' exact component={Category}/>
                     <Route path='/books' exact component={books}/>
-                    <Route path='/testBook' exact component={testBook}/>
+                    <Route path='/authors' exact component={authors}/>
+                    <Route path='/book' exact component={singleBook}/>
+                    <Route path='/author' exact component={singleAuthor}/>
                 </div>
             </BrowserRouter>
         );

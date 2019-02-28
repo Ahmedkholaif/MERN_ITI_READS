@@ -11,12 +11,16 @@ this.state={
     }
 }
 
-
+componentWillReceiveProps(nextProps){
+    this.setState({
+       items:nextProps.items,
+    })
+}
   
 render() {
 return (
     
-    <div>
+    <Col xs="12" className="mt-5">
         <Row className="justify-content-md-center">
             <Col>
                 <Row>
@@ -24,13 +28,13 @@ return (
                     this.state.items.map(item =>(
                         <Col xs="3">
                         <Row className={"item"}>
-                            <Col><img src={item.img} height="50px"/></Col>
+                            <Col><img src={item.img} height="100"/></Col>
                         </Row>
                         <Row className={"item"}>
-                            <Col><Link to={item.bookLink} replace>{item.bookName}</Link></Col>
+                            <Col><Link to="#" replace>{item.bookName}</Link></Col>
                         </Row>
                         <Row className={"item lastItem"}>
-                            <Col><Link to={item.authorLink} replace>{item.authorName}</Link></Col>
+                            <Col><Link to="#" replace>{item.author}</Link></Col>
                         </Row>
                     </Col>
                     ))
@@ -38,7 +42,7 @@ return (
                 </Row>
             </Col>
         </Row>
-      </div>
+      </Col>
     );
   }
 }

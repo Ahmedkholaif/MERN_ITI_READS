@@ -4,6 +4,7 @@ import '../css/UserHomePage.css'
 import CustomNavbar from './Navbar';
 import BooksTable from './BooksTable';
 import CustomPagination from './pagination';
+import {Redirect} from 'react-router-dom'
 import axios from "axios";
 
 
@@ -35,14 +36,11 @@ componentDidMount(){
       "x-auth":token,
       }
     }
-    axios.get(`/api/users/current`,conf
+    axios.get(`/api/users/current?page=${this.state.activePage}?mode=${this.state.shelf}`,conf
     )
     .then(res =>{
-      console.log(res);
-      console.log(res.data.books)
       this.setState({
         books:res.data.books,
-
       })
     })
     .catch(err => console.log(err))
@@ -94,12 +92,33 @@ displayToReadBooks =()=>{
 
 handelPagination = (pageNum)=>
 {
-  this.setState({activePage: pageNum});
-  // window.fetch(`/userBooks?${pageNum}?${this.state.shelf}`)
-  // .then(response => response.json()).then(data=> this.setState({activePage: pageNum,books:data});) ;
+  console.log("page",pageNum ,"----",this.state.books)
+  const token = localStorage.token;
+  if(token) {
+    const conf ={
+      params:{
+        page:`${this.state.activePage}`,
+        mode:`${this.state.shelf}`
+      },
+      headers:{
+      "x-auth":token,
+      }
+    }
+    axios.get(`/api/users/current?page=${this.state.pageNum}?mode=${this.state.shelf}`,conf
+    )
+    .then(res =>{
+      this.setState({
+        books:res.data.books,
+        activePage: pageNum
+      })
+    })
+    .catch(err => console.log(err))
+  }
+  console.log("page",pageNum ,"----",this.state.books)
 }
   render() {
     return (
+       localStorage.token ? 
       <div>
             <CustomNavbar/>
             <Row className="homeBody">
@@ -135,6 +154,8 @@ handelPagination = (pageNum)=>
             </Col>
         </Row>
       </div>
+      : <Redirect to={{ pathname: '/', state: { from: this.props.location } }} />
+      
     );
   }
 }

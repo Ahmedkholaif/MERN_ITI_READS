@@ -34,6 +34,14 @@ class RatingStars extends Component {
         this.setState({rating: nextValue});
       }
      
+
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      books:nextProps.books,
+      rating: nextProps.rate,
+    })
+}
+
       render() {
         const { rating } = this.state;
         

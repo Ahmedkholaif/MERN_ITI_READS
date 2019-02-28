@@ -12,6 +12,7 @@ constructor(props) {
 
 }
 
+
 /*
 
 this component accept the next props:
