@@ -126,6 +126,8 @@ componentDidMount() {
             this.setState(
                 {authors: response.data.authors }
                 );
+                this.props.passAuthors(response.data);
+                
         
         }).catch(error => {
         console.log(error);

@@ -105,6 +105,8 @@ componentDidMount() {
         this.setState({
             categories: res.data
             })
+            this.props.passCategories(res.data);
+                
         })
     .catch(err => {
         console.log(err)})
