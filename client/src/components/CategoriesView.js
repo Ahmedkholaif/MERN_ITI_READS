@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Table, Button, Alert, ModalHeader, ModalBody, ModalFooter, Modal, Input } from "reactstrap";
 import axios from 'axios';
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import '../css/CategoriesView.css';
 import AddCategory from './AddCategory';
-import { Redirect } from "react-router-dom";
 
 class CategoriesView extends Component {
     constructor(props) {

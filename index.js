@@ -16,10 +16,10 @@ app.use('/api/admin', adminRouter);
 
 app.delete("/api/signout", authenticate, (req, res) => {
     req.user
-      .removeToken(req.token)
-      .then(() => res.status(200).send())
-      .catch(() => res.status(404).send());
-  });
+        .removeToken(req.token)
+        .then(() => res.status(200).send())
+        .catch(() => res.status(404).send());
+});
 
 // app.use('/api',)//The home page
 //----------------User routes ------------------------
