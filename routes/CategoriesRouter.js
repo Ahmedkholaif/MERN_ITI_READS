@@ -72,11 +72,14 @@ router.delete("/:catID",auth_Admin, (req, res) => {
     console.log(req.params);
     const catID = req.params.catID;
     console.log(catID);
-    Category.deleteOne({
+    Category.findByIdAndRemove({
         _id : catID
     })
     .then((reslt)=>{
-        res.status(200).send({msg:"deleted",reslt});
+        Book.remove({category:reslt.catName})
+        .then(res2=>{
+            res.status(200).send({msg:"deleted",reslt,res2});
+        })
     })
     .catch((e)=>{
         res.status(404).send(e);
