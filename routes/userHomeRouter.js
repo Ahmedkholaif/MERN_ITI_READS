@@ -38,13 +38,14 @@ router.get("/", (req, res) => {
       { $limit: end }
     ];
   } else {
+    console.log(page);
     pipeline = [
       { $match: { email: req.user.email } }, // it will be req.user.firstName
       { $unwind: "$books" }, // to comvert the books field into array
       { $project: { books: 1, _id: 0 } },
       { $project: { "books._id": 0 } },
-      { $skip: page * 5 || 0 },
-      { $limit: 5 }
+      { $skip: start },
+      { $limit: end }
     ];
   }
   User.findOne({ email: req.user.email }, (err, user) => {
@@ -58,8 +59,8 @@ router.get("/", (req, res) => {
     } else {
       count = user.books.length;
     }
-    console.log(count);
     User.aggregate(pipeline, function(err, result) {
+      console.log(result);
       if (err) {
         res.status(500).send();
       }
@@ -103,7 +104,7 @@ const editBookState = (bookName, mode, rate, res) => {
       if (data) {
         book_id = data._id;
         User.findOneAndUpdate(
-          { email: "ahmed_kholaif@yahoo.com", "books.bookInfo": book_id }, //firstName willbe req.user._id
+          { email: req.user.email, "books.bookInfo": book_id }, //firstName willbe req.user._id
           { $set: { "books.$.shelf": mode } },
           (err, dataa) => {
             if (err) {
@@ -126,7 +127,7 @@ const editBookState = (bookName, mode, rate, res) => {
         }
         book_id = data._id;
         User.findOneAndUpdate(
-          { email: "ahmed_kholaif@yahoo.com", "books.bookInfo": book_id }, //firstName willbe req.user._id
+          { email: req.user.email, "books.bookInfo": book_id }, //firstName willbe req.user._id
           { $set: { "books.$.rate": rate } },
           (err, dataa) => {
             console.log(dataa);
