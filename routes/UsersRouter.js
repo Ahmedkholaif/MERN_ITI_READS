@@ -131,7 +131,7 @@ router.use("/current", authenticate, (req, res, next) => {
 
 router.use("/current", userHomeRouter);
 //
-router.delete("/current/logout", authenticate, (req, res) => {
+router.delete("/current/signout", authenticate, (req, res) => {
   req.user
     .removeToken(req.token)
     .then(() => res.status(200).send())

@@ -7,6 +7,7 @@ const categoryRouter = require('./CategoriesRouter');
 const bookRouter = require('./BooksRouter');
 const authorRouter = require('./AuthorsRouter');
 const User = require('../models/User');
+const {auth_Admin} = require('../helpers/Auth');
 const router = express.Router();
 
 //admin login request
@@ -36,6 +37,12 @@ router.post('/',(req,res)=>{
 
 });
 
+router.delete("/signout", auth_Admin, (req, res) => {
+    req.user
+      .removeToken(req.token)
+      .then(() => res.status(200).send())
+      .catch(() => res.status(404).send());
+  });
 //admin private request
 router.use('/categories',categoryRouter);
 router.use('/books',bookRouter);

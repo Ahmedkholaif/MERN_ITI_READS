@@ -59,37 +59,37 @@ router.get("/", auth_Admin,(req, res) => {
 });
 
 //Edit a Book
-router.put("/:title", auth_Admin, (req, res) => {
+router.put("/:bookID", auth_Admin, (req, res) => {
 
     const body =JSON.parse(req.body.body);
-    
+    console.log(body);
     let uploadFile = req.files.file ;
 
     const fileName = `${new Date().toISOString()}${Math.random()}${req.files.file.name}` ;
+    const bookID = req.params.bookID;
 
-    const oldTitle = req.params.title;
     const bookName = body.bookName;
     const author = body.author;
     const category = body.category;
+    const description = body.description;
     let img;
     uploadFile.mv(
         `${__dirname}/../public/${fileName}`,(err)=> {
         
         if(err) {return res.status(500).send(err)}
         img =  `../../../${fileName}`;
-        Book.updateOne({
-            bookName: `${oldTitle}`
-        }, {
-                bookName,
-                author,
-                category,
-                img
-            }, (err, res) => {
-                if (err) console.log(err);
-                console.log(res);
+        Book.findByIdAndUpdate({
+            _id : bookID
+        }, {$set :{
+            bookName,
+            author,
+            category,
+            img,
+            description,
+        }}, (err, reslt) => {
+                if (err) res.status(404).send({err});
+                res.status(200).send({img});
             })
-            .then(res.status(200).send("Book Updated"))
-            .catch(err => res.status(404).send({err}))
         })
 });
 //Delete a Book

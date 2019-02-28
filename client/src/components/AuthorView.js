@@ -96,7 +96,7 @@ class AuthorView extends Component {
 
             axios.put(`/api/admin/authors/${id}`, data , conf)
             .then(res =>{
-                console.log(res);
+                // console.log(res);
                 if(res.status === 200){
                     authors[key].img = res.data.img;
 
@@ -162,7 +162,7 @@ componentDidMount() {
         }
     axios.get('/api/admin/authors',conf)
         .then(response => {
-            console.log(response);
+            // console.log(response);
             this.setState(
                 {authors: response.data.authors }
                 );
@@ -226,11 +226,11 @@ componentDidMount() {
                                onChange={this.handleOnChangeDate}
                                placeholder='Author Date fo Birth'/>
                         <Input
-                                 type="file"
-                                 name=""
-                                 id="exampleFile"
-                                 onChange={this.handleselectedFile}
-                                 placeholder='Author Photo '/>
+                                type="file"
+                                name=""
+                                id="exampleFile"
+                                onChange={this.handleselectedFile}
+                                placeholder='Author Photo '/>
                         
                     </ModalBody>
                     <ModalFooter>

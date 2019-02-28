@@ -4,6 +4,7 @@ const PORT = process.env.PORT || 3002 ;
 const userRouter = require('./routes/UsersRouter');
 const adminRouter = require('./routes/AdminRouter');
 const fileUpload = require('express-fileupload');
+const { authenticate, auth_Admin } = require('./helpers/Auth');
 const app = express();
 
 app.use(express.json());
@@ -13,6 +14,12 @@ app.use(express.static('public'));
 app.use('/api/users',userRouter);
 app.use('/api/admin',adminRouter);
 
+app.delete("/api/signout", authenticate, (req, res) => {
+    req.user
+      .removeToken(req.token)
+      .then(() => res.status(200).send())
+      .catch(() => res.status(404).send());
+  });
 
 // app.use('/api',)//The home page
 //----------------User routes ------------------------

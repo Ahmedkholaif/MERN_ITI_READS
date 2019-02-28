@@ -15,10 +15,12 @@ class BookView extends Component {
                 bookName:'',
                 author:'',
                 category:'',
-                img:''
-            }
+            },
+            selectedFile: null,
+            loaded: 0,
         };
         this.handleData = this.handleData.bind(this);
+        this.handleUpdateBook = this.handleUpdateBook.bind(this);
         this.toggle = this.toggle.bind(this);
     }
 
@@ -34,14 +36,13 @@ class BookView extends Component {
         })
     }
     toggle(id) {
-        console.log(id);
+        // console.log(id);
         this.setState(prevState => ({
             modal: !prevState.modal,
             book:{
                 bookName:'',
                 author:'',
                 category:'',
-                img:''
             },
             IdEdit: 0
         }));
@@ -50,8 +51,6 @@ class BookView extends Component {
             const book = books.filter(book => {
                 return book._id === id;
             });
-            console.log(id);
-            console.log(book);
             
             const bookName = book[0].bookName;
             const author = book[0].author;
@@ -62,54 +61,52 @@ class BookView extends Component {
                     bookName,
                     author,
                     category,
-                    description
+                    description,
                 },
                 IdEdit:id,
             });
         }
     }
 
-    handleUpdateBook() {
+    handleUpdateBook  () {
 
         const bookName = this.state.book.bookName;
         const author = this.state.book.author;
         const category = this.state.book.category;
         const description = this.state.book.description;
 
-
         const id = this.state.IdEdit;
         if (bookName !== '' && id !== 0 && author !== '' && category !== '' && description !== '') {
-
             const books = this.state.books;
-            for (let key in books ){
+            for (let key in books ) {
                 if (books[key]._id === id) {
                     books[key].bookName = bookName;
                     books[key].author = author;
                     books[key].category = category;
                     books[key].description = description;
-                    
-                            // send post
+                    console.log(books[key]);
+            // send post
             const token = localStorage.token;
             if (token) {
                 const data = new FormData();
-            data.append(
-                "file",
-                this.state.selectedFile,
-                this.state.selectedFile.name
-            );
+                 data.append(
+                    "file",
+                    this.state.selectedFile,
+                    this.state.selectedFile.name,
+                  );
 
-            data.append("body", JSON.stringify(this.state.book));
-            const conf = {
-                onUploadProgress: ProgressEvent => {
-                this.setState({
-                    loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
-                });
-                },
-                headers: {
-                "Content-Type": "application/json",
-                "x-auth": token
-                }
-            };
+                 data.append("body", JSON.stringify(this.state.book));
+                 const conf = {
+                    // onUploadProgress: ProgressEvent => {
+                    // this.setState({
+                    //     loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
+                    // });
+                    // },
+                    headers: {
+                    "Content-Type": "application/json",
+                    "x-auth": token
+                    }
+                };
 
             axios.put(`/api/admin/books/${id}`, data , conf)
             .then(res => {
@@ -154,7 +151,7 @@ class BookView extends Component {
         }
          axios.get('/api/admin/books',conf)
         .then(response => {
-            console.log(response);
+            // console.log(response);
             if(response.status === 200) {
                 this.setState(
                     {books: response.data.books }
@@ -173,10 +170,10 @@ class BookView extends Component {
         const token = localStorage.token;
         if(token) {
             const conf ={
-              headers:{
+              headers :{
               "x-auth":token,
+              }
             }
-          }
         axios.delete(`/api/admin/books/${deletedId}`,conf)
         .then(res =>{
             if(res.status === 200){
@@ -192,6 +189,25 @@ class BookView extends Component {
         this.setState({books: this.state.books.filter(book =>book._id !== deletedId)});
     }
 
+    handleOnChangeBookName = event => {
+        this.setState({book: {...this.state.book,bookName: event.target.value}});
+    }
+    handleOnChangeCategory = event => {
+        this.setState({book: {...this.state.book,category: event.target.value}});
+    }
+    handleOnChangeAuthor = event => {
+        this.setState({book: {...this.state.book,author: event.target.value}});
+    }
+    handleOnChangeDescription = event => {
+        this.setState({book: {...this.state.book,description: event.target.value}});
+    }
+
+    handleselectedFile = event => {
+        this.setState({
+            selectedFile: event.target.files[0],
+            loaded: 0
+        });
+    };
 
     render() {
 
@@ -204,7 +220,7 @@ class BookView extends Component {
         ) : error ? <h1><Alert color='danger'>{error}</Alert></h1> : null;
 
         const bookslength = books.length;
-        console.log(books,bookslength);
+        // console.log(books,bookslength);
         const booksView = bookslength ? books.map(book =>
             <tr key={book._id}>
                 <td><img src={book.img} alt="img" width="75" height="75"/></td>
@@ -221,7 +237,7 @@ class BookView extends Component {
                 <AddBook categories={this.state.categories} handlerFromParant={this.handleData} books={this.state.books} authors={this.state.authors}/>
                 <Modal isOpen={this.state.modal} toggle={this.toggle} backdrop={this.state.backdrop}
                        className={this.props.className}>
-                    <ModalHeader toggle={this.toggle}>Add Book</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Edit Book</ModalHeader>
                     <ModalBody>
                         <Input type="text" value={this.state.bookName} defaultValue={this.state.book.bookName} onChange={this.handleOnChangeBookName}
                                placeholder='Book Name'/>

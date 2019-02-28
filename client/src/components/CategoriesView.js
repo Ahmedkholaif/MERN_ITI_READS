@@ -101,7 +101,7 @@ class CategoriesView extends Component {
             }
             axios.get(`/api/admin/categories`, conf)
                 .then(res => {
-                    console.log(res);
+                    // console.log(res);
                     this.setState({
                         categories: res.data
                     })
