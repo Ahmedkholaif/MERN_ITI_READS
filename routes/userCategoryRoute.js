@@ -14,8 +14,7 @@ router.get("/", (req, res) => {
 router.get("/:categoryName", (req, res) => {
   let cat = req.params.categoryName;
   const page = req.query.page;
-  console.log((page - 1) * perPage);
-  Book.find({ categoryID: cat })
+  Book.find({ category: cat })
     .skip(page > 0 ? (page - 1) * perPage : 0)
     .limit(perPage)
     .exec(function(err, data) {

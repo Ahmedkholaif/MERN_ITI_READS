@@ -2,6 +2,8 @@ const express = require("express");
 const multer = require("multer");
 const router = express.Router();
 const Author = require('../models/Author');
+const Book = require('../models/Book');
+
 const {auth_Admin} = require('../helpers/Auth');
 //Start of Routes for Author
 
@@ -66,14 +68,15 @@ router.post('/', auth_Admin,(req, res) => {
 
 // Edit an Author
 //@ admin auth
-router.put('/:name', auth_Admin,(req, res) => {
+router.put('/:authorID', auth_Admin,(req, res) => {
 
   const body =JSON.parse(req.body.body);
+  console.log(body);
   let img ;
   const fullName = body.fullName;
   const dateOfBirth = body.dateOfBirth;
   let uploadFile = req.files.file ;
-
+  const authorID = req.params.authID;
   const fileName = `${new Date().toISOString()}${Math.random()}${req.files.file.name}` ;
   uploadFile.mv(
     `${__dirname}/../public/${fileName}`,(err)=> {
@@ -82,7 +85,7 @@ router.put('/:name', auth_Admin,(req, res) => {
       img =  `../../../${fileName}`;
       Author.updateOne(
         {
-          fullName: oldname
+          _id: authorID
         },
         { $set: {
             fullName,
@@ -91,7 +94,7 @@ router.put('/:name', auth_Admin,(req, res) => {
             }
         })
         .then(()=>{
-            res.status(200).send({masg:"succes"});
+            res.status(200).send({img});
         }) 
         .catch((e)=>{
             res.status(404).send(e);
@@ -100,14 +103,19 @@ router.put('/:name', auth_Admin,(req, res) => {
   )
 });
 // Delete an Author
-router.delete('/:name',auth_Admin ,(req, res) => {
-  const name = req.params.name
-  Author.deleteOne(
-    {
-      fullName: name
+router.delete('/:authID',auth_Admin ,(req, res) => {
+  
+    const authorID = req.params.authID;
+    console.log(authorID);
+    Author.findByIdAndRemove({
+        _id : authorID
     })
-    .then (()=>{
-        res.status(200).send({msg:"succes"});
+    .then((reslt)=>{
+        Book.remove({author:reslt.fullName})
+        .then(res2=>{
+            console.log(reslt,res2);
+            res.status(200).send({msg:"deleted",reslt,res2});
+        })
     })
     .catch((e)=>{
         res.status(404).send(e);

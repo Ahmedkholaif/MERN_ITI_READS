@@ -15,12 +15,13 @@ class AuthorView extends Component {
     state = {
         authors: [],
         modal: false,
-        AuthorFullNameEdit: '',
+        author:{
+            fullName: '',
+            dateOfBirth: '',
+        },
         IdEdit: 0,
-        AuthorDateEdit: '',
         selectedFile: null,
         loaded: 0,
-        img: "",
     };
 
     handleData(data) {
@@ -30,86 +31,125 @@ class AuthorView extends Component {
     }
 
     toggle(id) {
+        console.log(id);
         this.setState(prevState => ({
             modal: !prevState.modal,
-            AuthorFirstNameEdit: '',
-            AuthorLastNameEdit: '',
-            AuthorDateEdit: '',
+            author:{
+                fullName: '',
+                dateOfBirth: '',
+            },
             IdEdit: 0
         }));
-
-        const authors = this.state.authors;
-        const author = authors.filter(author => {
-            return author.id === id;
-        });
-
-        console.log(author);
-        const author_id = author[0].id;
-        const author_fname = author[0].title;
-        const author_lname = author[0].title;
-        const author_date = author[0].title;
-        this.setState({
-            AuthorFirstNameEdit: author_fname,
-            AuthorLastNameEdit: author_lname,
-            AuthorDateEdit: author_date,
-            IdEdit: author_id
-        });
+        if (id !== null) {
+            const authors = this.state.authors;
+            const author = authors.filter(author => {
+                return author._id === id;
+            });
+            console.log(id);
+            console.log(author);
+            
+            const fullName = author[0].fullName;
+            const dateOfBirth = author[0].dateOfBirth;
+            this.setState({
+                author : {
+                    fullName,
+                    dateOfBirth,
+                },
+                IdEdit:id,
+            });
+        }
     }
 
     handleUpdateAuthor() {
-        try {
 
-            const fname = this.state.AuthorFirstNameEdit;
-            const lname = this.state.AuthorLastNameEdit;
-            const date = this.state.AuthorDateEdit;
-            const id = this.state.IdEdit;
-            if (fname !== '' && id !== 0 && lname !== '' && date !== '') {
-                const authors = this.state.authors;
-                for (var key in authors) {
-                    if (authors[key].id === id) {
-                        authors[key].title = fname;
-                    }
+        const fullName = this.state.author.fullName;
+        const dateOfBirth = this.state.author.dateOfBirth;
+        const id = this.state.IdEdit;
+        if (fullName !== '' && id !== 0 && dateOfBirth !== '') {
+            const authors = this.state.authors;
+            for (let key in authors ){
+                if (authors[key]._id === id) {
+                    authors[key].fullName = fullName;
+                    
+                            // send post
+            const token = localStorage.token;
+            if (token) {
+                const data = new FormData();
+            data.append(
+                "file",
+                this.state.selectedFile,
+                this.state.selectedFile.name
+            );
+
+            data.append("body", JSON.stringify(this.state.author));
+            const conf = {
+                onUploadProgress: ProgressEvent => {
+                this.setState({
+                    loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
+                });
+                },
+                headers: {
+                "Content-Type": "application/json",
+                "x-auth": token
                 }
-                this.setState({authors: authors});
+            };
+
+            axios.put(`/api/admin/authors/${id}`, data , conf)
+            .then(res =>{
+                console.log(res);
+                if(res.status === 200){
+                    authors[key].img = res.data.img;
+
+                    this.setState({
+                    authors,
+                     author:{
+                    fullName:'',
+                    dateOfBirth:'',
+                     },
+                     IdEdit: 0
+                }
+                );
+
+                console.log(res.data.img);
+
+            } else {
+                console.log("not updated in db");
             }
-            this.setState({
-                AuthorFirstNameEdit: '',
-                AuthorLastNameEdit: '',
-                AuthorDateEdit: '',
-                IdEdit: 0
-            });
-            // send post
-            axios.post('/', {
-                id: id,
-                fname: fname,
-                lname: lname,
-                date: date
-            }).then(response => {
-                console.log(response);
-            }).catch(error => {
-                console.log(error);
-            });
-        } catch (e) {
-            console.log(e.message);
-            console.log(e);
+        })
+        .catch(err => {
+            console.log({err});
+            this.setState({error: 'Error Delete Operation'})
+        })
         }
+        }
+
+                }
+            };
+        
     }
 
     handleDeleteAuthor = deletedId => {
 
-        axios.delete('https://jsonplaceholder.typicode.com/albums/' + {deletedId})
-            .then(response => {
-                console.log(response);
-            }).catch(error => {
+        const token = localStorage.token;
+        if(token) {
+            const conf ={
+              headers:{
+              "x-auth":token,
+            }
+          }
+        axios.delete(`/api/admin/authors/${deletedId}`,conf)
+        .then(res =>{
+            if(res.status === 200){
+            console.log(res);
+            } else {
+                console.log("not deleted from db");
+            }
+         })
+        .catch(err => {
+            console.log(err)})
             this.setState({error: 'Error Delete Operation'})
-        })
-        // const authors = this.state.authors;
-        // authors.filter(author => {
-        //     return author.id !== deletedId;
-        // });
-        this.setState({
-            authors: this.state.authors.filter(author => author.id !== deletedId)
-        });
+        }
+        this.setState({authors: this.state.authors.filter(author =>author._id !== deletedId)});
     }
 
 componentDidMount() {
@@ -126,6 +166,8 @@ componentDidMount() {
             this.setState(
                 {authors: response.data.authors }
                 );
+                this.props.passAuthors(response.data);
+                
         
         }).catch(error => {
         console.log(error);
@@ -134,17 +176,21 @@ componentDidMount() {
     }
 }
 
-    handleOnChangeFname = event => {
-        this.setState({AuthorFirstNameEdit:event.target.value});
-        console.log(this.state.AuthorFirstNameEdit);
+    handleOnChangefullName = event => {
+        this.setState({
+            author:{...this.state.author,
+            fullName :event.target.value
+        }
+        });
+        console.log(this.state.author.fullName);
     }
-    handleOnChangeLname = event => {
-        this.setState({AuthorLastNameEdit:event.target.value});
-        console.log(this.state.AuthorLastNameEdit);
-    }
+    
     handleOnChangeDate = event => {
-        this.setState({AuthorDateEdit:event.target.value});
-        console.log(this.state.AuthorDateEdit);
+        this.setState({author:{...this.state.author,
+            dateOfBirth:event.target.value
+        }
+        });
+        console.log(this.state.author.dateOfBirth);
     }
 
     handleselectedFile = event => {
@@ -158,7 +204,7 @@ componentDidMount() {
         const {authors, error} = this.state;
         const authorsView = authors.length ? authors.map(author =>
             <tr key={author._id}>
-                <td><img src={author.img} alt="img"/></td>
+                <td><img src={author.img} alt="img" width="75" height="75"/></td>
                 <td>{author.fullName}</td>
                 <td>{author.dateOfBirth}</td>
                 <td><Button color='danger' onClick={() => this.handleDeleteAuthor(author._id)}>Delete</Button></td>
@@ -173,13 +219,10 @@ componentDidMount() {
                        className={this.props.className}>
                     <ModalHeader>Edit Author</ModalHeader>
                     <ModalBody>
-                        <Input type="text" defaultValue={this.state.AuthorFirstNameEdit}
-                               onChange={this.handleOnChangeFname}
-                               placeholder='Author FIrstName'/>
-                        <Input type="text" defaultValue={this.state.AuthorLastNameEdit}
-                               onChange={this.handleOnChangeLname}
-                               placeholder='Author LastName'/>
-                        <Input type="date" defaultValue={this.state.AuthorDateEdit}
+                        <Input type="text" defaultValue={this.state.author.fullName}
+                               onChange={this.handleOnChangefullName}
+                               placeholder='Full FIrstName'/>
+                        <Input type="date" defaultValue={this.state.author.dateOfBirth}
                                onChange={this.handleOnChangeDate}
                                placeholder='Author Date fo Birth'/>
                         <Input

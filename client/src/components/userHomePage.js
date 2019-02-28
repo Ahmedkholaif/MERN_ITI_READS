@@ -104,7 +104,7 @@ handelPagination = (pageNum)=>
       "x-auth":token,
       }
     }
-    axios.get(`/api/users/current?page=${this.state.pageNum}?mode=${this.state.shelf}`,conf
+    axios.get(`/api/users/current?page=${this.state.pageNum}&mode=${this.state.shelf}`,conf
     )
     .then(res =>{
       this.setState({
