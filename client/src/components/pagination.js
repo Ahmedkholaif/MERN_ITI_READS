@@ -25,14 +25,14 @@ render() {
 return (
     <div className="pagginationContainer">
     <Pagination
-    hideDisabled
-    hideFirstLastPages
+    // hideDisabled
+    // hideFirstLastPages
     prevPageText={<i className='fas fa-angle-left'/>}
     nextPageText={<i className='fas fa-angle-right'/>}
     activePage={this.props.activePage}
     itemsCountPerPage={5}
-    totalItemsCount={450}
-    pageRangeDisplayed={5}
+    totalItemsCount={this.props.max}
+    pageRangeDisplayed={this.props.chunk}
     onChange={this.props.change}
     itemClass={"page-item"}
     linkClass={"page-link"}

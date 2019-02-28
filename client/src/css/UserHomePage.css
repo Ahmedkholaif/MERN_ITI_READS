@@ -101,6 +101,9 @@ background-color: white;
 .tableTitle{
     margin: 2% auto;
 }
+.booksTable{
+    height: 62vh;
+}
 
 .pagginationContainer{
     text-align: center;

@@ -76,14 +76,15 @@ router.put('/:authorID', auth_Admin,(req, res) => {
   const fullName = body.fullName;
   const dateOfBirth = body.dateOfBirth;
   let uploadFile = req.files.file ;
-  const authorID = req.params.authID;
+  const authorID = req.params.authorID;
+  console.log( req.params.authorID)
   const fileName = `${new Date().toISOString()}${Math.random()}${req.files.file.name}` ;
   uploadFile.mv(
     `${__dirname}/../public/${fileName}`,(err)=> {
         
       if(err) {return res.status(500).send(err)}
       img =  `../../../${fileName}`;
-      Author.updateOne(
+      Author.findByIdAndUpdate(
         {
           _id: authorID
         },
@@ -92,12 +93,9 @@ router.put('/:authorID', auth_Admin,(req, res) => {
             img,
             dateOfBirth,
             }
-        })
-        .then(()=>{
-            res.status(200).send({img});
-        }) 
-        .catch((e)=>{
-            res.status(404).send(e);
+        },(err,author)=>{
+          if(err) res.status(404).send(err);
+          res.status(200).send({img});
         })
     }
   )

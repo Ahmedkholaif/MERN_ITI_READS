@@ -41,7 +41,7 @@ class BooksTable extends Component {
           })()}
         </Row>
         <Row>
-          <Table className="m-0">
+          <Table className="m-0 booksTable">
             <thead>
               <tr>
                 <th>Cover</th>

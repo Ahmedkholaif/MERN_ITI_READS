@@ -57,8 +57,10 @@ background-color: white;
 
 /*** items styling */
 #displayedItems{
-    height: 70vh;
-    margin:0 auto;
+    height: 60vh;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top:10vh !important;;
 }
 .justify-content-md-center{
     margin:0 auto;
