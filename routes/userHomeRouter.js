@@ -1,23 +1,11 @@
 const express = require("express");
 const router = express.Router();
-<<<<<<< HEAD
 const Book = require("../models/Book");
 const User = require("../models/User");
 const Author = require("../models/Author");
 const bookRouter = require("./userBookRouter");
 const authorRouter = require("./userAuthorRouter");
 const categoryRouter = require("./userCategoryRoute");
-=======
-const Book = require('../models/Book');
-const User = require('../models/User');
-const Author = require('../models/Author');
-
-
-const authorRouter = require('./userAuthorRouter');
-const categoryRouter = require('./userCategoryRoute');
-const bookRouter = require("./userBookRouter");
-
->>>>>>> 76f0d64e0e6ee1f7083e441ec9e7662fe6cccf6e
 
 const perPage = 10;
 const { authenticate, auth_Admin } = require("../helpers/Auth");
@@ -115,42 +103,41 @@ const editBookState = (bookName, mode, rate, res) => {
       if (data) {
         book_id = data._id;
         User.findOneAndUpdate(
-          { email: req.user.email, "books.bookInfo": book_id }, //firstName willbe req.user._id
+          { email: "ahmed_kholaif@yahoo.com", "books.bookInfo": book_id }, //firstName willbe req.user._id
           { $set: { "books.$.shelf": mode } },
           (err, dataa) => {
             if (err) {
               res.status(404).send(err);
             } else {
-              res.status(404).send(data);
+              res.status(200).send();
             }
           }
         );
-      }})}
-       else if (mode == "rating") {
-        Book.findOneAndUpdate(
-          { title: bookName },
-          { $inc: { "rating.total": rate, "rating.users": 1 } },
-          (err, data) => {
-            //$inc to increament
-            if (err) {
-              res.status(404).send();
-            }
-            book_id = data._id;
-            User.findOneAndUpdate(
-              { email: req.user.email, "books.book": book_id }, //firstName willbe req.user._id
-              { $set: { "books.$.rate": rate } },
-              (err, dataa) => {
-                console.log("found in user");
-<<<<<<< HEAD
-                res.send.status(200).send();
-              }
-            );
-          }
-        );
-      } else {
-        res.status(404).send();
       }
     });
+  } else if (mode == "rating") {
+    Book.findOneAndUpdate(
+      { bookName: bookName },
+      { $inc: { "avgRate.total": rate, "avgRate.users": 1 } },
+      (err, data) => {
+        //$inc to increament
+        if (err) {
+          res.status(404).send();
+        }
+        book_id = data._id;
+        User.findOneAndUpdate(
+          { email: "ahmed_kholaif@yahoo.com", "books.bookInfo": book_id }, //firstName willbe req.user._id
+          { $set: { "books.$.rate": rate } },
+          (err, dataa) => {
+            console.log(dataa);
+            console.log(err);
+            res.status(200).send();
+          }
+        );
+      }
+    );
+  } else {
+    res.status(404).send();
   }
 };
 // edit the book
@@ -211,73 +198,6 @@ router.get("/search", (req, res) => {
 //     }
 // });
 
-=======
-                res.send.status(200).send()})
-        }) 
-    }
-    else{
-        res.status(404).send()
-    }
- })
-}}
-// edit the book
-router.put("/:bookName",(req,res)=>{
-    const mode = req.query.mode;
-    const rate = parseInt(req.query.rate);
-    const bookName = req.params.bookName;
-    editBookState(bookName,mode,rate,res)
-})
-
-//use GET : /api/users/search?type=book&title=Blue+Cat                 
-// to search for a book or author and search by title
-router.get("/search", (req, res)=> {
-    const q = req.query.q;
-    const type = req.query.type;
-    if (type === "book"){
-        Book.find({ bookName: { $regex: ".*" + q + ".*", $options: 'i' }  } , (err, result) => {
-            if (err) return handleError(err);
-            console.log(result);
-            res.json(result);
-        })
-    } else if(type === "author"){
-        Author.find({ fullName: { $regex: ".*" + q + ".*", $options: 'i' }  } , (err, result) => {
-            if (err) return handleError(err);
-            console.log(result);
-            res.json(result);
-        })
-    }else{
-        res.status(404).send()
-        console.log("404");
-    }
-})
-    // } else if(type === "author"){
-
-
-    // }  else {
-
-
-   
-
-    // console.log(type);
-    // res.json([q,type]);
-    
-    // res.json(name);
-
-    //   const searchQuery = req.query.q;
-    //     if (searchQuery === "books" ){
-    //         res.json("books")
-    //     }
-    //     else if (searchQuery == "authors"){
-    //         res.json("authors") //(data)
-
-    //     }
-    //     else {
-    //         res.status(404).send()
-    //     }
-// });
-
-
->>>>>>> 76f0d64e0e6ee1f7083e441ec9e7662fe6cccf6e
 //Routes for testing
 router.get("/addUserBook", (req, res, next) => {
   Book.findOne({ bookName: "ahemd fi belad el 3ga2eb" }, (err, data) => {
@@ -308,3 +228,51 @@ router.get("/addBook", (req, res) => {
 module.exports.editBookState = editBookState;
 module.exports = router;
 
+// const addBooks = () => {
+//     for (let index = 0; index < 12; index++) {
+//         let book = new Book({ title: "xx", authorID: "motaz" });
+//         console.log(book._id)
+//         book.save().then(function (result) {
+//             console.log(result._id)
+//             return User.findOneAndUpdate(
+//                 { firstName: "motaz" },
+//                 { $push: { books: result } }
+//             );
+//         }).then(function (result) {
+//             console.log('updated post');
+//         });
+
+//     }
+// }
+// const getbooks = (books) => {
+//     books.forEach(book => {
+//         console.log(book._id)
+//         gettedBooks.push(book.id)
+//         Book.findById((book._id).then(()=>{
+//             gettedBooks.push(data)
+//             console.log(data);
+
+//         }),(err,data)=>{
+//                     if (err) throw err;
+
+//                 })
+//     });
+// }
+
+// router.get("/", (req, res, next) => {
+// let books;
+// addBooks()
+// const page = req.query.page;
+// let start = (page > 0 ? (page - 1) : 0) * 10; //start from index ( 0 , 10 , 20 , 30)
+// let end = start + 10;
+// let user;
+// })
+
+// })
+// Book.find()
+//     .skip((page > 0 ? ((page - 1) * perPage) : 0))
+//     .limit(perPage)
+//     .exec(function (err, data) {
+//         if (err) throw err;
+//         res.json(data)
+//     })
