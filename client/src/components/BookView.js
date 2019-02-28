@@ -96,9 +96,9 @@ class BookView extends Component {
                     this.state.selectedFile,
                     this.state.selectedFile.name,
                   );
-
-                 data.append("body", JSON.stringify(this.state.book));
-                 const conf = {
+                  data.append("body", JSON.stringify(this.state.book));
+                 
+                  const conf = {
                     onUploadProgress: ProgressEvent => {
                     this.setState({
                         loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
@@ -109,7 +109,7 @@ class BookView extends Component {
                     "x-auth": token
                     }
                 };
-                data.append("body", JSON.stringify(this.state.book));
+                
                 axios.put(`/api/admin/books/${id}`, data, conf)
                 .then(res => {
                     console.log(res);
