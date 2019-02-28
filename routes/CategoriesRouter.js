@@ -1,5 +1,6 @@
 const express = require('express');
 const Category = require('../models/Category');
+const Book =require('../models/Book');
 const {auth_Admin} = require('../helpers/Auth');
 const router = express.Router();
 
@@ -78,6 +79,7 @@ router.delete("/:catID",auth_Admin, (req, res) => {
     .then((reslt)=>{
         Book.remove({category:reslt.catName})
         .then(res2=>{
+            console.log(reslt,res2);
             res.status(200).send({msg:"deleted",reslt,res2});
         })
     })

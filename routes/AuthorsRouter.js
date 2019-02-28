@@ -2,6 +2,8 @@ const express = require("express");
 const multer = require("multer");
 const router = express.Router();
 const Author = require('../models/Author');
+const Book = require('../models/Book');
+
 const {auth_Admin} = require('../helpers/Auth');
 //Start of Routes for Author
 
@@ -100,14 +102,19 @@ router.put('/:name', auth_Admin,(req, res) => {
   )
 });
 // Delete an Author
-router.delete('/:name',auth_Admin ,(req, res) => {
-  const name = req.params.name
-  Author.deleteOne(
-    {
-      fullName: name
+router.delete('/:authID',auth_Admin ,(req, res) => {
+  
+    const authorID = req.params.authID;
+    console.log(authorID);
+    Author.findByIdAndRemove({
+        _id : authorID
     })
-    .then (()=>{
-        res.status(200).send({msg:"succes"});
+    .then((reslt)=>{
+        Book.remove({author:reslt.fullName})
+        .then(res2=>{
+            console.log(reslt,res2);
+            res.status(200).send({msg:"deleted",reslt,res2});
+        })
     })
     .catch((e)=>{
         res.status(404).send(e);

@@ -28,7 +28,7 @@ class CategoriesView extends Component {
         if(id !== null) {
             const categories = this.state.categories;
             const category = categories.filter(category => {
-            return category._id === id;
+                return category._id === id;
              });
 
         const catid = category[0]._id;
@@ -164,7 +164,7 @@ componentDidMount() {
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={() => this.handleUpdateCategory()}>Edit Category</Button>{' '}
-                        <Button color="secondary" onClick={()=>this.toggle(null)}>Cancel</Button>
+                        <Button color="secondary" onClick={()=>this.toggle(null)}>Close</Button>
                     </ModalFooter>
                 </Modal>
                 <Table>
