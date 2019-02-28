@@ -1,17 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const Book = require('../models/Book');
-const User = require('../models/User');
-const Author = require('../models/Author');
-
-const bookRouter = require('./userBookRouter');
-
-const authorRouter = require('./userAuthorRouter');
-const categoryRouter = require('./userCategoryRoute');
 const Book = require("../models/Book");
 const User = require("../models/User");
+const Author = require("../models/Author");
 const bookRouter = require("./userBookRouter");
-
 const authorRouter = require("./userAuthorRouter");
 const categoryRouter = require("./userCategoryRoute");
 
@@ -55,36 +47,49 @@ router.get("/", (req, res) => {
       { $limit: 5 }
     ];
   }
-  User.aggregate(pipeline, function(err, result) {
-    if (err) {
-      res.status(500).send();
-    }
-    User.populate(
-      result,
-      {
-        path: "books.bookInfo",
-        select: {
-          img: 1,
-          _id: 0,
-          bookName: 1,
-          author: 1,
-          category: 1,
-          avgRate: 1
-        } //select fields to return
-      },
-      (err, result) => {
-        console.log(result);
-        if (err) {
-          console.log(err);
-          // res.status(404).send()
+  User.findOne({ email: req.user.email }, (err, user) => {
+    let count = 0;
+    if (mode != "all") {
+      user.books.forEach(book => {
+        if (book.shelf === mode) {
+          count++;
         }
-        let books = [];
-        result.forEach(element => {
-          books.push(element.books);
-        });
-        return res.json({ books: books, email, img });
+      });
+    } else {
+      count = user.books.length;
+    }
+    console.log(count);
+    User.aggregate(pipeline, function(err, result) {
+      if (err) {
+        res.status(500).send();
       }
-    );
+      User.populate(
+        result,
+        {
+          path: "books.bookInfo",
+          select: {
+            img: 1,
+            _id: 0,
+            bookName: 1,
+            author: 1,
+            category: 1,
+            avgRate: 1
+          } //select fields to return
+        },
+        (err, result) => {
+          console.log(result);
+          if (err) {
+            console.log(err);
+            // res.status(404).send()
+          }
+          let books = [];
+          result.forEach(element => {
+            books.push(element.books);
+          });
+          return res.json({ books: books, count, email, img });
+        }
+      );
+    });
   });
 });
 //this is used to add rating or to change shelve
@@ -103,128 +108,36 @@ const editBookState = (bookName, mode, rate, res) => {
           (err, dataa) => {
             if (err) {
               res.status(404).send(err);
+            } else {
+              res.status(404).send(data);
             }
-            else{
-                    res.status(404).send(data)
-                }
-
-        }) 
-    }
-    else if(mode=="rating") {
-        Book.findOneAndUpdate({title:bookName} , 
-            {$inc: {"rating.total" : rate , "rating.users" :  1}},(err,data)=>{ //$inc to increament
-                if(err){
-                    res.status(404).send()
-                }
+          }
+        );
+      }})}
+       else if (mode == "rating") {
+        Book.findOneAndUpdate(
+          { title: bookName },
+          { $inc: { "rating.total": rate, "rating.users": 1 } },
+          (err, data) => {
+            //$inc to increament
+            if (err) {
+              res.status(404).send();
+            }
             book_id = data._id;
-            User.findOneAndUpdate({firstName : "motaz" , "books.book" : book_id}, //firstName willbe req.user._id
-            {'$set' : {'books.$.rate' : rate}},(err,dataa)=>{
+            User.findOneAndUpdate(
+              { email: req.user.email, "books.book": book_id }, //firstName willbe req.user._id
+              { $set: { "books.$.rate": rate } },
+              (err, dataa) => {
                 console.log("found in user");
-                res.send.status(200).send()})
-        }) 
-    }
-    else{
-        res.status(404).send()
-    }
-}
-// edit the book
-router.put("/:bookName",(req,res)=>{
-    const mode = req.query.mode;
-    const rate = parseInt(req.query.rate);
-    const bookName = req.params.bookName;
-    editBookState(bookName,mode,rate,res)
-})
-
-//use GET : /api/users/search?type=book&title=Blue+Cat                 
-// to search for a book or author and search by title
-router.get("/search", (req, res)=> {
-    const q = req.query.q;
-    const type = req.query.type;
-    if (type === "book"){
-        Book.find({ bookName: { $regex: ".*" + q + ".*", $options: 'i' }  } , (err, result) => {
-            if (err) return handleError(err);
-            console.log(result);
-            res.json(result);
-        })
-    } else if(type === "author"){
-        Author.find({ fullName: { $regex: ".*" + q + ".*", $options: 'i' }  } , (err, result) => {
-            if (err) return handleError(err);
-            console.log(result);
-            res.json(result);
-        })
-    }else{
-        res.status(404).send()
-        console.log("404");
-    }
-})
-    // } else if(type === "author"){
-
-
-    // }  else {
-
-
-   
-
-    // console.log(type);
-    // res.json([q,type]);
-    
-    // res.json(name);
-
-    //   const searchQuery = req.query.q;
-    //     if (searchQuery === "books" ){
-    //         res.json("books")
-    //     }
-    //     else if (searchQuery == "authors"){
-    //         res.json("authors") //(data)
-
-    //     }
-    //     else {
-    //         res.status(404).send()
-    //     }
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            res.status(200).send();
+                res.send.status(200).send();
+              }
+            );
           }
         );
       } else {
         res.status(404).send();
       }
     });
-  } else if (mode == "rating") {
-    Book.findOneAndUpdate(
-      { title: bookName },
-      { $inc: { "rating.total": rate, "rating.users": 1 } },
-      (err, data) => {
-        //$inc to increament
-        if (err) {
-          res.status(404).send();
-        }
-        book_id = data._id;
-        User.findOneAndUpdate(
-          { email: req.user.email, "books.bookInfo": book_id }, //firstName willbe req.user._id
-          { $set: { "books.$.rate": rate } },
-          (err, daaa) => {
-            res.send.status(200).send();
-          }
-        );
-      }
-    );
-  } else {
-    res.status(404).send();
   }
 };
 // edit the book
@@ -234,20 +147,56 @@ router.put("/:bookName", (req, res) => {
   const bookName = req.params.bookName;
   editBookState(bookName, mode, rate, res);
 });
-//delete the book
 
-/////router Elfashe777777777777777''''''' Ziyad to add search for books , author , category use pattern and relative posibilty contant Aineshtain
-router.get("/dd", (req, res) => {
-  console.log("search");
-  const searchQuery = req.query.q;
-  if (searchQuery === "books") {
-    res.json("books");
-  } else if (searchQuery == "authors") {
-    res.json("authors"); //(data)
+//use GET : /api/users/search?type=book&title=Blue+Cat
+// to search for a book or author and search by title
+router.get("/search", (req, res) => {
+  const q = req.query.q;
+  const type = req.query.type;
+  if (type === "book") {
+    Book.find(
+      { bookName: { $regex: ".*" + q + ".*", $options: "i" } },
+      (err, result) => {
+        if (err) return handleError(err);
+        console.log(result);
+        res.json(result);
+      }
+    );
+  } else if (type === "author") {
+    Author.find(
+      { fullName: { $regex: ".*" + q + ".*", $options: "i" } },
+      (err, result) => {
+        if (err) return handleError(err);
+        console.log(result);
+        res.json(result);
+      }
+    );
   } else {
     res.status(404).send();
+    console.log("404");
   }
 });
+// } else if(type === "author"){
+
+// }  else {
+
+// console.log(type);
+// res.json([q,type]);
+
+// res.json(name);
+
+//   const searchQuery = req.query.q;
+//     if (searchQuery === "books" ){
+//         res.json("books")
+//     }
+//     else if (searchQuery == "authors"){
+//         res.json("authors") //(data)
+
+//     }
+//     else {
+//         res.status(404).send()
+//     }
+// });
 
 //Routes for testing
 router.get("/addUserBook", (req, res, next) => {

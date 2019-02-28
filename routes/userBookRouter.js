@@ -8,13 +8,16 @@ const userHomeRouter = require("./userHomeRouter");
 //to get all books in application
 router.get("/", (req, res, next) => {
   const page = req.query.page;
-  Book.find()
-    .skip(page > 0 ? (page - 1) * perPage : 0)
-    .limit(perPage)
-    .exec(function(err, data) {
-      if (err) throw err;
-      res.json(data);
-    });
+  Book.count({}, (err, count) => {
+    Book.find()
+      .skip(page > 0 ? (page - 1) * perPage : 0)
+      .limit(perPage)
+      .exec(function(err, books) {
+        if (err) throw err;
+
+        res.json({ books, count });
+      });
+  });
 });
 //to get book name and show its status according to the user
 router.get("/:bookName", (req, res, next) => {
