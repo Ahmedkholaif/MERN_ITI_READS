@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import '../css/AuthorView.css';
 import AddAuthor from './AddAuthor';
 import axios from "axios";
+import {Redirect} from 'react-router-dom'
 import {Alert, Button, Input, Modal, ModalBody, ModalFooter, ModalHeader, Table} from "reactstrap";
 
 
