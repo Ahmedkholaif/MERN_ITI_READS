@@ -172,29 +172,12 @@ componentDidMount() {
                         { books: response.data.books }
                     );
                 }
-<<<<<<< HEAD
-            }
-            axios.get('/api/admin/books', conf)
-                    .then(response => {
-                        console.log(response);
-                        if (response.status === 200) {
-                            this.setState(
-                                { books: response.data.books }
-                            );
-                        }
-                        // this.props.passAuthors(response.data);
-                    }).catch(error => {
-                        console.log(error);
-                        this.setState({ error: 'Error reteiriving data' })
-                    })
-=======
                 // this.props.passAuthors(response.data);
             }).catch(error => {
-            console.log(error);
-            this.setState({error: 'Error reteiriving data'})
-        })
->>>>>>> a41380987213c4761e7dc5ca877e2a58017816c0
-        }
+                console.log(error);
+                this.setState({ error: 'Error reteiriving data' })
+            })
+    }
 
 }
 
