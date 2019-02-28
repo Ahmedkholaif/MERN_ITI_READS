@@ -21,15 +21,7 @@ class UserHomePage extends Component {
             books: [],
         }
 
-    
-    this.state = {
-      isOpen: false,
-      activePage:1,
-      itemsCount:1,
-      shelf : "all",
-      books:[],
-    }
-
+      }
 
     componentDidMount() {
         const token = localStorage.token;
@@ -43,17 +35,7 @@ class UserHomePage extends Component {
                     "x-auth": token,
                 }
             }
-            axios.get(`/api/users/current?page=${this.state.activePage}?mode=${this.state.shelf}`, conf
-            )
-                .then(res => {
-                    this.setState({
-                        books: res.data.books,
-                    })
-                })
-                .catch(err => console.log(err))
-        }
-
-    }
+            
     axios.get(`/api/users/current?page=${this.state.activePage}?mode=${this.state.shelf}`,conf
     )
     .then(res =>{
@@ -65,7 +47,7 @@ class UserHomePage extends Component {
     })
     .catch(err => console.log(err))
   }
-
+    }
 // test = setInterval(() => {
 //   alert(this.state.books[0].rate)
 // }, 5000);
@@ -210,50 +192,7 @@ handelPagination = (pageNum)=>
   }
 }
 
-    render() {
-        return (
-            localStorage.token ?
-                <div>
-                    <CustomNavbar/>
-                    <Row className="homeBody">
-                        <Col xs="3">
-                            <div className="sideMenu">
-                                <ul>
-                                    <li>
-                                        <h6 link="#" onClick={this.displayAllBooks}>All books</h6>
-                                        <hr/>
-                                    </li>
-                                    <li>
-                                        <h6 onClick={this.displayReadBooks}>Read</h6>
-                                        <hr/>
-                                    </li>
-                                    <li>
-                                        <h6 onClick={this.displayCurrentlyReadingBooks}>Currently reading</h6>
-                                        <hr/>
-                                    </li>
-                                    <li>
-                                        <h6 onClick={this.displayToReadBooks}>Want to read</h6>
-                                        <hr/>
-                                    </li>
-                                </ul>
-                            </div>
-                        </Col>
-                        <Col xs="9">
-                            <Row className="rightMenu">
-                                <Col>
-                                    <BooksTable books={this.state.books} shelf={this.state.shelf}/>
-                                    <CustomPagination activePage={this.state.activePage}
-                                                      change={this.handelPagination}/>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                </div>
-                : <Redirect to={{pathname: '/', state: {from: this.props.location}}}/>
 
-        );
-    }
-}
 
 
 export default UserHomePage;
