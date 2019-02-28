@@ -7,7 +7,7 @@ const bookSchema =new mongoose.Schema({
     author:{
         type:"string"
     },
-    category:"string", 
+    category:String, 
     img:String,
     avgRate:{
         total:Number,users:Number
