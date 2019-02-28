@@ -5,7 +5,7 @@ import CategoriesView from '../components/CategoriesView'
 import AuthorView from '../components/AuthorView'
 import BookView from '../components/BookView'
 import axios from 'axios';
-
+import {Redirect} from 'react-router-dom'
 import '../css/AdminLogin.css';
 
 
@@ -26,7 +26,7 @@ export default class Example extends React.Component {
         event.preventDefault();
         if(localStorage.token){
             const conf= {
-                headers: {'x-auth':token}
+                headers: {'x-auth':localStorage.token}
             };
             axios.delete('/api/signout',conf)
                 .then(response=>{

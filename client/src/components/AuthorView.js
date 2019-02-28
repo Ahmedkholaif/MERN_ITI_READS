@@ -3,7 +3,7 @@ import '../css/AuthorView.css';
 import AddAuthor from './AddAuthor';
 import axios from "axios";
 import {Alert, Button, Input, Modal, ModalBody, ModalFooter, ModalHeader, Table} from "reactstrap";
-
+import {Redirect} from 'react-router-dom'
 
 class AuthorView extends Component {
     constructor(props) {
@@ -172,22 +172,7 @@ class AuthorView extends Component {
                 this.setState({error: 'Error reteiriving data'})
             })
         }
-<<<<<<< HEAD
-    axios.get('/api/admin/authors',conf)
-        .then(response => {
-            // console.log(response);
-            this.setState(
-                {authors: response.data.authors }
-                );
-                this.props.passAuthors(response.data.authors);
-                
         
-        }).catch(error => {
-        console.log(error);
-        this.setState({error: 'Error reteiriving data'})
-    })
-=======
->>>>>>> cdf461b39d9ef310ff2eaca3201f98ca696cfe4f
     }
 
     handleOnChangefullName = event => {
@@ -230,21 +215,6 @@ class AuthorView extends Component {
         ) : error ? <h1><Alert color='danger'>{error}</Alert></h1> : null;
 
         return (
-<<<<<<< HEAD
-            <div>
-                <AddAuthor authors={this.state.authors} handlerFromParant={this.handleData}/>
-                <Modal isOpen={this.state.modal} toggle={() => this.toggle()}
-                       className={this.props.className}>
-                    <ModalHeader>Edit Author</ModalHeader>
-                    <ModalBody>
-                        <Input type="text" defaultValue={this.state.author.fullName}
-                               onChange={this.handleOnChangefullName}
-                               placeholder='Full FIrstName'/>
-                        <Input type="date" defaultValue={this.state.author.dateOfBirth}
-                               onChange={this.handleOnChangeDate}
-                               placeholder='Author Date fo Birth'/>
-                        <Input
-=======
             localStorage.token ?
                 <div>
                     <AddAuthor authors={this.state.authors} handlerFromParant={this.handleData}/>
@@ -259,36 +229,11 @@ class AuthorView extends Component {
                                    onChange={this.handleOnChangeDate}
                                    placeholder='Author Date fo Birth'/>
                             <Input
->>>>>>> cdf461b39d9ef310ff2eaca3201f98ca696cfe4f
                                 type="file"
                                 name=""
                                 id="exampleFile"
                                 onChange={this.handleselectedFile}
                                 placeholder='Author Photo '/>
-<<<<<<< HEAD
-                        
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={() => this.handleUpdateAuthor()}>Edit Author</Button>{' '}
-                        <Button color="secondary" onClick={()=>this.toggle(null)}>Close</Button>
-                    </ModalFooter>
-                </Modal>
-                <Table>
-                    <thead>
-                    <tr>
-                        <th>Author Photo</th>
-                        <th>Author Full-Name</th>
-                        <th>Author Date Of Birth </th>
-                        <th>#</th>
-                        <th>#</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {authorsView}
-                    </tbody>
-                </Table>
-            </div>
-=======
 
                         </ModalBody>
                         <ModalFooter>
@@ -312,7 +257,6 @@ class AuthorView extends Component {
                     </Table>
                 </div>
                 : <Redirect to={{pathname: '/', state: {from: this.props.location}}}/>
->>>>>>> cdf461b39d9ef310ff2eaca3201f98ca696cfe4f
         );
     }
 }

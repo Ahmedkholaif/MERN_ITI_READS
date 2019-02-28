@@ -3,7 +3,7 @@ import axios from "axios";
 import {Alert, Button, Table} from "reactstrap";
 import AddBook from '../components/AddBook';
 import {Input, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
-import {Redirect} from 'react-router'
+import {Redirect} from 'react-router-dom'
 class BookView extends Component {
     constructor(props) {
         super(props);
@@ -99,59 +99,45 @@ class BookView extends Component {
 
                  data.append("body", JSON.stringify(this.state.book));
                  const conf = {
-                    // onUploadProgress: ProgressEvent => {
-                    // this.setState({
-                    //     loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
-                    // });
-                    // },
+                    onUploadProgress: ProgressEvent => {
+                    this.setState({
+                        loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
+                    });
+                    },
                     headers: {
                     "Content-Type": "application/json",
                     "x-auth": token
                     }
                 };
+                data.append("body", JSON.stringify(this.state.book));
+                axios.put(`/api/admin/books/${id}`, data, conf)
+                .then(res => {
+                    console.log(res);
+                    if (res.status === 200) {
+                        books[key].img = res.data.img;
 
-                        data.append("body", JSON.stringify(this.state.book));
-                        const conf = {
-                            onUploadProgress: ProgressEvent => {
-                                this.setState({
-                                    loaded: (ProgressEvent.loaded / ProgressEvent.total) * 100
-                                });
+                        this.setState({
+                            books,
+                            book: {
+                               bookName: '',
+                                description: '',
+                                author: '',
+                                category: '',
                             },
-                            headers: {
-                                "Content-Type": "application/json",
-                                "x-auth": token
+                            IdEdit: 0
+                            });
+                                console.log(res.data.img);
+
+                            } else {
+                                console.log("not updated in db");
                             }
-                        };
-
-                        axios.put(`/api/admin/books/${id}`, data, conf)
-                            .then(res => {
-                                console.log(res);
-                                if (res.status === 200) {
-                                    books[key].img = res.data.img;
-
-                                    this.setState({
-                                        books,
-                                        book: {
-                                            bookName: '',
-                                            description: '',
-                                            author: '',
-                                            category: '',
-                                        },
-                                        IdEdit: 0
-                                    });
-
-                                    console.log(res.data.img);
-
-                                } else {
-                                    console.log("not updated in db");
-                                }
-                            })
-                            .catch(err => {
-                                console.log({err});
-                                this.setState({error: 'Error Delete Operation'})
-                            })
-                    }
+                        })
+                        .catch(err => {
+                            console.log({err});
+                            this.setState({error: 'Error Delete Operation'})
+                        })
                 }
+            }
             }
         }
     }

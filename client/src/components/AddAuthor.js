@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader, Input} from "reactstrap";
 import axios from "axios";
-
+import {Redirect} from 'react-router-dom'
 
 class AddAuthor extends Component {
     constructor(props) {
