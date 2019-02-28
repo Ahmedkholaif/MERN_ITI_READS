@@ -4,16 +4,11 @@ const Book = require('../models/Book');
 const User = require('../models/User');
 const Author = require('../models/Author');
 
-const bookRouter = require('./userBookRouter');
 
 const authorRouter = require('./userAuthorRouter');
 const categoryRouter = require('./userCategoryRoute');
-const Book = require("../models/Book");
-const User = require("../models/User");
 const bookRouter = require("./userBookRouter");
 
-const authorRouter = require("./userAuthorRouter");
-const categoryRouter = require("./userCategoryRoute");
 
 const perPage = 10;
 const { authenticate, auth_Admin } = require("../helpers/Auth");
@@ -126,7 +121,8 @@ const editBookState = (bookName, mode, rate, res) => {
     else{
         res.status(404).send()
     }
-})})
+ })
+}}
 // edit the book
 router.put("/:bookName",(req,res)=>{
     const mode = req.query.mode;
