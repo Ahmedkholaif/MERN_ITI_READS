@@ -1,0 +1,32 @@
+.row{
+    margin: 0 auto !important;
+}
+
+.bookBody{
+    margin-top:10vh !important; 
+}
+.authorInfo{
+    text-align: left;
+}
+.authorInfo>a{
+    display: block;
+    text-decoration: none;
+}
+.authorInfo>h3{
+    display: block;
+}
+.authorInfo>p{
+    display: block;
+}
+
+hr{
+    background-color: black;
+    width: 100%;
+    margin: 2vh auto;
+}
+
+.authorBooks{
+    border: 2px solid #000;
+    border-radius: 5px;
+    padding: 5vh;
+}
