@@ -21,7 +21,6 @@ class UserHomePage extends Component {
             books: [],
         }
 
-<<<<<<< HEAD
     
     this.state = {
       isOpen: false,
@@ -29,8 +28,6 @@ class UserHomePage extends Component {
       itemsCount:1,
       shelf : "all",
       books:[],
-=======
->>>>>>> cdf461b39d9ef310ff2eaca3201f98ca696cfe4f
     }
 
 
@@ -57,7 +54,6 @@ class UserHomePage extends Component {
         }
 
     }
-<<<<<<< HEAD
     axios.get(`/api/users/current?page=${this.state.activePage}?mode=${this.state.shelf}`,conf
     )
     .then(res =>{
@@ -69,8 +65,6 @@ class UserHomePage extends Component {
     })
     .catch(err => console.log(err))
   }
-=======
->>>>>>> cdf461b39d9ef310ff2eaca3201f98ca696cfe4f
 
 // test = setInterval(() => {
 //   alert(this.state.books[0].rate)
@@ -104,7 +98,6 @@ sendRequestShelf = (shelf)=>
   }
 }
 
-<<<<<<< HEAD
 displayAllBooks =()=>{
   if(this.state.shelf!=="all")
   {
@@ -216,67 +209,6 @@ handelPagination = (pageNum)=>
     );
   }
 }
-=======
-    displayAllBooks = () => {
-        if (this.state.shelf !== "all") {
-            this.setState({
-                shelf: "all",
-                activePage: 1,
-            })
-        }
-    }
-    displayReadBooks = () => {
-        if (this.state.shelf !== "read") {
-            this.setState({
-                shelf: "read",
-                activePage: 1,
-            })
-        }
-    }
-    displayCurrentlyReadingBooks = () => {
-        if (this.state.shelf !== "current") {
-            this.setState({
-                shelf: "current",
-                activePage: 1,
-            })
-        }
-    }
-    displayToReadBooks = () => {
-        if (this.state.shelf !== "toRead") {
-            this.setState({
-                shelf: "toRead",
-                activePage: 1,
-            })
-        }
-    }
-
-
-    handelPagination = (pageNum) => {
-        console.log("page", pageNum, "----", this.state.books)
-        const token = localStorage.token;
-        if (token) {
-            const conf = {
-                params: {
-                    page: `${this.state.activePage}`,
-                    mode: `${this.state.shelf}`
-                },
-                headers: {
-                    "x-auth": token,
-                }
-            }
-            axios.get(`/api/users/current?page=${this.state.pageNum}&mode=${this.state.shelf}`, conf
-            )
-                .then(res => {
-                    this.setState({
-                        books: res.data.books,
-                        activePage: pageNum
-                    })
-                })
-                .catch(err => console.log(err))
-        }
-        console.log("page", pageNum, "----", this.state.books)
-    }
->>>>>>> cdf461b39d9ef310ff2eaca3201f98ca696cfe4f
 
     render() {
         return (
