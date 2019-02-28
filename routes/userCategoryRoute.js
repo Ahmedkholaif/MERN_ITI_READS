@@ -14,13 +14,18 @@ router.get("/", (req, res) => {
 router.get("/:categoryName", (req, res) => {
   let cat = req.params.categoryName;
   const page = req.query.page;
-  Book.find({ category: cat })
+  Book.count({category:cat},(err,count)=>{
+    Book.find({ category: cat })
     .skip(page > 0 ? (page - 1) * perPage : 0)
     .limit(perPage)
-    .exec(function(err, data) {
+    .exec(function(err, books) {
       if (err) throw err;
+      data = {books,count}
       res.json(data);
     });
+
+  })
+
 });
 
 module.exports = router;

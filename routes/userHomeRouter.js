@@ -24,8 +24,8 @@ router.get("/", (req, res) => {
   const { email, img } = req.user;
   const page = req.query.page;
   const mode = req.query.mode;
-  let start = (page > 0 ? page - 1 : 0) * 5; //start from index ( 0 , 5 , 10 , 15)
-  let end = start + 5;
+  let start = (page > 0 ? page - 1 : 0) * 4; //start from index ( 0 , 5 , 10 , 15)
+  let end = start + 4;
   let pipeline;
   if (mode !== "all") {
     pipeline = [
@@ -35,7 +35,7 @@ router.get("/", (req, res) => {
       { $project: { books: 1, _id: 0 } }, //to only keep books and user's id
       { $project: { "books._id": 0 } }, // to remove book id
       { $skip: start }, //for pagunation
-      { $limit: end }
+      { $limit: 4 }
     ];
   } else {
     console.log(page);
@@ -45,7 +45,7 @@ router.get("/", (req, res) => {
       { $project: { books: 1, _id: 0 } },
       { $project: { "books._id": 0 } },
       { $skip: start },
-      { $limit: end }
+      { $limit: 4 }
     ];
   }
   User.findOne({ email: req.user.email }, (err, user) => {
