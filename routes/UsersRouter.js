@@ -8,49 +8,50 @@ const bcrypt = require('bcryptjs');
 const router = express.Router();
 const { authenticate, auth_Admin } = require('../helpers/Auth');
 router.post('/register', (req, res) => {
-    
-    const body =JSON.parse(req.body.body);
-    console.log(req.body);
-    console.log(body);
-    let img ;
-    let uploadFile = req.files.file ;
-    const fileName = `${new Date().toISOString()}${Math.random()}${req.files.file.name}` ;
-    
-    const firstName = body.firstName;
-    const lastName = body.lastName;
-    const email = body.email;
-    const password = body.password;
-   
-    User.findOne({email})
-    .then(user=>{
-        if(user) {
-            return res.status(400).json({err:"Email already exists "});
-        }else {
-            uploadFile.mv(
-                `${__dirname}/../public/${fileName}`,
-                (err)=> {
-                    if(err) {return res.status(500).send(err)}
-        
-                    img =  `../../../${fileName}`;
-                   
-                    const user = new User({
-                        firstName ,
-                        lastName,
-                        email,
-                        password,
-                        img
-                        })
-                    user.save()
-                    .then ( () =>  {
-                        return user.getAuthToken();})
-                        .then(token => {
-                            console.log(user);
-                            res.header('x-auth',token).send(user);
-                        })
-                    .catch(err => res.status(404).send({err,err:"save error"}));
-                    });
-        }
-    } )
+
+  const body = JSON.parse(req.body.body);
+  console.log(req.body);
+  console.log(body);
+  let img;
+  let uploadFile = req.files.file;
+  const fileName = `${new Date().toISOString()}${Math.random()}${req.files.file.name}`;
+
+  const firstName = body.firstName;
+  const lastName = body.lastName;
+  const email = body.email;
+  const password = body.password;
+
+  User.findOne({ email })
+    .then(user => {
+      if (user) {
+        return res.status(400).json({ err: "Email already exists " });
+      } else {
+        uploadFile.mv(
+          `${__dirname}/../public/${fileName}`,
+          (err) => {
+            if (err) { return res.status(500).send(err) }
+
+            img = `../../../${fileName}`;
+
+            const user = new User({
+              firstName,
+              lastName,
+              email,
+              password,
+              img
+            })
+            user.save()
+              .then(() => {
+                return user.getAuthToken();
+              })
+              .then(token => {
+                console.log(user);
+                res.header('x-auth', token).send(user);
+              })
+              .catch(err => res.status(404).send({ err, err: "save error" }));
+          });
+      }
+    })
 });
 router.post("/register", (req, res) => {
   const body = JSON.parse(req.body.body);
@@ -60,7 +61,7 @@ router.post("/register", (req, res) => {
   let uploadFile = req.files.file;
   const fileName = `${new Date().toISOString()}${Math.random()}${
     req.files.file.name
-  }`;
+    }`;
 
   const firstName = body.firstName;
   const lastName = body.lastName;

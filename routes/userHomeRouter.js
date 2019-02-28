@@ -130,8 +130,6 @@ const editBookState = (bookName, mode, rate, res) => {
           { email: req.user.email, "books.bookInfo": book_id }, //firstName willbe req.user._id
           { $set: { "books.$.rate": rate } },
           (err, dataa) => {
-            console.log(dataa);
-            console.log(err);
             res.status(200).send();
           }
         );
@@ -159,7 +157,6 @@ router.get("/search", (req, res) => {
       { bookName: { $regex: ".*" + q + ".*", $options: "i" } },
       (err, result) => {
         if (err) return handleError(err);
-        console.log(result);
         res.json(result);
       }
     );
@@ -168,7 +165,6 @@ router.get("/search", (req, res) => {
       { fullName: { $regex: ".*" + q + ".*", $options: "i" } },
       (err, result) => {
         if (err) return handleError(err);
-        console.log(result);
         res.json(result);
       }
     );
@@ -201,7 +197,7 @@ router.get("/search", (req, res) => {
 
 //Routes for testing
 router.get("/addUserBook", (req, res, next) => {
-  Book.findOne({ bookName: "ahemd fi belad el 3ga2eb" }, (err, data) => {
+  Book.findOne({ bookName: "Hatchet" }, (err, data) => {
     let book = { bookInfo: data, shelf: "read", rate: 2 };
     User.findOneAndUpdate(
       { email: "ahmed_kholaif@yahoo.com" },

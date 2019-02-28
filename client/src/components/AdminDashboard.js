@@ -1,11 +1,11 @@
 import React from 'react';
-import {TabContent, TabPane, Button, Nav, NavItem, NavLink, Col} from 'reactstrap';
+import { TabContent, TabPane, Button, Nav, NavItem, NavLink, Col } from 'reactstrap';
 import classnames from 'classnames';
 import CategoriesView from '../components/CategoriesView'
 import AuthorView from '../components/AuthorView'
 import BookView from '../components/BookView'
 import axios from 'axios';
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import '../css/AdminLogin.css';
 
 
@@ -22,19 +22,19 @@ export default class Example extends React.Component {
         };
     }
 
-    handleSignout() {
-        // event.preventDefault();
-        if(localStorage.token){
-            const conf= {
-                headers: {'x-auth':localStorage.token}
+    handleSignout(event) {
+        event.preventDefault();
+        if (localStorage.token) {
+            const conf = {
+                headers: { 'x-auth': localStorage.token }
             };
-            axios.delete('/api/signout',conf)
-                .then(response=>{
+            axios.delete('/api/signout', conf)
+                .then(response => {
                     localStorage.clear();
                     window.location.href = '/';
-                }).catch(error=>{
+                }).catch(error => {
                     console.log(error);
-            });
+                });
         }
     }
 
@@ -66,7 +66,7 @@ export default class Example extends React.Component {
                     <Nav tabs>
                         <NavItem>
                             <NavLink
-                                className={classnames({active: this.state.activeTab === '1'})}
+                                className={classnames({ active: this.state.activeTab === '1' })}
                                 onClick={() => {
                                     this.toggle('1');
                                 }}
@@ -76,7 +76,7 @@ export default class Example extends React.Component {
                         </NavItem>
                         <NavItem>
                             <NavLink
-                                className={classnames({active: this.state.activeTab === '2'})}
+                                className={classnames({ active: this.state.activeTab === '2' })}
                                 onClick={() => {
                                     this.toggle('2');
                                 }}
@@ -86,7 +86,7 @@ export default class Example extends React.Component {
                         </NavItem>
                         <NavItem>
                             <NavLink
-                                className={classnames({active: this.state.activeTab === '3'})}
+                                className={classnames({ active: this.state.activeTab === '3' })}
                                 onClick={() => {
                                     this.toggle('3');
                                 }}
@@ -99,22 +99,22 @@ export default class Example extends React.Component {
                     <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId="1">
                             <Col sm="12">
-                                <CategoriesView passCategories={this.handlePassCategoriesProps}/>
+                                <CategoriesView passCategories={this.handlePassCategoriesProps} />
                             </Col>
                         </TabPane>
                         <TabPane tabId="2">
                             <Col sm="12">
-                                <BookView categories={this.state.categories} authors={this.state.authors}/>
+                                <BookView categories={this.state.categories} authors={this.state.authors} />
                             </Col>
                         </TabPane>
                         <TabPane tabId="3">
                             <Col sm="12">
-                                <AuthorView passAuthors={this.handlePassAuthorsProps}/>
+                                <AuthorView passAuthors={this.handlePassAuthorsProps} />
                             </Col>
                         </TabPane>
                     </TabContent>
                 </div>
-                : <Redirect to={{pathname: '/', state: {from: this.props.location}}}/>
+                : <Redirect to={{ pathname: '/', state: { from: this.props.location } }} />
         );
     }
 }

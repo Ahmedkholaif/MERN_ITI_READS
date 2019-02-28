@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {Table, Button, Alert, ModalHeader, ModalBody, ModalFooter, Modal, Input} from "reactstrap";
+import React, { Component } from 'react';
+import { Table, Button, Alert, ModalHeader, ModalBody, ModalFooter, Modal, Input } from "reactstrap";
 import axios from 'axios';
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import '../css/CategoriesView.css';
 import AddCategory from './AddCategory';
 
@@ -51,7 +51,7 @@ class CategoriesView extends Component {
             for (let key in categories) {
                 if (categories[key]._id === id) {
                     categories[key].catName = title;
-                    this.setState({categories: categories});
+                    this.setState({ categories: categories });
                     this.setState({
                         NameEdit: '',
                         idEdit: ''
@@ -77,8 +77,8 @@ class CategoriesView extends Component {
                                 }
                             })
                             .catch(err => {
-                                console.log({err});
-                                this.setState({error: 'Error Delete Operation'})
+                                console.log({ err });
+                                this.setState({ error: 'Error Delete Operation' })
                             })
                     }
                 }
@@ -112,7 +112,7 @@ class CategoriesView extends Component {
                 .catch(err => {
                     console.log(err)
                 })
-            this.setState({error: 'Error reteiriving data'})
+            this.setState({ error: 'Error reteiriving data' })
         }
     }
 
@@ -135,19 +135,19 @@ class CategoriesView extends Component {
                 .catch(err => {
                     console.log(err)
                 })
-            this.setState({error: 'Error Delete Operation'})
+            this.setState({ error: 'Error Delete Operation' })
         }
-        this.setState({categories: this.state.categories.filter(category => category._id !== deletedId)});
+        this.setState({ categories: this.state.categories.filter(category => category._id !== deletedId) });
 
     }
 
     handleOnChange = event => {
-        this.setState({NameEdit: event.target.value});
+        this.setState({ NameEdit: event.target.value });
         console.log(this.state.NameEdit);
     }
 
     render() {
-        const {categories, error} = this.state;
+        const { categories, error } = this.state;
         const categoriesView = categories.length ? categories.map(category =>
             <tr key={category._id}>
                 <td>{category.catName}</td>
@@ -159,13 +159,13 @@ class CategoriesView extends Component {
         return (
             localStorage.token ?
                 <div className='CategoriesTable'>
-                    <AddCategory categories={this.state.categories} handlerFromParant={this.handleData}/>
+                    <AddCategory categories={this.state.categories} handlerFromParant={this.handleData} />
                     <Modal isOpen={this.state.modal} toggle={() => this.toggle()}
-                           className={this.props.className}>
+                        className={this.props.className}>
                         <ModalHeader>Add Category</ModalHeader>
                         <ModalBody>
                             <Input type="text" defaultValue={this.state.NameEdit} onChange={this.handleOnChange}
-                                   placeholder='Category Name'/>
+                                placeholder='Category Name' />
                         </ModalBody>
                         <ModalFooter>
                             <Button color="primary" onClick={() => this.handleUpdateCategory()}>Edit
@@ -175,18 +175,18 @@ class CategoriesView extends Component {
                     </Modal>
                     <Table>
                         <thead>
-                        <tr>
-                            <th>Category Name</th>
-                            <th>#</th>
-                            <th>#</th>
-                        </tr>
+                            <tr>
+                                <th>Category Name</th>
+                                <th>#</th>
+                                <th>#</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {categoriesView}
+                            {categoriesView}
                         </tbody>
                     </Table>
                 </div>
-                : <Redirect to={{pathname: '/', state: {from: this.props.location}}}/>
+                : <Redirect to={{ pathname: '/', state: { from: this.props.location } }} />
         );
     }
 }

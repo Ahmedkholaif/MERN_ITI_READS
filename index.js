@@ -1,6 +1,6 @@
 const express = require('express');
 require('./mongo-conf.js');
-const PORT = process.env.PORT || 3002 ;
+const PORT = process.env.PORT || 3002;
 const userRouter = require('./routes/UsersRouter');
 const adminRouter = require('./routes/AdminRouter');
 const fileUpload = require('express-fileupload');
@@ -12,15 +12,15 @@ app.use(express.json());
 app.use(fileUpload());
 
 app.use(express.static('public'));
-app.use('/api/users',userRouter);
-app.use('/api/admin',adminRouter);
+app.use('/api/users', userRouter);
+app.use('/api/admin', adminRouter);
 
 app.delete("/api/signout", authenticate, (req, res) => {
     req.user
-      .removeToken(req.token)
-      .then(() => res.status(200).send())
-      .catch(() => res.status(404).send());
-  });
+        .removeToken(req.token)
+        .then(() => res.status(200).send())
+        .catch(() => res.status(404).send());
+});
 
 // app.use('/api',)//The home page
 //----------------User routes ------------------------

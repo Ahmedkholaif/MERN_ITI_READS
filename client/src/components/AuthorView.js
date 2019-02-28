@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../css/AuthorView.css';
 import AddAuthor from './AddAuthor';
 import axios from "axios";
-import {Alert, Button, Input, Modal, ModalBody, ModalFooter, ModalHeader, Table} from "reactstrap";
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
+import { Alert, Button, Input, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 
 class AuthorView extends Component {
     constructor(props) {
@@ -99,13 +99,13 @@ class AuthorView extends Component {
                                     authors[key].img = res.data.img;
 
                                     this.setState({
-                                            authors,
-                                            author: {
-                                                fullName: '',
-                                                dateOfBirth: '',
-                                            },
-                                            IdEdit: 0
-                                        }
+                                        authors,
+                                        author: {
+                                            fullName: '',
+                                            dateOfBirth: '',
+                                        },
+                                        IdEdit: 0
+                                    }
                                     );
                                     // console.log(res.data.img);
                                 } else {
@@ -113,8 +113,8 @@ class AuthorView extends Component {
                                 }
                             })
                             .catch(err => {
-                                console.log({err});
-                                this.setState({error: 'Error Delete Operation'})
+                                console.log({ err });
+                                this.setState({ error: 'Error Delete Operation' })
                             })
                     }
                 }
@@ -145,9 +145,9 @@ class AuthorView extends Component {
                 .catch(err => {
                     console.log(err)
                 })
-            this.setState({error: 'Error Delete Operation'})
+            this.setState({ error: 'Error Delete Operation' })
         }
-        this.setState({authors: this.state.authors.filter(author => author._id !== deletedId)});
+        this.setState({ authors: this.state.authors.filter(author => author._id !== deletedId) });
     }
 
     componentDidMount() {
@@ -162,17 +162,17 @@ class AuthorView extends Component {
                 .then(response => {
                     console.log(response);
                     this.setState(
-                        {authors: response.data.authors}
+                        { authors: response.data.authors }
                     );
                     this.props.passAuthors(response.data.authors);
 
 
                 }).catch(error => {
-                console.log(error);
-                this.setState({error: 'Error reteiriving data'})
-            })
+                    console.log(error);
+                    this.setState({ error: 'Error reteiriving data' })
+                })
         }
-        
+
     }
 
     handleOnChangefullName = event => {
@@ -203,10 +203,10 @@ class AuthorView extends Component {
     };
 
     render() {
-        const {authors, error} = this.state;
+        const { authors, error } = this.state;
         const authorsView = authors.length ? authors.map(author =>
             <tr key={author._id}>
-                <td><img src={author.img} alt="img" width="75" height="75"/></td>
+                <td><img src={author.img} alt="img" width="75" height="75" /></td>
                 <td>{author.fullName}</td>
                 <td>{author.dateOfBirth}</td>
                 <td><Button color='danger' onClick={() => this.handleDeleteAuthor(author._id)}>Delete</Button></td>
@@ -217,23 +217,23 @@ class AuthorView extends Component {
         return (
             localStorage.token ?
                 <div>
-                    <AddAuthor authors={this.state.authors} handlerFromParant={this.handleData}/>
+                    <AddAuthor authors={this.state.authors} handlerFromParant={this.handleData} />
                     <Modal isOpen={this.state.modal} toggle={() => this.toggle()}
-                           className={this.props.className}>
+                        className={this.props.className}>
                         <ModalHeader>Edit Author</ModalHeader>
                         <ModalBody>
                             <Input type="text" defaultValue={this.state.author.fullName}
-                                   onChange={this.handleOnChangefullName}
-                                   placeholder='Full FIrstName'/>
+                                onChange={this.handleOnChangefullName}
+                                placeholder='Full FIrstName' />
                             <Input type="date" defaultValue={this.state.author.dateOfBirth}
-                                   onChange={this.handleOnChangeDate}
-                                   placeholder='Author Date fo Birth'/>
+                                onChange={this.handleOnChangeDate}
+                                placeholder='Author Date fo Birth' />
                             <Input
                                 type="file"
                                 name=""
                                 id="exampleFile"
                                 onChange={this.handleselectedFile}
-                                placeholder='Author Photo '/>
+                                placeholder='Author Photo ' />
 
                         </ModalBody>
                         <ModalFooter>
@@ -243,20 +243,20 @@ class AuthorView extends Component {
                     </Modal>
                     <Table>
                         <thead>
-                        <tr>
-                            <th>Author Photo</th>
-                            <th>Author Full-Name</th>
-                            <th>Author Date Of Birth</th>
-                            <th>#</th>
-                            <th>#</th>
-                        </tr>
+                            <tr>
+                                <th>Author Photo</th>
+                                <th>Author Full-Name</th>
+                                <th>Author Date Of Birth</th>
+                                <th>#</th>
+                                <th>#</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {authorsView}
+                            {authorsView}
                         </tbody>
                     </Table>
                 </div>
-                : <Redirect to={{pathname: '/', state: {from: this.props.location}}}/>
+                : <Redirect to={{ pathname: '/', state: { from: this.props.location } }} />
         );
     }
 }

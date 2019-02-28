@@ -8,32 +8,37 @@ const perPage = 10;
 
 router.get("/", (req, res) => {
   const page = req.query.page;
-  Author.count({},(err,count)=>{
-  Author.find({})
+  Author.count({}, (err, count) => {
+    Author.find({})
       .skip(page > 0 ? (page - 1) * perPage : 0)
       .limit(perPage)
-      .exec(function(err, authors) {
+      .exec(function (err, authors) {
         if (err) throw err;
-        data = {authors,count}
+        data = { authors, count }
         res.json(data);
       })
-  ;
-})});
+      ;
+  })
+});
 // Get the books of the Author has been selected
 router.get("/:authorName", (req, res) => {
   let author = req.params.authorName;
   const page = req.query.page;
   console.log((page - 1) * perPage);
-  Book.count({author:author},(err,count)=>{
-    Book.find({ author: author })
-    .skip(page > 0 ? (page - 1) * perPage : 0)
-    .limit(perPage)
-    .exec(function(err, books) {
-      if (err) throw err;
-      data = {books,count}
+  Author.findOne({ fullName: author }, (error, authorData) => {
+    Book.count({ author: author }, (err, count) => {
+      Book.find({ author: author })
+        .skip(page > 0 ? (page - 1) * perPage : 0)
+        .limit(perPage)
+        .exec(function (err, books) {
+          if (err) throw err;
+          data = { books, count, name: authorData.fullName, img: authorData.img }
+          console.log(data);
+          res.json(data);
+        });
+    })
+  })
 
-      res.json(data);
-    });
-})});
+});
 
 module.exports = router;
