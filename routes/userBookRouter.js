@@ -11,7 +11,7 @@ router.get("/", (req, res, next) => {
   Book.find({})
     .skip(page > 0 ? (page - 1) * perPage : 0)
     .limit(perPage)
-    .exec(function(err, books) {
+    .exec(function (err, books) {
       if (err) res.status(404).send({ err });
       res.status(200).json({ books });
     });
@@ -70,7 +70,14 @@ router.get("/:bookName", (req, res, next) => {
 //change books state
 router.put("/:bookName", (req, res, next) => {
   let mode = req.query.mode;
-  let userRate = parseInt(req.query.rate);
+
+  let userRate;
+  if (req.query.rate) {
+    userRate = parseInt(req.query.rate)
+  }
+  else {
+    userRate = 0;
+  }
   let bookName = req.params.bookName;
   if (
     mode === "read" ||
@@ -90,13 +97,14 @@ router.put("/:bookName", (req, res, next) => {
             // if the user own it use the editBookState in userHomeRouter
             userHomeRouter.editBookState(bookName, mode, userRate, res);
           } else {
-            if (userRate !== null) {
+            console.log(userRate);
+            if (userRate !== 0) {
               // if the user rated it it will be automatically turned to read
               mode = "read";
             }
             //now the book object will get ready to be added to the user books with the following props
             let book = {
-              book: queriedBook,
+              bookInfo: queriedBook,
               shelf: mode,
               rate: userRate
             };
@@ -115,13 +123,15 @@ router.put("/:bookName", (req, res, next) => {
                 }
               }
             );
+            // console.log(req.user.email);
             //motaz will be changed to req.user.userName
             //add the book to the user
-            User.updateOne(
+            User.findOneAndUpdate(
               { email: req.user.email },
-              { $push: { books: bookInfo } },
+              { $push: { books: book } },
               (err, data) => {
-                console.log(data);
+                // console.log(err);
+                // console.log(data);
                 res.status(200).send();
               }
             );

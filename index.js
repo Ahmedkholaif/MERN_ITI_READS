@@ -1,6 +1,6 @@
 const express = require('express');
 require('./mongo-conf.js');
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3020;
 const userRouter = require('./routes/UsersRouter');
 const adminRouter = require('./routes/AdminRouter');
 const fileUpload = require('express-fileupload');

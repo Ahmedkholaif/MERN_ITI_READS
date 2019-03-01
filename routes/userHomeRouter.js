@@ -59,7 +59,7 @@ router.get("/", (req, res) => {
     } else {
       count = user.books.length;
     }
-    User.aggregate(pipeline, function(err, result) {
+    User.aggregate(pipeline, function (err, result) {
       console.log(result);
       if (err) {
         res.status(500).send();
@@ -94,7 +94,7 @@ router.get("/", (req, res) => {
   });
 });
 //this is used to add rating or to change shelve
-const editBookState = (bookName, mode, rate, res) => {
+const editBookState = (bookName, mode, rate, res, req) => {
   let book_id;
   if (mode === "read" || mode === "current" || mode === "toRead") {
     Book.findOne({ bookName: bookName }, (err, data) => {
@@ -144,7 +144,7 @@ router.put("/:bookName", (req, res) => {
   const mode = req.query.mode;
   const rate = parseInt(req.query.rate);
   const bookName = req.params.bookName;
-  editBookState(bookName, mode, rate, res);
+  editBookState(bookName, mode, rate, res, req);
 });
 
 //use GET : /api/users/search?type=book&title=Blue+Cat
@@ -202,7 +202,7 @@ router.get("/addUserBook", (req, res, next) => {
     User.findOneAndUpdate(
       { email: "ahmed_kholaif@yahoo.com" },
       { $push: { books: book } },
-      (err, dataa) => {}
+      (err, dataa) => { }
     );
     res.send("done");
   });
