@@ -5,6 +5,7 @@ const userRouter = require('./routes/UsersRouter');
 const adminRouter = require('./routes/AdminRouter');
 const fileUpload = require('express-fileupload');
 const { authenticate, auth_Admin } = require('./helpers/Auth');
+const path = require ('path');
 const app = express();
 
 app.use(express.json());
@@ -54,6 +55,13 @@ app.delete("/api/signout", authenticate, (req, res) => {
 //use POST : /api/admin/categories                          to add category
 //use PUT : /api/admin/categories/categoryName              to edit  category
 //use DELETE : /api/admin/categories/categotyName           to delete  category
-app.listen(PORT, () => {
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+    app.get('*',(req,res)=>{
+        res.sendFile(path.resolve(__dirname,'client','index.html'));
+    })
+}
+
+app.listen(PORT,()=>{
     console.log(`Server Started at port ${PORT}`);
 });

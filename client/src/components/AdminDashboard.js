@@ -94,7 +94,7 @@ export default class Example extends React.Component {
                                 Authors
                             </NavLink>
                         </NavItem>
-                        <Button color='danger' onClick={() => this.handleSignout}>SignOut</Button>
+                        <Button color='danger' onClick={this.handleSignout}>SignOut</Button>
                     </Nav>
                     <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId="1">
