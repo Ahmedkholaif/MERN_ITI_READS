@@ -41,7 +41,6 @@ class UserHomePage extends Component {
           conf
         )
         .then(res => {
-          console.log(res.data);
           this.setState({
             books: res.data.books,
             itemsCount: res.data.count
@@ -70,7 +69,6 @@ class UserHomePage extends Component {
       axios
         .get(`/api/users/current`, conf)
         .then(res => {
-          console.log(conf.params.mode, res.data.books);
 
           this.setState({
             books: res.data.books,

@@ -73,7 +73,7 @@ class SingleHomePage extends Component {
             </Row>
             <Row>
               <Col className="p-0 authorInfo">
-                <p>Book Summary</p>
+                <h3>{this.state.author.name}</h3>
               </Col>
             </Row>
           </Col>
@@ -89,7 +89,7 @@ class SingleHomePage extends Component {
                     <img src={book.img} width="40" />
                   </Col>
                   <Col>
-                    <Link to="#" replace>
+                    <Link to={`/book?${book.bookName}`} replace>
                       {book.bookName}
                     </Link>
                   </Col>

@@ -50,7 +50,6 @@ class AddAuthor extends Component {
                 };
                 axios.post('/api/admin/authors', data, conf)
                     .then(response => {
-                        console.log(response);
                         const authorsProps = this.props.authors;
                         authorsProps.push(response.data.author);
                         this.setState({ authors: authorsProps });
@@ -58,7 +57,6 @@ class AddAuthor extends Component {
                         this.setState({ authors: '' });
 
                     }).catch(error => {
-                        console.log(error);
                     });
             }
         }

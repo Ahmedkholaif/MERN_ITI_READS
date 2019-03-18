@@ -96,7 +96,7 @@ router.get("/", (req, res) => {
 //this is used to add rating or to change shelve
 const editBookState = (bookName, mode, rate, res, req) => {
   let book_id;
-  if (mode === "read" || mode === "current" || mode === "toRead") {
+  if (mode === "Read" || mode === "current" || mode === "toRead") {
     Book.findOne({ bookName: bookName }, (err, data) => {
       if (err) {
         res.status(404).send();

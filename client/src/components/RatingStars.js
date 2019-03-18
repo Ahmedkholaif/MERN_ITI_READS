@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import StarRatingComponent from 'react-star-rating-component';
+import axios from "axios";
 
 
 /*
@@ -14,19 +15,37 @@ this component accept the next props:
 class RatingStars extends Component {
     constructor(props) {
         super(props);
-     
-        this.state = {
+          this.state = {
           rating: this.props.rate,
           books:props.books,
         };
         this.onStarClick = this.onStarClick.bind(this);
       }
-     
       onStarClick(nextValue, prevValue, name) {
+        
         const newBooks = this.state.books.map(book=>{
             if(book.bookInfo.bookName == name)
             {
               book.rate = nextValue;
+              const token = localStorage.token;
+              if (token) {
+                const conf = {
+               
+                  headers: {
+                    "x-auth": token
+                  }
+                };
+                axios
+                  .put(
+                    `/api/users/current/${name}?mode=rating&rate=${book.rate} `,{},
+                    conf
+                  )
+                  .then(res => {
+                    console.log(res);
+                    this.setState({books:newBooks});
+                  })
+                  .catch(err => console.log(err));
+              }
             }
             return book;
           })
@@ -44,14 +63,14 @@ class RatingStars extends Component {
 
       render() {
         const { rating } = this.state;
-        
         return (                
           <div>
             <StarRatingComponent 
               name={this.props.name} 
               starCount={5}
               value={rating}
-              onStarClick={this.props.clickable ? this.onStarClick.bind(this) : ""}
+              onStarClick={
+                this.props.clickable ? this.onStarClick.bind(this)  : ""}
              starColor={"#DA5637"}
             />
           </div>

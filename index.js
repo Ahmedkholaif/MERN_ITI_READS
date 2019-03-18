@@ -1,11 +1,11 @@
 const express = require('express');
 require('./mongo-conf.js');
-const PORT = process.env.PORT || 3002;
+const PORT = 4002;
 const userRouter = require('./routes/UsersRouter');
 const adminRouter = require('./routes/AdminRouter');
 const fileUpload = require('express-fileupload');
 const { authenticate, auth_Admin } = require('./helpers/Auth');
-const path = require ('path');
+const path = require ('path'); 
 const app = express();
 
 app.use(express.json());

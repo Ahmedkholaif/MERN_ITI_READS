@@ -7,11 +7,11 @@ import DropDownShelves from "./DropDownShelves";
 import RatingStars from "./RatingStars";
 import axios from "axios";
 let avgRate;
+let clickable = true;
 
 class SingleHomePage extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       book: {
         bookInfo: {}
@@ -23,7 +23,6 @@ class SingleHomePage extends Component {
       ]
     };
   }
-
   componentDidMount() {
     const token = localStorage.token;
     if (token) {
@@ -38,11 +37,13 @@ class SingleHomePage extends Component {
           conf
         )
         .then(res => {
-          avgRate = res.data.rate.rating / res.data.rate.number;
-
+          avgRate = res.data.rating.rating / res.data.rating.number;
           if (res.status === 200) {
+            console.log(res.data);
             let currentBook = {
-              bookInfo: res.data
+              bookInfo: res.data.bookInfo,
+              rate : res.data.rate,
+              shelf : res.data.shelf
             };
             this.setState({
               book: currentBook,
@@ -55,6 +56,9 @@ class SingleHomePage extends Component {
   }
 
   render() {
+      if (this.state.book.rate>0){
+        clickable = false;
+      }
     return (
       <div>
         <CustomNavbar />
@@ -76,8 +80,8 @@ class SingleHomePage extends Component {
             <Row>
               <Col>
                 <RatingStars
-                  rate={this.state.book.bookInfo.avgRate}
-                  clickable={true}
+                  rate={this.state.book.rate}
+                  clickable={clickable}
                   name={this.state.book.bookInfo.bookName}
                   books={this.state.books}
                 />
