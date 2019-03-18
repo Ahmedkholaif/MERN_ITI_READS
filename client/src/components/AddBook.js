@@ -34,13 +34,10 @@ class AddBook extends Component {
         this.setState(prevState => ({
             modal: !prevState.modal,
         }));
-        console.log('toogle before if', this.state.book);
         if (this.state.book.bookName === '' || this.state.book.author === '' || this.state.book.category === ''
             || this.state.book.description === ''
         ) {
-            console.log('toogle in if');
         } else {
-            console.log('toogle after if', this.state.book);
             const token = localStorage.token;
             if (token) {
                 const data = new FormData();
@@ -64,7 +61,6 @@ class AddBook extends Component {
                 };
                 axios.post('/api/admin/books', data, conf)
                     .then(response => {
-                        console.log(response);
                         const booksProps = this.props.books;
                         booksProps.push(response.data.book);
                         this.setState({

@@ -23,12 +23,16 @@ router.get("/:bookName", (req, res, next) => {
   let rate = parseInt(req.query.rate);
   // console.log(bookName);
   let bookData = {
-    bookName: null,
-    author: null,
-    category: null,
-    img: null,
-    description: null,
-    rate: { userRate: null, rating: null, number: null },
+    bookInfo : {
+      bookName: null,
+      author: null,
+      category: null,
+      img: null,
+      description: null,
+    }
+    ,
+    rating: {rating: null, number: null },
+    rate : null,
     shelf: null,
     reviews: null
   };
@@ -42,7 +46,6 @@ router.get("/:bookName", (req, res, next) => {
       .populate("books.bookInfo")
       .exec((err, userData) => {
         let book;
-        console.log(userData);
         if (userData !== null) {
           userData.books.forEach(element => {
             if (element.bookInfo.id === queriedBook.id) {
@@ -50,17 +53,17 @@ router.get("/:bookName", (req, res, next) => {
               book = element;
             }
           });
-          bookData.rate.userRate = book.rate;
+          bookData.rate = book.rate;
           bookData.shelf = book.shelf;
         }
-        bookData.bookName = queriedBook.bookName;
-        bookData.author = queriedBook.author;
-        bookData.category = queriedBook.category;
-        bookData.img = queriedBook.img;
-        bookData.description = queriedBook.description;
-        bookData.rate.rating = queriedBook.avgRate.total;
-        bookData.rate.number = queriedBook.avgRate.users;
-        bookData.reviews = queriedBook.reviews;
+        bookData.bookInfo.bookName = queriedBook.bookName;
+        bookData.bookInfo.author = queriedBook.author;
+        bookData.bookInfo.category = queriedBook.category;
+        bookData.bookInfo.img = queriedBook.img;
+        bookData.bookInfo.description = queriedBook.description;
+        bookData.rating.rating = queriedBook.avgRate.total;
+        bookData.rating.number = queriedBook.avgRate.users;
+        bookData.bookInfo.reviews = queriedBook.reviews;
         console.log(bookData);
         res.send(bookData);
       });
@@ -70,7 +73,7 @@ router.get("/:bookName", (req, res, next) => {
 //change books state
 router.put("/:bookName", (req, res, next) => {
   let mode = req.query.mode;
-
+  console.log(mode);
   let userRate;
   if (req.query.rate) {
     userRate = parseInt(req.query.rate)
@@ -80,7 +83,7 @@ router.put("/:bookName", (req, res, next) => {
   }
   let bookName = req.params.bookName;
   if (
-    mode === "read" ||
+    mode === "Read" ||
     mode === "current" ||
     mode === "toRead" ||
     mode === "rating"
@@ -95,9 +98,9 @@ router.put("/:bookName", (req, res, next) => {
         .exec((err, userData) => {
           if (userData !== null) {
             // if the user own it use the editBookState in userHomeRouter
-            userHomeRouter.editBookState(bookName, mode, userRate, res);
+            userHomeRouter.editBookState(bookName, mode, userRate, res,req);
           } else {
-            console.log(userRate);
+            console.log("not in books");
             if (userRate !== 0) {
               // if the user rated it it will be automatically turned to read
               mode = "read";
@@ -126,6 +129,7 @@ router.put("/:bookName", (req, res, next) => {
             // console.log(req.user.email);
             //motaz will be changed to req.user.userName
             //add the book to the user
+            console.log("not in books");
             User.findOneAndUpdate(
               { email: req.user.email },
               { $push: { books: book } },

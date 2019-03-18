@@ -42,8 +42,6 @@ componentDidMount(){
     axios.get(`/api/users/current/books?page=${this.state.activePage}`,conf
     )
     .then(res =>{
-      console.log(res);
-      console.log(res.data.books)
       if(res.status === 200){
       this.setState({
         books:res.data.books,

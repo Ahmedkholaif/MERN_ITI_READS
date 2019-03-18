@@ -9,7 +9,6 @@ router.post('/', auth_Admin, (req, res) => {
     const body =JSON.parse(req.body.body);
     
     let uploadFile = req.files.file ;
-    console.log(body,"reached");
     
     const fileName = `${new Date().toISOString()}${Math.random()}${req.files.file.name}` ;
     const bookName = body.bookName;
@@ -37,11 +36,9 @@ router.post('/', auth_Admin, (req, res) => {
                     });
                     book.save()
                     .then(()=>{
-                        console.log(book)
                         res.status(200).send({book});
                     })
                     .catch((e)=>{
-                        console.log(e);
                         res.status(404).send({  msg:'error' });
                     })
                 })
@@ -62,7 +59,6 @@ router.get("/", auth_Admin,(req, res) => {
 router.put("/:bookID", auth_Admin, (req, res) => {
 
     const body =JSON.parse(req.body.body);
-    console.log(body);
     let uploadFile = req.files.file ;
 
     const fileName = `${new Date().toISOString()}${Math.random()}${req.files.file.name}` ;

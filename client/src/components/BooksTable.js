@@ -21,7 +21,6 @@ class BooksTable extends Component {
   }
 
   render() {
-    console.log(this.state.books);
     return (
       <div>
         <Row>
@@ -55,6 +54,10 @@ class BooksTable extends Component {
             </thead>
             <tbody>
               {this.state.books.map(book => {
+                let clickable = true;
+                if(book.rate>0){
+                    clickable = false;
+                }
                 let averageRate =
                   book.bookInfo.avgRate.total / book.bookInfo.avgRate.users;
                 return (
@@ -79,12 +82,13 @@ class BooksTable extends Component {
                     <td>
                       <RatingStars
                         rate={book.rate}
-                        clickable={true}
+                        clickable={clickable}
                         name={book.bookInfo.bookName}
                         books={this.state.books}
                       />
                     </td>
                     <td>
+                      {console.log(book,this.state.books)}
                       <DropDownShelves book={book} books={this.state.books} />
                     </td>
                   </tr>

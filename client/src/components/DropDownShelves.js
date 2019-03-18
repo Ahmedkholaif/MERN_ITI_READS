@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import '../css/UserHomePage.css'
+import axios from "axios";
 
 class DropDownShelves extends Component {
 
@@ -14,7 +15,8 @@ constructor(props) {
 
   componentWillReceiveProps(nextProps){
     this.setState({
-      books:nextProps.books
+      books:nextProps.books,
+      book:nextProps.book
     })
 }
 
@@ -23,10 +25,27 @@ constructor(props) {
       if(book.bookInfo.bookName == event.target.name)
       {
         book.shelf = event.target.value;
+        const token = localStorage.token;
+        if (token) {
+          const conf = {
+         
+            headers: {
+              "x-auth": token
+            }
+          };
+          axios
+            .put(
+              `/api/users/current/books/${event.target.name}?mode=${book.shelf}`,{},
+              conf
+            )
+            .then(res => {
+              this.setState({books:newBooks});
+            })
+            .catch(err => console.log(err));
+        }
       }
       return book;
     })
-    this.setState({books:newBooks});
   };
 
 
@@ -34,6 +53,7 @@ constructor(props) {
   render() {
     return (
         <div>
+          {console.log(this.props.book)}
         {(
         <select
         value={this.props.book.shelf}
