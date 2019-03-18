@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import propTypes from 'prop-types';
 import axios from 'axios';
-
+import {Link} from 'react-router-dom'
 export default class Login extends React.Component {
   constructor(props) {
 
@@ -99,7 +99,8 @@ export default class Login extends React.Component {
     const { loginData, errors } = this.state;
     return (
       <Form inline  className='float-lg-right' method="post" onSubmit={this.handleSubmit}>
-        <FormGroup>
+			<Link to ="/admin">Admin </Link>	
+			<FormGroup>
           <Label for="email" hidden>Email</Label>
           <Input type="email"
           name="email"
